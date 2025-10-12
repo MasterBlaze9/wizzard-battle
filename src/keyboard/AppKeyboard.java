@@ -4,7 +4,8 @@ import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
-import game.Player;
+
+import game.PlayerEnum;
 import game.characters.Character;
 
 public class AppKeyboard implements KeyboardHandler {
@@ -14,9 +15,9 @@ public class AppKeyboard implements KeyboardHandler {
 
 	private Character controlledCharacter;
 
-	public AppKeyboard(Player player, Character controlledCharacter) {
+	public AppKeyboard(PlayerEnum playerNumber, Character controlledCharacter) {
 		keyboard = new Keyboard(this);
-		playerControls = new Controls(player);
+		playerControls = new Controls(playerNumber);
 		this.controlledCharacter = controlledCharacter;
 
 		keyboard.addEventListener(playerControls.getMoveUpEvent());

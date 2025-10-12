@@ -3,7 +3,6 @@ package keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 
-import game.Player;
 import game.PlayerEnum;
 
 public class Controls {
@@ -14,8 +13,8 @@ public class Controls {
 	KeyboardEvent moveRight = new KeyboardEvent();
 	KeyboardEvent attack = new KeyboardEvent(); // TODO Define the attack key
 
-	public Controls(Player player) {
-		if (player.getPlayerNumber().equals(PlayerEnum.Player_1)) {
+	public Controls(PlayerEnum playerNumber) {
+		if (playerNumber.equals(PlayerEnum.Player_1)) {
 			moveUp.setKey(KeyboardEvent.KEY_W);
 			moveDown.setKey(KeyboardEvent.KEY_S);
 			moveLeft.setKey(KeyboardEvent.KEY_A);

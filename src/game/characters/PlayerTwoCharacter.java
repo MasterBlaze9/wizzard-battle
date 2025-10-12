@@ -1,13 +1,12 @@
 package game.characters;
 
 import game.PlayerEnum;
+import game.spells.Spell;
 
 public class PlayerTwoCharacter extends Character {
 
-	private PlayerEnum playerNumber;
-
-		public PlayerTwoCharacter() {
-		playerNumber = PlayerEnum.Player_2;
+	public PlayerTwoCharacter(int column, int row) {
+		super(column, row, PlayerEnum.Player_2);
 	}
 
 	@Override
@@ -32,6 +31,12 @@ public class PlayerTwoCharacter extends Character {
 	public void moveRight() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'moveRight'");
+	}
+
+	@Override
+	public void castSpell(Spell spellToCast) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'castSpell'");
 	}
 
 }
