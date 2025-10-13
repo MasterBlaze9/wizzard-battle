@@ -2,17 +2,23 @@ package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
+import ui.GameArea;
 import utils.AppColor;
 
 public class Grid {
 
     public static final int PADDING = 10;
-
-    private int cellSize = 15;
+    // Single shared cell size so all "pixels" (grid cells) are the same size.
+    public static final int CELL_SIZE = 5;
+    /**
+     * Scale (0..1) used by character UI to determine how large a character is
+     * relative to a single grid cell. Exposed here so it can be tuned project-wide.
+     */
+    private static double CHARACTER_SCALE = 0.9;
     private int cols;
     private int rows;
 
-    private Rectangle field;
+    private Rectangle canvas;
 
     /**
      * Simple graphics grid constructor with a certain number of rows and columns
@@ -26,41 +32,53 @@ public class Grid {
     }
 
     /**
-     * Initializes the field simple graphics rectangle and draws it
+     * Initializes the canvas simple graphics rectangle and draws it
      */
-
     public void init() {
-        this.field = new Rectangle(PADDING, PADDING, cols * cellSize, rows * cellSize);
-        this.field.setColor(AppColor.BROWN.toColor());
-        this.field.fill();
+        canvas = new Rectangle(PADDING, PADDING, cols * CELL_SIZE, rows * CELL_SIZE);
+        canvas.setColor(AppColor.BROWN.toColor());
+        canvas.fill();
+        GameArea gameArea = new GameArea( (double) getRows() /4, getWidth(), (double) getHeight() /2 );
+
     }
 
     public int getCellSize() {
-        return cellSize;
+        return CELL_SIZE;
+    }
+
+    public static double getCharacterScale() {
+        return CHARACTER_SCALE;
+    }
+
+    public static void setCharacterScale(double scale) {
+        if (scale <= 0 || scale > 1) {
+            throw new IllegalArgumentException("scale must be > 0 and <= 1");
+        }
+        CHARACTER_SCALE = scale;
     }
 
     public int getCols() {
-        return this.cols;
+        return cols;
     }
 
     public int getRows() {
-        return this.rows;
+        return rows;
     }
 
     public int getWidth() {
-        return this.field.getWidth();
+        return canvas.getWidth();
     }
 
     public int getHeight() {
-        return this.field.getHeight();
+        return canvas.getHeight();
     }
 
     public int getX() {
-        return this.field.getX();
+        return canvas.getX();
     }
 
     public int getY() {
-        return this.field.getY();
+        return canvas.getY();
     }
 
 }
