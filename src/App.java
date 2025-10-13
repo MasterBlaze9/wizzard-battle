@@ -1,5 +1,9 @@
+import ui.grid.Grid;
+
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        
+        Grid grid = new Grid(128, 65);
+        grid.init();
     }
 }

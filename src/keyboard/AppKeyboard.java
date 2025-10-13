@@ -43,7 +43,7 @@ public class AppKeyboard implements KeyboardHandler {
 	}
 
 	@Override
-	public void keyReleased(KeyboardEvent arg0) {
+	public void keyReleased(KeyboardEvent keyboardEvent) {
 
 	}
 
