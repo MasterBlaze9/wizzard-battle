@@ -2,6 +2,7 @@ package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
+import ui.GameArea;
 import utils.AppColor;
 
 public class Grid {
@@ -37,6 +38,8 @@ public class Grid {
         canvas = new Rectangle(PADDING, PADDING, cols * CELL_SIZE, rows * CELL_SIZE);
         canvas.setColor(AppColor.BROWN.toColor());
         canvas.fill();
+        GameArea gameArea = new GameArea( (double) getRows() /4, getWidth(), (double) getHeight() /2 );
+
     }
 
     public int getCellSize() {
