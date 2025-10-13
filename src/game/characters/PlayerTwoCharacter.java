@@ -3,7 +3,7 @@ package game.characters;
 import game.PlayerEnum;
 import game.spells.Spell;
 import keyboard.AppKeyboard;
-import keyboard.Controls;
+// Controls import removed because it's not used here
 import ui.character.CharacterUI;
 import ui.grid.Grid;
 import ui.position.Position;
@@ -22,9 +22,21 @@ public class PlayerTwoCharacter extends Character {
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_2, this);
 	}
 
+	public Position getPosition() {
+		return position;
+	}
+
+	public PlayerEnum getPlayerNumber() {
+		return playerNumber;
+	}
+
+	public AppKeyboard getAppKeyboard() {
+		return appKeyboard;
+	}
+
 	@Override
 	public void moveUp() {
-		characterHead.move(0, - Grid.CELL_SIZE);
+		characterHead.move(0, -Grid.CELL_SIZE);
 	}
 
 	@Override
@@ -34,12 +46,12 @@ public class PlayerTwoCharacter extends Character {
 
 	@Override
 	public void moveLeft() {
-		characterHead.move( - Grid.CELL_SIZE, 0);
+		characterHead.move(-Grid.CELL_SIZE, 0);
 	}
 
 	@Override
 	public void moveRight() {
-		characterHead.move(  Grid.CELL_SIZE, 0);
+		characterHead.move(Grid.CELL_SIZE, 0);
 	}
 
 	@Override

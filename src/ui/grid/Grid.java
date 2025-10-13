@@ -9,42 +9,72 @@ import utils.AppColor;
 public class Grid {
 
     public static final int PADDING = 10;
-    // Single shared cell size so all "pixels" (grid cells) are the same size.
-    public static final int CELL_SIZE = 5;
-    /**
-     * Scale (0..1) used by character UI to determine how large a character is
-     * relative to a single grid cell. Exposed here so it can be tuned project-wide.
-     */
+    
+    public static final int DEFAULT_CELL_SIZE = 5;
+
+    public static int CELL_SIZE = DEFAULT_CELL_SIZE;
+
     private static double CHARACTER_SCALE = 0.9;
     private int cols;
     private int rows;
 
-    private Rectangle canvas;
+    private int targetWidth = 0;
+    private int targetHeight = 0;
 
-    /**
-     * Simple graphics grid constructor with a certain number of rows and columns
-     *
-     * @param cols number of the columns
-     * @param rows number of rows
-     */
+    private int cellSize = 0;
+
+    private Rectangle canvas;
+    private GameArea gameArea;
+    private Line line;
+
+   
     public Grid(int cols, int rows) {
         this.cols = cols;
         this.rows = rows;
+        this.cellSize = DEFAULT_CELL_SIZE;
     }
 
-    /**
-     * Initializes the canvas simple graphics rectangle and draws it
-     */
+
+    public Grid(int cols, int rows, int targetWidth, int targetHeight) {
+        this.cols = cols;
+        this.rows = rows;
+        this.targetWidth = Math.max(0, targetWidth - 2 * PADDING);
+        this.targetHeight = Math.max(0, targetHeight - 2 * PADDING);
+
+        // compute maximum possible cell size that fits both dimensions
+        int sizeByWidth = this.targetWidth / Math.max(1, cols);
+        int sizeByHeight = this.targetHeight / Math.max(1, rows);
+        this.cellSize = Math.max(1, Math.min(sizeByWidth, sizeByHeight));
+    }
+
+   
     public void init() {
-        canvas = new Rectangle(PADDING, PADDING, cols * CELL_SIZE, rows * CELL_SIZE);
+        int usedCellSize = cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
+      
+        CELL_SIZE = usedCellSize;
+        canvas = new Rectangle(PADDING, PADDING, cols * usedCellSize, rows * usedCellSize);
         canvas.setColor(AppColor.BROWN.toColor());
         canvas.fill();
-        GameArea gameArea = new GameArea( (double) getRows() /4, getWidth(), (double) getHeight() /2 );
-        Line line = new Line(0 , 10, getHeight() /2);
+       
+        gameArea = new GameArea(canvas.getX(), canvas.getY(), canvas.getWidth(), canvas.getHeight());
+     
+        int areaX = gameArea.getAreaX();
+        int areaY = gameArea.getAreaY();
+        int areaW = gameArea.getAreaWidth();
+        int areaH = gameArea.getAreaHeight();
+
+        int lineWidth = 10; // pixels
+        int lineX = areaX + (areaW - lineWidth) / 2;
+        int lineY = areaY;
+        line = new Line(lineX, lineY, lineWidth, areaH);
+
+      
+        gameArea.translate(0, 0);
+        line.translate(0, 0);
     }
 
     public int getCellSize() {
-        return CELL_SIZE;
+        return cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
     }
 
     public static double getCharacterScale() {

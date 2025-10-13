@@ -7,7 +7,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
 import game.PlayerEnum;
 import game.characters.Character;
-import org.w3c.dom.ls.LSOutput;
+
 
 public class AppKeyboard implements KeyboardHandler {
 

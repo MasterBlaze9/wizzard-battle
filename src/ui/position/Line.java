@@ -6,15 +6,11 @@ import utils.AppColor;
 public class Line extends Rectangle {
 
     private Rectangle line;
-    private Position position;
 
-
-    public Line(double col,double width,double height){
-        line = new Rectangle(325, 73,width,height*1.3);
+    public Line(int x, int y, int width, int height) {
+        line = new Rectangle(x, y, width, height);
         line.setColor(AppColor.BLUE.toColor());
         line.fill();
-
     }
-
 
 }
