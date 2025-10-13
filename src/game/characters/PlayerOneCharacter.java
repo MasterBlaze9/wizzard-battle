@@ -2,13 +2,24 @@ package game.characters;
 
 import game.PlayerEnum;
 import game.spells.Spell;
+import ui.character.CharacterUI;
+import ui.position.Position;
 
 public class PlayerOneCharacter extends Character {
 
-
+	private CharacterUI characterHead;
+	private Position position;
+	private PlayerEnum playerNumber;
+	
 
 	public PlayerOneCharacter(int column, int row) {
-		super(column, row, PlayerEnum.Player_1);
+		playerNumber = PlayerEnum.Player_1;
+		position = new Position(column, row);
+		characterHead = new CharacterUI(column, row);
+	}
+
+	public Position getPosition() {
+		return position;
 	}
 
 	@Override
@@ -37,8 +48,8 @@ public class PlayerOneCharacter extends Character {
 
 	@Override
 	public void castSpell(Spell spellToCast) {
-		int currentRow = super.getRow();
-		int curremtColumn = super.getColumn();
+		int currentRow = position.getRow();
+		int curremtColumn = position.getCol();
 		throw new UnsupportedOperationException("Unimplemented method 'castSpell'");
 	}
 

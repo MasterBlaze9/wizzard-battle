@@ -2,11 +2,19 @@ package game.characters;
 
 import game.PlayerEnum;
 import game.spells.Spell;
+import ui.character.CharacterUI;
+import ui.position.Position;
 
 public class PlayerTwoCharacter extends Character {
 
+	private CharacterUI characterHead;
+	private Position position;
+	private PlayerEnum playerNumber;
+
 	public PlayerTwoCharacter(int column, int row) {
-		super(column, row, PlayerEnum.Player_2);
+		playerNumber = PlayerEnum.Player_2;
+		position = new Position(column, row);
+		characterHead = new CharacterUI(column, row);
 	}
 
 	@Override
