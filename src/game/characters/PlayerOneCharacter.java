@@ -2,7 +2,10 @@ package game.characters;
 
 import game.PlayerEnum;
 import game.spells.Spell;
+import keyboard.AppKeyboard;
+import keyboard.Controls;
 import ui.character.CharacterUI;
+import ui.grid.Grid;
 import ui.position.Position;
 
 public class PlayerOneCharacter extends Character {
@@ -10,12 +13,14 @@ public class PlayerOneCharacter extends Character {
 	private CharacterUI characterHead;
 	private Position position;
 	private PlayerEnum playerNumber;
+	private AppKeyboard appKeyboard;
 	
 
 	public PlayerOneCharacter(int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
 		position = new Position(column, row);
 		characterHead = new CharacterUI(column, row);
+		appKeyboard = new AppKeyboard(PlayerEnum.Player_1,this);
 	}
 
 	public Position getPosition() {
@@ -24,26 +29,25 @@ public class PlayerOneCharacter extends Character {
 
 	@Override
 	public void moveUp() {
-		// TODO: implement actual movement (e.g., change sprite/position)
-		System.out.println("PlayerOneCharacter: moveUp");
+		characterHead.move(0, - Grid.CELL_SIZE);
+
+		System.out.println(position.getCol());
+		System.out.println(position.getRow());
 	}
 
 	@Override
 	public void moveDown() {
-		// TODO: implement actual movement (e.g., change sprite/position)
-		System.out.println("PlayerOneCharacter: moveDown");
+		characterHead.move(0, Grid.CELL_SIZE);
 	}
 
 	@Override
 	public void moveLeft() {
-		// TODO: implement actual movement (e.g., change sprite/position)
-		System.out.println("PlayerOneCharacter: moveLeft");
+		characterHead.move( - Grid.CELL_SIZE, 0);
 	}
 
 	@Override
 	public void moveRight() {
-		// TODO: implement actual movement (e.g., change sprite/position)
-		System.out.println("PlayerOneCharacter: moveRight");
+		characterHead.move(  Grid.CELL_SIZE, 0);
 	}
 
 	@Override

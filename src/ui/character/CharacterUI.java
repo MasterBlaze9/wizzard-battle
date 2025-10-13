@@ -22,4 +22,9 @@ public class CharacterUI {
 		characterHead.setColor(Color.BLACK);
 		characterHead.fill();
 	}
+
+	public void move(int cols,int rows){
+		characterHead.translate(cols, rows);
+	}
+
 }

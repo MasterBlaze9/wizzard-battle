@@ -5,10 +5,11 @@ import game.characters.Character;
 
 public class Player {
 
-	private Character character;
+    private Character character;
 
-	public Character getCharacter() {
-		return character;
-	}
+    public Character getCharacter() {
+
+        return character;
+    }
 
 }
