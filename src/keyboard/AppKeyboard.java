@@ -7,6 +7,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
 import game.PlayerEnum;
 import game.characters.Character;
+import org.w3c.dom.ls.LSOutput;
 
 public class AppKeyboard implements KeyboardHandler {
 
@@ -25,6 +26,7 @@ public class AppKeyboard implements KeyboardHandler {
 		keyboard.addEventListener(playerControls.getMoveLeftEvent());
 		keyboard.addEventListener(playerControls.getMoveRightEvent());
 	}
+
 
 	@Override
 	public void keyPressed(KeyboardEvent keyboardEvent) {
