@@ -1,8 +1,11 @@
 package game.characters;
 
 import game.spells.Spell;
+import ui.position.Position;
 
 public abstract class Character {
+
+	public abstract Position getPosition();
 
 	public abstract void moveUp();
 

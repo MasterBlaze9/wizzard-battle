@@ -7,6 +7,7 @@ import keyboard.AppKeyboard;
 import ui.character.CharacterUI;
 import ui.grid.Grid;
 import ui.position.Position;
+import collisionManager.CollisionManager;
 
 public class PlayerTwoCharacter extends Character {
 
@@ -14,12 +15,14 @@ public class PlayerTwoCharacter extends Character {
 	private Position position;
 	private PlayerEnum playerNumber;
 	private AppKeyboard appKeyboard;
+	private CollisionManager collisionManager;
 
-	public PlayerTwoCharacter(int column, int row) {
+	public PlayerTwoCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_2;
 		position = new Position(column, row);
 		characterHead = new CharacterUI(column, row);
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_2, this);
+		collisionManager = new CollisionManager(this, grid);
 	}
 
 	public Position getPosition() {
@@ -36,22 +39,42 @@ public class PlayerTwoCharacter extends Character {
 
 	@Override
 	public void moveUp() {
-		characterHead.move(0, -Grid.CELL_SIZE);
+		int newRow = position.getRow() - 1;
+		int newCol = position.getCol();
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+			characterHead.move(0, -Grid.CELL_SIZE);
+			position.setRow(newRow);
+		}
 	}
 
 	@Override
 	public void moveDown() {
-		characterHead.move(0, Grid.CELL_SIZE);
+		int newRow = position.getRow() + 1;
+		int newCol = position.getCol();
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+			characterHead.move(0, Grid.CELL_SIZE);
+			position.setRow(newRow);
+		}
 	}
 
 	@Override
 	public void moveLeft() {
-		characterHead.move(-Grid.CELL_SIZE, 0);
+		int newCol = position.getCol() - 1;
+		int newRow = position.getRow();
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+			characterHead.move(-Grid.CELL_SIZE, 0);
+			position.setCol(newCol);
+		}
 	}
 
 	@Override
 	public void moveRight() {
-		characterHead.move(Grid.CELL_SIZE, 0);
+		int newCol = position.getCol() + 1;
+		int newRow = position.getRow();
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+			characterHead.move(Grid.CELL_SIZE, 0);
+			position.setCol(newCol);
+		}
 	}
 
 	@Override

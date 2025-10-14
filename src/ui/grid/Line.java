@@ -1,4 +1,4 @@
-package ui.position;
+package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import utils.AppColor;
