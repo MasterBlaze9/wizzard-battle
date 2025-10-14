@@ -1,4 +1,4 @@
-package ui;
+package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 

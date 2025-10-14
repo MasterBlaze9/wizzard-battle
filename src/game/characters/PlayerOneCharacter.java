@@ -29,7 +29,7 @@ public class PlayerOneCharacter extends Character {
 		int newRow = position.getRow() - 1;
 		int newCol = position.getCol();
 
-		if (collisionManager.checkColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
 			// apply visual move and update logical position
 			characterHead.move(0, -Grid.CELL_SIZE);
 			position.setRow(newRow);
@@ -40,7 +40,7 @@ public class PlayerOneCharacter extends Character {
 	public void moveDown() {
 		int newRow = position.getRow() + 1;
 		int newCol = position.getCol();
-		if (collisionManager.checkColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
 			characterHead.move(0, Grid.CELL_SIZE);
 			position.setRow(newRow);
 		}
@@ -50,7 +50,7 @@ public class PlayerOneCharacter extends Character {
 	public void moveLeft() {
 		int newCol = position.getCol() - 1;
 		int newRow = position.getRow();
-		if (collisionManager.checkColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
 			characterHead.move(-Grid.CELL_SIZE, 0);
 			position.setCol(newCol);
 		}
@@ -60,7 +60,7 @@ public class PlayerOneCharacter extends Character {
 	public void moveRight() {
 		int newCol = position.getCol() + 1;
 		int newRow = position.getRow();
-		if (collisionManager.checkColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
 			characterHead.move(Grid.CELL_SIZE, 0);
 			position.setCol(newCol);
 		}

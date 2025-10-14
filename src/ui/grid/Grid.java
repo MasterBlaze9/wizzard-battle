@@ -2,8 +2,6 @@ package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
-import ui.GameArea;
-import ui.position.Line;
 import utils.AppColor;
 
 public class Grid {
@@ -56,13 +54,12 @@ public class Grid {
 
         gameArea = new GameArea(canvas.getX(), canvas.getY(), canvas.getWidth(), canvas.getHeight());
 
-        int areaX = gameArea.getAreaX();
-        int areaY = gameArea.getAreaY();
+       
         int areaW = gameArea.getAreaWidth();
         int areaH = gameArea.getAreaHeight();
 
-        int lineX = areaX + (areaW - dividerWidth) / 2;
-        int lineY = areaY;
+        int lineX = (areaW - dividerWidth) / 2;
+        int lineY = gameArea.getAreaY();
         line = new Line(lineX, lineY, dividerWidth, areaH);
 
         gameArea.translate(0, 0);
@@ -94,17 +91,6 @@ public class Grid {
 
     public int getCellSize() {
         return cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
-    }
-
-    public static double getCharacterScale() {
-        return CHARACTER_SCALE;
-    }
-
-    public static void setCharacterScale(double scale) {
-        if (scale <= 0 || scale > 1) {
-            throw new IllegalArgumentException("scale must be > 0 and <= 1");
-        }
-        CHARACTER_SCALE = scale;
     }
 
     public int getCols() {
