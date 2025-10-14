@@ -1,10 +1,9 @@
 package ui.grid;
 
+import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 import utils.AppColor;
-
-import java.util.PropertyResourceBundle;
 
 public class Grid {
 
@@ -30,6 +29,7 @@ public class Grid {
     private HealthBarAppearancePlayer2 healthBar2;
     private Player1FaceCard card1;
     private Player2FaceCard card2;
+    private Life life;
     private int dividerWidth = 10;
 
     public Grid(int cols, int rows) {
@@ -80,7 +80,7 @@ public class Grid {
 
         card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth()/8 -PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-
+        life = new Life(PADDING+canvas.getWidth() / 8, PADDING, CELL_SIZE * 2 ,CELL_SIZE * 2);
     }
 
     public int getMaxRowsPerPlayer() {
