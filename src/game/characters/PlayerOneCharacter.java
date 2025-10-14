@@ -24,7 +24,7 @@ public class PlayerOneCharacter extends Character {
 		collisionManager = new CollisionManager(this, grid);
 	}
 
-	public PlayerEnum getPlayerEnum(){
+	public PlayerEnum getPlayerEnum() {
 		return playerNumber;
 	}
 
@@ -75,11 +75,7 @@ public class PlayerOneCharacter extends Character {
 		int currentRow = position.getRow();
 		int currentColumn = position.getCol();
 
-		Spell spell = new Spell(position.getRow(), position.getCol(), playerNumber);
-
-		while(spell.getPosition().getCol() < Grid.getCols() -1){
-			position.setCol(position.getCol() +1);
-		}
+		new Spell(position.getRow(), position.getCol(), playerNumber);
 	}
 
 	public Position getPosition() {
