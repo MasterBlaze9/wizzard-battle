@@ -24,6 +24,10 @@ public class PlayerOneCharacter extends Character {
 		collisionManager = new CollisionManager(this, grid);
 	}
 
+	public PlayerEnum getPlayerEnum(){
+		return playerNumber;
+	}
+
 	@Override
 	public void moveUp() {
 		int newRow = position.getRow() - 1;
@@ -67,12 +71,15 @@ public class PlayerOneCharacter extends Character {
 	}
 
 	@Override
-	public void castSpell(Spell spellToCast) {
+	public void castSpell() {
 		int currentRow = position.getRow();
-		int curremtColumn = position.getCol();
-		// include position in the exception message so the local vars are used
-		throw new UnsupportedOperationException(
-				"Unimplemented method 'castSpell' at " + curremtColumn + "," + currentRow);
+		int currentColumn = position.getCol();
+
+		Spell spell = new Spell(position.getRow(), position.getCol(), playerNumber);
+
+		while(spell.getPosition().getCol() < Grid.getCols() -1){
+			position.setCol(position.getCol() +1);
+		}
 	}
 
 	public Position getPosition() {

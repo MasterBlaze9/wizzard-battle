@@ -15,6 +15,6 @@ public abstract class Character {
 
 	public abstract void moveRight();
 
-	public abstract void castSpell(Spell spellToCast);
+	public abstract void castSpell();
 
 }

@@ -13,8 +13,8 @@ public class Grid {
     public static int CELL_SIZE = DEFAULT_CELL_SIZE;
 
     private static double CHARACTER_SCALE = 0.9;
-    private int cols;
-    private int rows;
+    private static int cols;
+    private static int rows;
 
     private int targetWidth = 0;
     private int targetHeight = 0;
@@ -93,11 +93,11 @@ public class Grid {
         return cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
     }
 
-    public int getCols() {
+    public static int getCols() {
         return cols;
     }
 
-    public int getRows() {
+    public static int getRows() {
         return rows;
     }
 

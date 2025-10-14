@@ -78,9 +78,9 @@ public class PlayerTwoCharacter extends Character {
 	}
 
 	@Override
-	public void castSpell(Spell spellToCast) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'castSpell'");
+	public void castSpell() {
+
+		new Spell(position.getRow(), position.getCol(), playerNumber);
 	}
 
 }

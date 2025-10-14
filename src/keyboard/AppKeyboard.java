@@ -25,6 +25,7 @@ public class AppKeyboard implements KeyboardHandler {
 		keyboard.addEventListener(playerControls.getMoveDownEvent());
 		keyboard.addEventListener(playerControls.getMoveLeftEvent());
 		keyboard.addEventListener(playerControls.getMoveRightEvent());
+		keyboard.addEventListener(playerControls.getAttackEvent());
 	}
 
 
@@ -40,6 +41,8 @@ public class AppKeyboard implements KeyboardHandler {
 			controlledCharacter.moveUp();
 		} else if (key == playerControls.getMoveDownEvent().getKey()) {
 			controlledCharacter.moveDown();
+		} else if (key==playerControls.getAttackEvent().getKey()) {
+			controlledCharacter.castSpell();
 		}
 
 	}
