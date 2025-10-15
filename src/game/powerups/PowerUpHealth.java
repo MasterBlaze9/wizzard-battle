@@ -1,20 +1,15 @@
-package game.powerups;
+package game.powerUps;
 
 import utils.AppColor;
 
 public class PowerUpHealth extends PowerUp {
-    private PowerUpHealth powerUpHealth;
 
     public int healthToAdd = 1;
 
-
-    public PowerUpHealth(int x, int y) {
-        super(x, y);
-
+    public PowerUpHealth(int col, int row) {
+        super(col, row);
         super.setColor(AppColor.RED.toColor());
-
         super.fill();
     }
-
 
 }
