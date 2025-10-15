@@ -1,7 +1,6 @@
-package ui.grid;
+package ui.character.HealthBar;
 
 import org.academiadecodigo.simplegraphics.graphics.Ellipse;
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import utils.AppColor;
 
     public class Life extends Ellipse {

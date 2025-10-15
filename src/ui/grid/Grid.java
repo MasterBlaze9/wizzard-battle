@@ -1,8 +1,12 @@
 package ui.grid;
 
-import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
+import ui.character.FaceCard.Player1FaceCard;
+import ui.character.FaceCard.Player2FaceCard;
+import ui.character.HealthBar.HealthBarAppearancePlayer1;
+import ui.character.HealthBar.HealthBarAppearancePlayer2;
+import ui.character.HealthBar.Life;
 import utils.AppColor;
 
 public class Grid {
@@ -80,7 +84,7 @@ public class Grid {
 
         card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth()/8 -PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        life = new Life(PADDING+canvas.getWidth() / 8, PADDING, CELL_SIZE * 2 ,CELL_SIZE * 2);
+        life = new Life(PADDING+canvas.getWidth() / 8, PADDING, CELL_SIZE * 3 ,CELL_SIZE * 3);
     }
 
     public int getMaxRowsPerPlayer() {

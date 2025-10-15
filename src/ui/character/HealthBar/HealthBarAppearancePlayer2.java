@@ -1,4 +1,4 @@
-package ui.grid;
+package ui.character.HealthBar;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 

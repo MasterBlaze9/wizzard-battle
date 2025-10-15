@@ -1,8 +1,7 @@
-package ui.grid;
+package ui.character.HealthBar;
 
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-import utils.AppColor;
 
 public class HealthBarAppearancePlayer1 extends Rectangle {
 

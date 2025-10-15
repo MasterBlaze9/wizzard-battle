@@ -1,7 +1,6 @@
-package ui.grid;
+package ui.character.FaceCard;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-import utils.AppColor;
 
 public class Player1FaceCard extends Rectangle {
 
