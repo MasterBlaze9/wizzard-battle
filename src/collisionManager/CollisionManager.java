@@ -1,7 +1,6 @@
 package collisionManager;
 
 import ui.grid.Grid;
-import ui.position.Position;
 import game.characters.Character;
 import game.spells.Spell;
 import game.characters.PlayerOneCharacter;
@@ -13,17 +12,17 @@ import java.util.List;
 
 public class CollisionManager {
 
-	private Position position;
 	private Character character;
-	private Spell spell;
 	private Grid grid;
 
 	// registry of characters in the game for spell collision checks
 	private static final List<Character> registeredCharacters = new ArrayList<>();
 
+	// registry of active powerups
+	private static final List<game.powerUps.PowerUp> registeredPowerUps = new ArrayList<>();
+
 	public CollisionManager(Character character) {
 		this.character = character;
-		position = new Position(character.getPosition().getCol(), character.getPosition().getRow());
 		// register character for global collision checks
 		registerCharacter(character);
 	}
@@ -37,15 +36,53 @@ public class CollisionManager {
 		this.grid = grid;
 	}
 
-	public CollisionManager(Spell spell) {
-		this.spell = spell;
-		position = new Position(spell.getPosition().getCol(), spell.getPosition().getRow());
-	}
-
+	/**
+	 * Register a character for global collision checks. Safe to call multiple
+	 * times.
+	 */
 	public static void registerCharacter(Character c) {
+		if (c == null)
+			return;
 		if (!registeredCharacters.contains(c)) {
 			registeredCharacters.add(c);
 		}
+	}
+
+	/**
+	 * Register a powerup for global lookup.
+	 */
+	public static void registerPowerUp(game.powerUps.PowerUp p) {
+		if (p == null) {
+			return;
+		}
+		if (!registeredPowerUps.contains(p)) {
+			registeredPowerUps.add(p);
+		}
+	}
+
+	/**
+	 * Unregister a powerup.
+	 */
+	public static void unregisterPowerUp(game.powerUps.PowerUp p) {
+		if (p == null) {
+			return;
+		}
+		registeredPowerUps.remove(p);
+	}
+
+	/**
+	 * Return a powerup occupying the given cell, or null if none.
+	 */
+	public static game.powerUps.PowerUp getPowerUpAt(int col, int row) {
+		for (game.powerUps.PowerUp p : registeredPowerUps) {
+			if (p == null) {
+				continue;
+			}
+			if (p.getCol() == col && p.getRow() == row) {
+				return p;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -102,7 +139,6 @@ public class CollisionManager {
 		int cell = Grid.CELL_SIZE;
 		int spellW = spell.getWidth();
 
-
 		int startX = Grid.PADDING + fromCol * cell + (cell - spellW) / 2;
 		int endX = Grid.PADDING + toCol * cell + (cell - spellW) / 2;
 
@@ -148,8 +184,8 @@ public class CollisionManager {
 
 	public boolean checkGameAreaColision(int newCol, int newRow) {
 
-		int totalCols = grid.getCols();
-		int totalRows = grid.getRows();
+		int totalCols = Grid.getCols();
+		int totalRows = Grid.getRows();
 
 		int colsPerPlayer = grid.getMaxColsPerPlayer();
 		int rowsPerPlayer = grid.getMaxRowsPerPlayer();

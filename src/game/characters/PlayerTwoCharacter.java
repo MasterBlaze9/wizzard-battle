@@ -9,7 +9,10 @@ import ui.character.HealthBar.HealthBar;
 import ui.grid.Grid;
 import ui.position.Position;
 import collisionManager.CollisionManager;
-
+import game.powerUps.PowerUp;
+import game.powerUps.PowerUpDamage;
+import game.powerUps.PowerUpHealth;
+import game.powerUps.PowerUpSpellSpeed;
 
 public class PlayerTwoCharacter extends Character {
 
@@ -43,48 +46,113 @@ public class PlayerTwoCharacter extends Character {
 
 	@Override
 	public void moveUp() {
-		int newRow = position.getRow() - 1;
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newRow = position.getRow() - moveCells;
 		int newCol = position.getCol();
 		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
-			characterHead.move(0, -Grid.CELL_SIZE);
+			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
 			position.setRow(newRow);
+
+			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (p != null) {
+				if (p instanceof PowerUpHealth) {
+					addLifePoints();
+					p.removeFromGame();
+				} else if (p instanceof PowerUpDamage) {
+					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				} else if (p instanceof PowerUpSpellSpeed) {
+					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				}
+			}
 		}
 	}
 
 	@Override
 	public void moveDown() {
-		int newRow = position.getRow() + 1;
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newRow = position.getRow() + moveCells;
 		int newCol = position.getCol();
 		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
-			characterHead.move(0, Grid.CELL_SIZE);
+			characterHead.move(0, Grid.CELL_SIZE * moveCells);
 			position.setRow(newRow);
+
+			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (p != null) {
+				if (p instanceof PowerUpHealth) {
+					addLifePoints();
+					p.removeFromGame();
+				} else if (p instanceof PowerUpDamage) {
+					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				} else if (p instanceof PowerUpSpellSpeed) {
+					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				}
+			}
 		}
 	}
 
 	@Override
 	public void moveLeft() {
-		int newCol = position.getCol() - 1;
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newCol = position.getCol() - moveCells;
 		int newRow = position.getRow();
 		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
-			characterHead.move(-Grid.CELL_SIZE, 0);
+			characterHead.move(-Grid.CELL_SIZE * moveCells, 0);
 			position.setCol(newCol);
+
+			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (p != null) {
+				if (p instanceof PowerUpHealth) {
+					addLifePoints();
+					p.removeFromGame();
+				} else if (p instanceof PowerUpDamage) {
+					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				} else if (p instanceof PowerUpSpellSpeed) {
+					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				}
+			}
 		}
 	}
 
 	@Override
 	public void moveRight() {
-		int newCol = position.getCol() + 1;
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newCol = position.getCol() + moveCells;
 		int newRow = position.getRow();
 		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
-			characterHead.move(Grid.CELL_SIZE, 0);
+			characterHead.move(Grid.CELL_SIZE * moveCells, 0);
 			position.setCol(newCol);
+
+			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (p != null) {
+				if (p instanceof PowerUpHealth) {
+					addLifePoints();
+					p.removeFromGame();
+				} else if (p instanceof PowerUpDamage) {
+					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				} else if (p instanceof PowerUpSpellSpeed) {
+					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					p.removeFromGame();
+				}
+			}
 		}
 	}
 
 	@Override
 	public void castSpell() {
-
-		new Spell(position.getRow(), position.getCol(), playerNumber);
+		Spell s = new Spell(position.getRow(), position.getCol(), playerNumber);
+		s.setDamage(s.getDamage() + getSpellDamageModifier());
+		s.setSpeed(s.getSpeed() + getSpellSpeedModifier());
 	}
 
 	@Override
