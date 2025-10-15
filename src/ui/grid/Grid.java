@@ -1,29 +1,32 @@
 package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import ui.character.FaceCard.Player1FaceCard;
+import ui.character.FaceCard.Player2FaceCard;
+import ui.character.HealthBar.HealthBar;
 
 import utils.AppColor;
 
 public class Grid {
 
     public static final int PADDING = 10;
-
     public static final int DEFAULT_CELL_SIZE = 5;
-
     public static int CELL_SIZE = DEFAULT_CELL_SIZE;
 
-    private static double CHARACTER_SCALE = 0.9;
-    private int cols;
-    private int rows;
-
+    private static int cols;
+    private static int rows;
     private int targetWidth = 0;
     private int targetHeight = 0;
 
     private int cellSize = 0;
 
-    private Rectangle canvas;
+    private static Rectangle canvas;
     private GameArea gameArea;
     private Line line;
+  
+  
+    private Player1FaceCard card1;
+    private Player2FaceCard card2;
 
     private int dividerWidth = 10;
 
@@ -64,6 +67,14 @@ public class Grid {
 
         gameArea.translate(0, 0);
         line.translate(0, 0);
+
+
+        card1 = new Player1FaceCard(PADDING, PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+
+
+        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth()/8 -PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+
+        
     }
 
     public int getMaxRowsPerPlayer() {
@@ -93,11 +104,11 @@ public class Grid {
         return cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
     }
 
-    public int getCols() {
+    public static int getCols() {
         return cols;
     }
 
-    public int getRows() {
+    public static int getRows() {
         return rows;
     }
 
@@ -114,11 +125,11 @@ public class Grid {
         return Math.max(0, (rows - rowsInArea) / 2);
     }
 
-    public int getWidth() {
+    public static int getWidth() {
         return canvas.getWidth();
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return canvas.getHeight();
     }
 

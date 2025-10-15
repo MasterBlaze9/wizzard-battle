@@ -4,6 +4,7 @@ import game.PlayerEnum;
 import game.spells.Spell;
 import keyboard.AppKeyboard;
 import ui.character.CharacterUI;
+import ui.character.HealthBar.HealthBar;
 import ui.grid.Grid;
 import ui.position.Position;
 import collisionManager.CollisionManager;
@@ -15,6 +16,7 @@ public class PlayerOneCharacter extends Character {
 	private PlayerEnum playerNumber;
 	private AppKeyboard appKeyboard;
 	private CollisionManager collisionManager;
+	private HealthBar healthBar;
 
 	public PlayerOneCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
@@ -22,6 +24,13 @@ public class PlayerOneCharacter extends Character {
 		characterHead = new CharacterUI(column, row);
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_1, this);
 		collisionManager = new CollisionManager(this, grid);
+
+		healthBar = new HealthBar(PlayerEnum.Player_1);
+       
+	}
+
+	public PlayerEnum getPlayerEnum() {
+		return playerNumber;
 	}
 
 	@Override
@@ -67,12 +76,11 @@ public class PlayerOneCharacter extends Character {
 	}
 
 	@Override
-	public void castSpell(Spell spellToCast) {
+	public void castSpell() {
 		int currentRow = position.getRow();
-		int curremtColumn = position.getCol();
-		// include position in the exception message so the local vars are used
-		throw new UnsupportedOperationException(
-				"Unimplemented method 'castSpell' at " + curremtColumn + "," + currentRow);
+		int currentColumn = position.getCol();
+
+		new Spell(position.getRow(), position.getCol(), playerNumber);
 	}
 
 	public Position getPosition() {
@@ -85,6 +93,15 @@ public class PlayerOneCharacter extends Character {
 
 	public AppKeyboard getAppKeyboard() {
 		return appKeyboard;
+	}
+
+	public void takeDamage(int damage) {
+		healthBar.removeLifePoints(damage);
+	}
+
+	@Override
+	public void addLifePoints() {
+		healthBar.addLifePoints();
 	}
 
 }

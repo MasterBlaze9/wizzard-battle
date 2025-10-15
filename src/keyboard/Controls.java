@@ -19,22 +19,26 @@ public class Controls {
 			moveDown.setKey(KeyboardEvent.KEY_S);
 			moveLeft.setKey(KeyboardEvent.KEY_A);
 			moveRight.setKey(KeyboardEvent.KEY_D);
+			attack.setKey(KeyboardEvent.KEY_T);
 
 			moveUp.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 			moveDown.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 			moveLeft.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 			moveRight.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+			attack.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 
 		} else {
-			moveUp.setKey(KeyboardEvent.KEY_UP);
-			moveDown.setKey(KeyboardEvent.KEY_DOWN);
-			moveLeft.setKey(KeyboardEvent.KEY_LEFT);
-			moveRight.setKey(KeyboardEvent.KEY_RIGHT);
+			moveUp.setKey(KeyboardEvent.KEY_I);
+			moveDown.setKey(KeyboardEvent.KEY_K);
+			moveLeft.setKey(KeyboardEvent.KEY_J);
+			moveRight.setKey(KeyboardEvent.KEY_L);
+			attack.setKey(KeyboardEvent.KEY_P);
 
 			moveUp.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 			moveDown.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 			moveLeft.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 			moveRight.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+			attack.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 		}
 	}
 

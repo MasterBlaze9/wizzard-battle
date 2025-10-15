@@ -3,11 +3,13 @@ package game.characters;
 import game.PlayerEnum;
 import game.spells.Spell;
 import keyboard.AppKeyboard;
-// Controls import removed because it's not used here
+
 import ui.character.CharacterUI;
+import ui.character.HealthBar.HealthBar;
 import ui.grid.Grid;
 import ui.position.Position;
 import collisionManager.CollisionManager;
+
 
 public class PlayerTwoCharacter extends Character {
 
@@ -16,6 +18,7 @@ public class PlayerTwoCharacter extends Character {
 	private PlayerEnum playerNumber;
 	private AppKeyboard appKeyboard;
 	private CollisionManager collisionManager;
+	private HealthBar healthBar;
 
 	public PlayerTwoCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_2;
@@ -23,6 +26,7 @@ public class PlayerTwoCharacter extends Character {
 		characterHead = new CharacterUI(column, row);
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_2, this);
 		collisionManager = new CollisionManager(this, grid);
+		healthBar = new HealthBar(PlayerEnum.Player_2);
 	}
 
 	public Position getPosition() {
@@ -78,9 +82,19 @@ public class PlayerTwoCharacter extends Character {
 	}
 
 	@Override
-	public void castSpell(Spell spellToCast) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'castSpell'");
+	public void castSpell() {
+
+		new Spell(position.getRow(), position.getCol(), playerNumber);
+	}
+
+	@Override
+	public void takeDamage(int damage) {
+		healthBar.removeLifePoints(damage);
+	}
+
+	@Override
+	public void addLifePoints() {
+		healthBar.addLifePoints();
 	}
 
 }
