@@ -29,9 +29,12 @@ public class Grid {
     private static Rectangle canvas;
     private GameArea gameArea;
     private Line line;
-    private PowerUpDamage powerUpDamage;
-    private PowerUpHealth powerUpHealth;
-    private PowerUpSpellSpeed powerUpSpellSpeed;
+    private PowerUpDamage powerUpDamageLeft;
+    private PowerUpHealth powerUpHealthLeft;
+    private PowerUpSpellSpeed powerUpSpellSpeedLeft;
+    private PowerUpDamage powerUpDamageRight;
+    private PowerUpHealth powerUpHealthRight;
+    private PowerUpSpellSpeed powerUpSpellSpeedRight;
     private Player1FaceCard card1;
     private Player2FaceCard card2;
 
@@ -64,7 +67,7 @@ public class Grid {
 
         gameArea = new GameArea(canvas.getX(), canvas.getY(), canvas.getWidth(), canvas.getHeight());
 
-       
+
         int areaW = gameArea.getAreaWidth();
         int areaH = gameArea.getAreaHeight();
 
@@ -76,38 +79,58 @@ public class Grid {
         line.translate(0, 0);
 
 
+        card1 = new Player1FaceCard("resources/testeCarinha.png", PADDING *2 + PADDING / 2
+                , PADDING*2 + PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        card1 = new Player1FaceCard("resources/testeCarinha.png",PADDING, PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth()/8 -PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        Random random = new Random();
 
-        int minX = gameArea.getAreaX();
-        int maxX = gameArea.getAreaX() + gameArea.getAreaWidth();
+        // Calculate divider and area bounds
+        //int line2X = gameArea.getAreaX() + (gameArea.getAreaWidth() - dividerWidth) / 2;
+        int leftMinX = gameArea.getAreaX();
+        int leftMaxX = lineX;
+        int rightMinX = lineX + dividerWidth;
+        int rightMaxX = gameArea.getAreaX() + gameArea.getAreaWidth();
         int minY = gameArea.getAreaY();
         int maxY = gameArea.getAreaY() + gameArea.getAreaHeight();
+        int powerUpSize = 25;
+        Random random = new Random();
 
-        powerUpDamage = new PowerUpDamage(
-                random.nextInt(maxX - minX) + minX,
-                random.nextInt(maxY - minY) + minY
+// Left side power-ups
+        PowerUpHealth powerUpHealthLeft = new PowerUpHealth(
+                random.nextInt(leftMaxX - leftMinX - powerUpSize) + leftMinX,
+                random.nextInt(maxY - minY - powerUpSize) + minY
+        );
+        PowerUpDamage powerUpDamageLeft = new PowerUpDamage(
+                random.nextInt(leftMaxX - leftMinX - powerUpSize) + leftMinX,
+                random.nextInt(maxY - minY - powerUpSize) + minY
+        );
+        PowerUpSpellSpeed powerUpSpellSpeedLeft = new PowerUpSpellSpeed(
+                random.nextInt(leftMaxX - leftMinX - powerUpSize) + leftMinX,
+                random.nextInt(maxY - minY - powerUpSize) + minY
         );
 
-        powerUpHealth = new PowerUpHealth(
-                random.nextInt(maxX - minX) + minX,
-                random.nextInt(maxY - minY) + minY
+// Right side power-ups
+        PowerUpHealth powerUpHealthRight = new PowerUpHealth(
+                random.nextInt(rightMaxX - rightMinX - powerUpSize) + rightMinX,
+                random.nextInt(maxY - minY - powerUpSize) + minY
         );
-
-        powerUpSpellSpeed = new PowerUpSpellSpeed(
-                random.nextInt(maxX - minX) + minX,
-                random.nextInt(maxY - minY) + minY
+        PowerUpDamage powerUpDamageRight = new PowerUpDamage(
+                random.nextInt(rightMaxX - rightMinX - powerUpSize) + rightMinX,
+                random.nextInt(maxY - minY - powerUpSize) + minY
         );
-
-
+        PowerUpSpellSpeed powerUpSpellSpeedRight = new PowerUpSpellSpeed(
+                random.nextInt(rightMaxX - rightMinX - powerUpSize) + rightMinX,
+                random.nextInt(maxY - minY - powerUpSize) + minY
+        );
     }
 
 
-    public int getMaxRowsPerPlayer() {
+
+
+
+        public int getMaxRowsPerPlayer() {
         int usedCellSize = getCellSize();
         if (gameArea != null) {
 
