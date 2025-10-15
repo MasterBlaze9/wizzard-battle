@@ -80,11 +80,11 @@ public class Grid {
         gameArea.translate(0, 0);
         line.translate(0, 0);
 
-        card1 = new Player1FaceCard("resources/testeCarinha.png", PADDING, PADDING, canvas.getWidth() / 8,
-                canvas.getHeight() / 4);
 
-        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING,
-                canvas.getWidth() / 8, canvas.getHeight() / 4);
+        card1 = new Player1FaceCard("resources/testeCarinha.png", PADDING *2 + PADDING / 2
+                , PADDING*2 + PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+
+        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         activeGrid = this;
 
@@ -259,7 +259,7 @@ public class Grid {
         }
     }
 
-    public int getMaxRowsPerPlayer() {
+        public int getMaxRowsPerPlayer() {
         int usedCellSize = getCellSize();
         if (gameArea != null) {
 
