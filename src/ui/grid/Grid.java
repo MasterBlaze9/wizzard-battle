@@ -1,11 +1,17 @@
 package ui.grid;
 
+import game.powerups.PowerUp;
+import game.powerups.PowerUpDamage;
+import game.powerups.PowerUpHealth;
+import game.powerups.PowerUpSpellSpeed;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import ui.character.FaceCard.Player1FaceCard;
 import ui.character.FaceCard.Player2FaceCard;
 import ui.character.HealthBar.HealthBar;
 
 import utils.AppColor;
+
+import java.util.Random;
 
 public class Grid {
 
@@ -23,8 +29,9 @@ public class Grid {
     private static Rectangle canvas;
     private GameArea gameArea;
     private Line line;
-  
-  
+    private PowerUpDamage powerUpDamage;
+    private PowerUpHealth powerUpHealth;
+    private PowerUpSpellSpeed powerUpSpellSpeed;
     private Player1FaceCard card1;
     private Player2FaceCard card2;
 
@@ -69,13 +76,36 @@ public class Grid {
         line.translate(0, 0);
 
 
-        card1 = new Player1FaceCard("resources/testeCarinha.png",PADDING, PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
+        card1 = new Player1FaceCard("resources/testeCarinha.png",PADDING, PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth()/8 -PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
+        Random random = new Random();
+
+        int minX = gameArea.getAreaX();
+        int maxX = gameArea.getAreaX() + gameArea.getAreaWidth();
+        int minY = gameArea.getAreaY();
+        int maxY = gameArea.getAreaY() + gameArea.getAreaHeight();
+
+        powerUpDamage = new PowerUpDamage(
+                random.nextInt(maxX - minX) + minX,
+                random.nextInt(maxY - minY) + minY
+        );
+
+        powerUpHealth = new PowerUpHealth(
+                random.nextInt(maxX - minX) + minX,
+                random.nextInt(maxY - minY) + minY
+        );
+
+        powerUpSpellSpeed = new PowerUpSpellSpeed(
+                random.nextInt(maxX - minX) + minX,
+                random.nextInt(maxY - minY) + minY
+        );
+
 
     }
+
 
     public int getMaxRowsPerPlayer() {
         int usedCellSize = getCellSize();

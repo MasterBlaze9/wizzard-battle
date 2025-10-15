@@ -36,8 +36,7 @@ public class HealthBar {
             }
 
         } else {
-            playerTwoHealthBar = new Rectangle(Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING), Grid.PADDING,
-                    Grid.getWidth() / 4, Grid.PADDING * 5);
+            playerTwoHealthBar = new Rectangle(Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING), Grid.PADDING, Grid.getWidth() / 4, Grid.PADDING * 5);
             playerTwoHealthBar.draw();
 
             lifeCounter = new Life[numberOfLifes];

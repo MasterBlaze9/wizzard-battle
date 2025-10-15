@@ -1,4 +1,12 @@
 package game.powerups;
 
-public class PowerUpDamage {
+import utils.AppColor;
+
+public class PowerUpDamage extends PowerUp {
+
+    public PowerUpDamage(int x, int y) {
+        super(x, y);
+        super.setColor(AppColor.YELLOW.toColor());
+        super.fill();
+    }
 }
