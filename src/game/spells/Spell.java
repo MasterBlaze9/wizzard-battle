@@ -121,7 +121,7 @@ public class Spell extends Rectangle {
                                 }
                                 this.position.setCol(hitCol);
                             }
-
+                            hit.takeDamage(damage);
                             System.out.println("Spell hit character: " + hit.getClass().getSimpleName());
                             try {
                                 this.delete();

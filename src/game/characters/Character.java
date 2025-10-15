@@ -1,6 +1,5 @@
 package game.characters;
 
-import game.spells.Spell;
 import ui.position.Position;
 
 public abstract class Character {
@@ -16,5 +15,9 @@ public abstract class Character {
 	public abstract void moveRight();
 
 	public abstract void castSpell();
+
+	public abstract void takeDamage(int damage);
+
+	public abstract void addLifePoints();
 
 }
