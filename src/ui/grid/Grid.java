@@ -1,35 +1,33 @@
 package ui.grid;
 
-import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import ui.character.FaceCard.Player1FaceCard;
+import ui.character.FaceCard.Player2FaceCard;
+import ui.character.HealthBar.HealthBar;
 
 import utils.AppColor;
 
 public class Grid {
 
     public static final int PADDING = 10;
-
     public static final int DEFAULT_CELL_SIZE = 5;
-
     public static int CELL_SIZE = DEFAULT_CELL_SIZE;
 
-    private static double CHARACTER_SCALE = 0.9;
     private static int cols;
     private static int rows;
-
     private int targetWidth = 0;
     private int targetHeight = 0;
 
     private int cellSize = 0;
 
-    private Rectangle canvas;
+    private static Rectangle canvas;
     private GameArea gameArea;
     private Line line;
-    private HealthBarAppearancePlayer1 healthBar1;
-    private HealthBarAppearancePlayer2 healthBar2;
+  
+  
     private Player1FaceCard card1;
     private Player2FaceCard card2;
-    private Life life;
+
     private int dividerWidth = 10;
 
     public Grid(int cols, int rows) {
@@ -70,17 +68,13 @@ public class Grid {
         gameArea.translate(0, 0);
         line.translate(0, 0);
 
-        healthBar1 = new HealthBarAppearancePlayer1(PADDING+canvas.getWidth() / 8, PADDING, canvas.getWidth()/ 4 ,dividerWidth * 5);
-
-        healthBar2 = new HealthBarAppearancePlayer2(canvas.getWidth() /2 + (canvas.getWidth()/ 8 + PADDING), PADDING, canvas.getWidth()/4 , dividerWidth * 5) ;
-
 
         card1 = new Player1FaceCard(PADDING, PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
 
         card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth()/8 -PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        life = new Life(PADDING+canvas.getWidth() / 8, PADDING, CELL_SIZE * 2 ,CELL_SIZE * 2);
+        
     }
 
     public int getMaxRowsPerPlayer() {
@@ -131,11 +125,11 @@ public class Grid {
         return Math.max(0, (rows - rowsInArea) / 2);
     }
 
-    public int getWidth() {
+    public static int getWidth() {
         return canvas.getWidth();
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return canvas.getHeight();
     }
 

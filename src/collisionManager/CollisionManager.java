@@ -101,7 +101,7 @@ public class CollisionManager {
 		// convert spell path (fromCol..toCol) into a swept pixel rectangle
 		int cell = Grid.CELL_SIZE;
 		int spellW = spell.getWidth();
-		int spellH = spell.getHeight();
+
 
 		int startX = Grid.PADDING + fromCol * cell + (cell - spellW) / 2;
 		int endX = Grid.PADDING + toCol * cell + (cell - spellW) / 2;
@@ -111,16 +111,16 @@ public class CollisionManager {
 		int sweptY = spell.getY();
 		int sweptH = spell.getHeight();
 
-		for (Character c : registeredCharacters) {
-			if (c == null) {
+		for (Character character : registeredCharacters) {
+			if (character == null) {
 				continue;
 			}
 
 			// ignore same-player hits
 			PlayerEnum charPlayer = null;
-			if (c instanceof PlayerOneCharacter) {
+			if (character instanceof PlayerOneCharacter) {
 				charPlayer = PlayerEnum.Player_1;
-			} else if (c instanceof PlayerTwoCharacter) {
+			} else if (character instanceof PlayerTwoCharacter) {
 				charPlayer = PlayerEnum.Player_2;
 			}
 
@@ -129,8 +129,8 @@ public class CollisionManager {
 			}
 
 			// compute character UI bounding box using CharacterUI centering logic
-			int cCol = c.getPosition().getCol();
-			int cRow = c.getPosition().getRow();
+			int cCol = character.getPosition().getCol();
+			int cRow = character.getPosition().getRow();
 			int growPadding = Math.max(2, cell / 4);
 			int charSize = cell + 2 * growPadding;
 			int charX = Grid.PADDING + cCol * cell + (cell - charSize) / 2;
@@ -139,7 +139,7 @@ public class CollisionManager {
 			// rectangle intersection test between swept rect and character bounding box
 			if (sweptX < charX + charSize && sweptX + sweptW > charX && sweptY < charY + charSize
 					&& sweptY + sweptH > charY) {
-				return c;
+				return character;
 			}
 		}
 
