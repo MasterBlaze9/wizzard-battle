@@ -6,7 +6,7 @@ public class App {
     public static void main(String[] args) {
 
         // Create a 1080p canvas while preserving logical cols/rows
-        Grid canvas = new Grid(128, 72, 1920, 1080);
+        Grid canvas = new Grid(128, 72,1000 , 1000);
         canvas.init();
 
         int quarterCellCol = canvas.getCols() / 4;

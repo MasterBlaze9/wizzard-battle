@@ -69,12 +69,12 @@ public class Grid {
         line.translate(0, 0);
 
 
-        card1 = new Player1FaceCard(PADDING, PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+        card1 = new Player1FaceCard("resources/testeCarinha.png",PADDING, PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
 
         card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth()/8 -PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        
+
     }
 
     public int getMaxRowsPerPlayer() {

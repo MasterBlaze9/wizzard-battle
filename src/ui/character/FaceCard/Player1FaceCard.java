@@ -1,15 +1,14 @@
+// src/ui/character/FaceCard/Player1FaceCard.java
 package ui.character.FaceCard;
 
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-public class Player1FaceCard extends Rectangle {
+public class Player1FaceCard {
 
-    private Rectangle card1;
+    private Picture card1;
 
-    public Player1FaceCard(int x, int y, int width, int height) {
-        card1 = new Rectangle(x, y, width, height);
-//        card1.setColor(AppColor.BLUE.toColor());
+    public Player1FaceCard(String imagePath, int x, int y, int width, int height) {
+        this.card1 = new Picture(x, y, imagePath);
         card1.draw();
     }
-
 }
