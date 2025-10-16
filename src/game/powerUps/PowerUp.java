@@ -16,8 +16,6 @@ public class PowerUp extends Rectangle {
 
     public PowerUp(int col, int row) {
         super(
-                // compute pixel coords centered inside cell (may be negative offset if larger
-                // than cell)
                 Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,
                 Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,
                 getDefaultSize(),

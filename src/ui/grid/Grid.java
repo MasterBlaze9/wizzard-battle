@@ -1,14 +1,11 @@
 package ui.grid;
 
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-
+import game.PlayerEnum;
 import game.powerUps.PowerUpDamage;
 import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
-import ui.character.FaceCard.Player1FaceCard;
-import ui.character.FaceCard.Player2FaceCard;
-
-
+import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import ui.character.FaceCard.PlayerFaceCard;
 import utils.AppColor;
 
 import java.util.Random;
@@ -28,6 +25,7 @@ public class Grid {
     private int targetWidth = 0;
     private int targetHeight = 0;
 
+
     private int cellSize = 0;
 
     private static Rectangle canvas;
@@ -37,8 +35,10 @@ public class Grid {
     private static game.powerUps.PowerUp leftPowerUp;
     private static game.powerUps.PowerUp rightPowerUp;
 
-    private Player1FaceCard card1;
-    private Player2FaceCard card2;
+
+
+    private PlayerFaceCard card1;
+    private PlayerFaceCard card2;
     private static Grid activeGrid;
 
     private int dividerWidth = 10;
@@ -68,7 +68,7 @@ public class Grid {
         canvas.setColor(AppColor.BROWN.toColor());
         canvas.fill();
 
-        gameArea = new GameArea(canvas.getX(), canvas.getY(), canvas.getWidth(), canvas.getHeight());
+        gameArea = new GameArea("resources/gameArea.png",canvas.getX(), canvas.getY(), canvas.getWidth(), canvas.getHeight());
 
         int areaW = gameArea.getAreaWidth();
         int areaH = gameArea.getAreaHeight();
@@ -81,10 +81,10 @@ public class Grid {
         line.translate(0, 0);
 
 
-        card1 = new Player1FaceCard("resources/testeCarinha.png", PADDING *2 + PADDING / 2
-                , PADDING*2 + PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+        card1 = new PlayerFaceCard(PlayerEnum.Player_1, PADDING * 2 + PADDING / 2
+                , PADDING * 2 + PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+        card2 = new PlayerFaceCard(PlayerEnum.Player_2, canvas.getWidth() - (canvas.getWidth() / 8 - PADDING) + PADDING * 2, PADDING + PADDING * 2, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         activeGrid = this;
 
@@ -259,7 +259,7 @@ public class Grid {
         }
     }
 
-        public int getMaxRowsPerPlayer() {
+    public int getMaxRowsPerPlayer() {
         int usedCellSize = getCellSize();
         if (gameArea != null) {
 

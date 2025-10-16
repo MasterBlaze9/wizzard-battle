@@ -2,18 +2,19 @@ package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 import utils.AppColor;
 
 
-public class GameArea extends Rectangle {
+public class GameArea extends Rectangle{
     private Rectangle gameArea;
     private int areaX;
     private int areaY;
     private int areaWidth;
     private int areaHeight;
-
+    private Picture GameArea;
     
-    public GameArea(int canvasX, int canvasY, int canvasWidth, int canvasHeight) {
+    public GameArea(String imagePath,int canvasX, int canvasY, int canvasWidth, int canvasHeight) {
       
         int areaWidth = canvasWidth;
         int areaHeight = canvasHeight / 2;
@@ -21,14 +22,16 @@ public class GameArea extends Rectangle {
         int areaX = canvasX;
         int areaY = canvasY + (canvasHeight - areaHeight) / 2;
 
+
         gameArea = new Rectangle(areaX, areaY, areaWidth, areaHeight);
         this.areaX = areaX;
         this.areaY = areaY;
         this.areaWidth = areaWidth;
         this.areaHeight = areaHeight;
+        this.GameArea = new Picture(areaX, areaY, imagePath);
+        GameArea.draw();
 
-        gameArea.setColor(AppColor.GREEN.toColor());
-        gameArea.fill();
+
     }
 
     public int getAreaX() {

@@ -6,7 +6,7 @@ public class App {
     @SuppressWarnings("unused")
     public static void main(String[] args) {
 
-        // Create a 1080p canvas while preserving logical cols/rows
+
         Grid canvas = new Grid(128, 72, 1000, 1000);
         canvas.init();
 
