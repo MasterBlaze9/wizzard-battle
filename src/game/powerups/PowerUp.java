@@ -1,41 +1,27 @@
 package game.powerUps;
 
+import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import ui.grid.Grid;
-import utils.AppColor;
 import collisionManager.CollisionManager;
 
-/**
- * PowerUp positioned in logical grid cells (col,row).
- * Subclasses should use the (col,row) constructor.
- */
-public class PowerUp extends Rectangle {
+public class PowerUp {
 
     private final int col;
     private final int row;
 
-    public PowerUp(int col, int row) {
-        super(
-                // compute pixel coords centered inside cell (may be negative offset if larger
-                // than cell)
-                Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,
-                Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,
-                getDefaultSize(),
-                getDefaultSize());
+    private Rectangle powerUpSquare;
 
+    public PowerUp(int col, int row) {
         this.col = col;
         this.row = row;
-
-        setColor(AppColor.RED.toColor());
-        fill();
-
-        // register for global lookup
+        powerUpSquare = new Rectangle(col, row, getDefaultSize(), getDefaultSize());
         CollisionManager.registerPowerUp(this);
     }
 
     private static int getDefaultSize() {
-        // make powerup visually at least the cell size or 12 px
-        return Math.max(12, Grid.CELL_SIZE);
+
+        return  Grid.CELL_SIZE;
     }
 
     public int getCol() {
@@ -46,20 +32,29 @@ public class PowerUp extends Rectangle {
         return row;
     }
 
-    /**
-     * Remove visual and unregister from collision manager.
-     */
     public void removeFromGame() {
         try {
-            this.delete();
+            delete();
         } catch (Exception ignored) {
         }
         CollisionManager.unregisterPowerUp(this);
-        // notify grid that this powerup is collected/removed so it can clear references
+
         try {
             Grid.onPowerUpCollected(this);
         } catch (Exception ignored) {
         }
+    }
+
+    public void delete() {
+        powerUpSquare.delete();
+    }
+
+    public void setColor(Color color) {
+        powerUpSquare.setColor(color);
+    }
+
+    public void fill() {
+        powerUpSquare.fill();
     }
 
 }

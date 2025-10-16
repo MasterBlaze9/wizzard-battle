@@ -2,6 +2,7 @@ package ui.grid;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
+import game.powerUps.PowerUp;
 import game.powerUps.PowerUpDamage;
 import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
@@ -34,8 +35,8 @@ public class Grid {
     private GameArea gameArea;
     private Line line;
 
-    private static game.powerUps.PowerUp leftPowerUp;
-    private static game.powerUps.PowerUp rightPowerUp;
+    private static PowerUp leftPowerUp;
+    private static PowerUp rightPowerUp;
 
     private Player1FaceCard card1;
     private Player2FaceCard card2;
@@ -159,7 +160,7 @@ public class Grid {
      * Called by a powerup when it is collected/removed so Grid can forget
      * references.
      */
-    public static void onPowerUpCollected(game.powerUps.PowerUp p) {
+    public static void onPowerUpCollected(PowerUp p) {
         if (p == null) {
             return;
         }
