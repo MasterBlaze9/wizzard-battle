@@ -9,13 +9,14 @@ public class PowerUp {
 
     private final int col;
     private final int row;
-
     private Rectangle powerUpSquare;
-
+    
     public PowerUp(int col, int row) {
-        this.col = col;
+
         this.row = row;
-        powerUpSquare = new Rectangle(col, row, getDefaultSize(), getDefaultSize());
+        this.col = col;
+
+        powerUpSquare = new Rectangle(Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2, Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,getDefaultSize(), getDefaultSize());
         CollisionManager.registerPowerUp(this);
     }
 

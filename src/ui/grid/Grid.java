@@ -9,11 +9,9 @@ import game.powerUps.PowerUpSpellSpeed;
 import ui.character.FaceCard.Player1FaceCard;
 import ui.character.FaceCard.Player2FaceCard;
 
-
 import utils.AppColor;
 
 import java.util.Random;
-
 
 public class Grid {
 
@@ -81,11 +79,11 @@ public class Grid {
         gameArea.translate(0, 0);
         line.translate(0, 0);
 
+        card1 = new Player1FaceCard("resources/testeCarinha.png", PADDING * 2 + PADDING / 2, PADDING * 2 + PADDING,
+                canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        card1 = new Player1FaceCard("resources/testeCarinha.png", PADDING *2 + PADDING / 2
-                , PADDING*2 + PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
-
-        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
+        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING,
+                canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         activeGrid = this;
 
@@ -122,22 +120,27 @@ public class Grid {
             rightCol = rightStart + random.nextInt(rightCols);
         }
 
-        int row = topRow;
+        int leftRow = topRow;
         if (rowsPerPlayer > 0) {
-            row = topRow + random.nextInt(rowsPerPlayer);
+            leftRow = topRow + random.nextInt(rowsPerPlayer);
+        }
+
+        int rightRow = topRow;
+        if (rowsPerPlayer > 0) {
+            rightRow = topRow + random.nextInt(rowsPerPlayer);
         }
 
         // spawn left random powerup
         int leftType = random.nextInt(3);
         switch (leftType) {
             case 0:
-                leftPowerUp = new PowerUpDamage(leftCol, row);
+                leftPowerUp = new PowerUpDamage(leftCol, leftRow);
                 break;
             case 1:
-                leftPowerUp = new PowerUpHealth(leftCol, row);
+                leftPowerUp = new PowerUpHealth(leftCol, leftRow);
                 break;
             default:
-                leftPowerUp = new PowerUpSpellSpeed(leftCol, row);
+                leftPowerUp = new PowerUpSpellSpeed(leftCol, leftRow);
                 break;
         }
 
@@ -145,13 +148,13 @@ public class Grid {
         int rightType = random.nextInt(3);
         switch (rightType) {
             case 0:
-                rightPowerUp = new PowerUpDamage(rightCol, row);
+                rightPowerUp = new PowerUpDamage(rightCol, rightRow);
                 break;
             case 1:
-                rightPowerUp = new PowerUpHealth(rightCol, row);
+                rightPowerUp = new PowerUpHealth(rightCol, rightRow);
                 break;
             default:
-                rightPowerUp = new PowerUpSpellSpeed(rightCol, row);
+                rightPowerUp = new PowerUpSpellSpeed(rightCol, rightRow);
                 break;
         }
     }
@@ -260,7 +263,7 @@ public class Grid {
         }
     }
 
-        public int getMaxRowsPerPlayer() {
+    public int getMaxRowsPerPlayer() {
         int usedCellSize = getCellSize();
         if (gameArea != null) {
 
