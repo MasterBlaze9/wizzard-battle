@@ -7,7 +7,7 @@ public class App {
     public static void main(String[] args) {
 
 
-        Grid canvas = new Grid(128, 72, 1000, 1000);
+        Grid canvas = new Grid(128, 72, 1920, 1080);
         canvas.init();
 
         int quarterCellCol = Grid.getCols() / 4;
