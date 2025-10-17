@@ -1,5 +1,6 @@
 package game.powerUps;
 
+import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import ui.grid.Grid;
 
@@ -9,9 +10,11 @@ public class PowerUp {
 
     private final int col;
     private final int row;
-
+    private Rectangle powerUpSquare;
+    
     public PowerUp(int col, int row) {
 
+        this.row = row;
         this.col = col;
 
         powerUpSquare = new Rectangle(Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2, Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,getDefaultSize(), getDefaultSize());
@@ -33,7 +36,7 @@ public class PowerUp {
 
     public void removeFromGame() {
         try {
-            this.delete();
+            delete();
         } catch (Exception ignored) {
         }
         CollisionManager.unregisterPowerUp(this);
