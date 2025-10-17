@@ -1,7 +1,4 @@
 package game.powerUps;
-
-import utils.AppColor;
-
 public class PowerUpHealth extends PowerUp {
 
     public int healthToAdd = 1;
