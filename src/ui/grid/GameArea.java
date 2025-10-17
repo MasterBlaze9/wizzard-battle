@@ -3,10 +3,10 @@ package ui.grid;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 import org.academiadecodigo.simplegraphics.pictures.Picture;
-import utils.AppColor;
 
 
-public class GameArea extends Rectangle{
+
+public class GameArea{
     private Rectangle gameArea;
     private int areaX;
     private int areaY;
@@ -14,14 +14,13 @@ public class GameArea extends Rectangle{
     private int areaHeight;
     private Picture GameArea;
     
-    public GameArea(String imagePath,int canvasX, int canvasY, int canvasWidth, int canvasHeight) {
-      
+    public GameArea(String imagePath, int canvasX, int canvasY, int canvasWidth, int canvasHeight) {
+
         int areaWidth = canvasWidth;
         int areaHeight = canvasHeight / 2;
 
         int areaX = canvasX;
         int areaY = canvasY + (canvasHeight - areaHeight) / 2;
-
 
         gameArea = new Rectangle(areaX, areaY, areaWidth, areaHeight);
         this.areaX = areaX;
@@ -31,7 +30,10 @@ public class GameArea extends Rectangle{
         this.GameArea = new Picture(areaX, areaY, imagePath);
         GameArea.draw();
 
-
+    }
+    
+    public void translate(int col, int row) {
+        gameArea.translate(col, row);
     }
 
     public int getAreaX() {

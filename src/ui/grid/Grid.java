@@ -58,6 +58,14 @@ public class Grid {
         this.cellSize = Math.max(1, Math.min(sizeByWidth, sizeByHeight));
     }
 
+    public PlayerFaceCard getCard1() {
+        return card1;
+    }
+
+    public PlayerFaceCard getCard2() {
+        return card2;
+    }
+
     public void init() {
         int usedCellSize = cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
 
