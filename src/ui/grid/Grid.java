@@ -92,10 +92,25 @@ public class Grid {
 
         gameArea.translate(0, 0);
 
-        card1 = new PlayerFaceCard(PlayerEnum.Player_1, 85, 70,
+        // choose two distinct face images and inject into the face card constructors
+        java.util.List<String> facePaths = new java.util.ArrayList<>();
+        facePaths.add("resources/Faces/Carolina.png");
+        facePaths.add("resources/Faces/Pascoa.png");
+        facePaths.add("resources/Faces/Rolo.png");
+        // remove duplicates and shuffle
+        facePaths = new java.util.ArrayList<>(new java.util.LinkedHashSet<>(facePaths));
+        if (facePaths.size() < 2) {
+            throw new IllegalStateException("Not enough distinct face images; need at least 2 distinct faces");
+        }
+        java.util.Collections.shuffle(facePaths);
+
+        String face1 = facePaths.get(0);
+        String face2 = facePaths.get(1);
+
+        card1 = new PlayerFaceCard(PlayerEnum.Player_1, face1, 85, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        card2 = new PlayerFaceCard(PlayerEnum.Player_2,
+        card2 = new PlayerFaceCard(PlayerEnum.Player_2, face2,
                 canvas.getWidth() - 135, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
