@@ -25,14 +25,14 @@ public class Spell {
                     Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2,
                     Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
                             + Grid.CELL_SIZE * 2,
-                    "resources/Spells/fire.png");
+                    "resources/Spells/spell.png");
             spell.draw();
         } else {
             spell = new Picture(
                     Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2,
                     Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
                             + Grid.CELL_SIZE * 2,
-                    "resources/Spells/fire1.png");
+                    "resources/Spells/spell2.png");
             spell.draw();
         }
 

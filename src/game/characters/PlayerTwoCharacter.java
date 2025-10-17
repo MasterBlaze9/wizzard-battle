@@ -21,7 +21,7 @@ public class PlayerTwoCharacter extends Character {
 	private AppKeyboard appKeyboard;
 	private CollisionManager collisionManager;
 	private HealthBar healthBar;
-
+//	HomeScreen homeScreen = new HomeScreen();
 	public PlayerTwoCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_2;
 		position = new Position(column, row);

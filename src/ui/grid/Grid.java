@@ -5,6 +5,7 @@ import game.powerUps.PowerUp;
 import game.powerUps.PowerUpDamage;
 import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 import ui.faceCard.PlayerFaceCard;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
@@ -31,7 +32,7 @@ public class Grid {
 
     private int cellSize = 0;
 
-    private static Rectangle canvas;
+    private static Picture canvas;
     private GameArea gameArea;
     private Line line;
 
@@ -76,9 +77,8 @@ public class Grid {
         // keep the static CELL_SIZE in sync with the grid's computed cell size
         CELL_SIZE = usedCellSize;
 
-        canvas = new Rectangle(PADDING, PADDING, cols * usedCellSize, rows * usedCellSize);
-        canvas.setColor(AppColor.BROWN.toColor());
-        canvas.fill();
+        canvas = new Picture(PADDING, PADDING, "resources/backgroun2.png");
+        canvas.draw();
 
         gameArea = new GameArea("resources/gameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),canvas.getHeight());
 

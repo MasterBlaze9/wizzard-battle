@@ -24,7 +24,7 @@ public class GameArea{
 
         gameArea = new Rectangle(areaX, areaY, areaWidth, areaHeight);
 
-        gameArea.grow(2,2);
+
         this.areaX = areaX;
         this.areaY = areaY;
         this.areaWidth = areaWidth;

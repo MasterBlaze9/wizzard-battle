@@ -9,31 +9,34 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import game.PlayerEnum;
 import game.characters.Character;
 
+//import ui.screens.HomeScreen;
+
 
 public class AppKeyboard implements KeyboardHandler {
 
 	private Keyboard keyboard;
 	private Controls playerControls;
-
+//	private HomeScreen start;
 	private Character controlledCharacter;
 
 	KeyboardEvent startGame = new KeyboardEvent();
 
-	public AppKeyboard(PlayerEnum playerNumber, Character controlledCharacter) {
+	public AppKeyboard(PlayerEnum playerNumber, Character controlledCharacter ){
 		keyboard = new Keyboard(this);
 		playerControls = new Controls(playerNumber);
 		this.controlledCharacter = controlledCharacter;
+//		this.start = start;
 
 		keyboard.addEventListener(playerControls.getMoveUpEvent());
 		keyboard.addEventListener(playerControls.getMoveDownEvent());
 		keyboard.addEventListener(playerControls.getMoveLeftEvent());
 		keyboard.addEventListener(playerControls.getMoveRightEvent());
 		keyboard.addEventListener(playerControls.getAttackEvent());
-		keyboard.addEventListener(startGame);
+//		keyboard.addEventListener(start.getStartGameScreen());
 
-		startGame.setKey(KeyboardEvent.KEY_SPACE);
-		startGame.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-
+//		startGame.setKey(KeyboardEvent.KEY_SPACE);
+//		startGame.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+//		keyboard.addEventListener(startGame);
 
 
 	}
@@ -42,6 +45,13 @@ public class AppKeyboard implements KeyboardHandler {
 	@Override
 	public void keyPressed(KeyboardEvent keyboardEvent) {
 		int key = keyboardEvent.getKey();
+
+//		if(start.isVisible()) {
+//			if (key == startGame.getKey()){
+//				start.hide();
+//			}
+//			return;
+//		}
 
 		if (key == playerControls.getMoveRightEvent().getKey()) {
 			controlledCharacter.moveRight();
@@ -53,11 +63,13 @@ public class AppKeyboard implements KeyboardHandler {
 			controlledCharacter.moveDown();
 		} else if (key==playerControls.getAttackEvent().getKey()) {
 			controlledCharacter.castSpell();
-		}else if(key == startGame.getKey()){
-			//TODO Create homescreen handle
+
 		}
 
 	}
+
+
+
 
 	@Override
 	public void keyReleased(KeyboardEvent keyboardEvent) {

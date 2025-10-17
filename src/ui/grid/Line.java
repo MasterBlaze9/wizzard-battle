@@ -9,8 +9,8 @@ public class Line extends Rectangle {
 
     public Line(int x, int y, int width, int height) {
         line = new Rectangle(x, y, width, height);
-        line.setColor(AppColor.BLUE.toColor());
-        line.fill();
+
+
     }
 
 }

@@ -13,6 +13,7 @@ import ui.healthBar.HealthBar;
 import ui.position.Position;
 import collisionManager.CollisionManager;
 
+
 public class PlayerOneCharacter extends Character {
 
 	private CharacterUI characterHead;
@@ -21,7 +22,7 @@ public class PlayerOneCharacter extends Character {
 	private AppKeyboard appKeyboard;
 	private CollisionManager collisionManager;
 	private HealthBar healthBar;
-
+	//HomeScreen homeScreen = new HomeScreen();
 	public PlayerOneCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
 		position = new Position(column, row);
