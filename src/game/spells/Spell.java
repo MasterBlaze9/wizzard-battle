@@ -1,6 +1,8 @@
 package game.spells;
 
 import game.PlayerEnum;
+
+import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import ui.position.Position;
 import ui.grid.Grid;
@@ -8,8 +10,9 @@ import game.characters.Character;
 import collisionManager.CollisionManager;
 import utils.AppColor;
 
-public class Spell extends Rectangle {
+public class Spell {
 
+    private Rectangle spell;
     private Position position;
     private int speed;
     private int damage;
@@ -17,14 +20,12 @@ public class Spell extends Rectangle {
     private AppColor color;
 
     public Spell(int row, int col, PlayerEnum playerEnum) {
-        super(
+        spell = new Rectangle(
                 Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2,
                 Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2,
                 Math.max(6, Grid.CELL_SIZE * 2),
                 Math.max(3, Grid.CELL_SIZE / 2));
 
-        // number of cells the spell moves per animation step; increase for faster
-        // spells
         this.speed = 2;
         this.damage = 1;
         this.playerEnum = playerEnum;
@@ -36,11 +37,11 @@ public class Spell extends Rectangle {
         }
 
         // logical position in cell coords
-        this.position = new Position(col, row);
+        position = new Position(col, row);
 
         // visual appearance
-        this.setColor(color.toColor());
-        this.fill();
+        setColor(color.toColor());
+        fill();
 
         // start self-animation: player 1 goes right (+1), player 2 goes left (-1)
         final int dir = playerEnum.equals(PlayerEnum.Player_1) ? 1 : -1;
@@ -49,15 +50,15 @@ public class Spell extends Rectangle {
             try {
                 while (true) {
                     // compute desired next column by speed (cells per tick)
-                    int currentCol = this.position.getCol();
-                    int desiredNext = currentCol + dir * this.speed;
+                    int currentCol = position.getCol();
+                    int desiredNext = currentCol + dir * speed;
 
                     // if the desired next goes past the right edge
                     if (dir > 0 && desiredNext >= Grid.getCols()) {
                         int cellsToEdge = Math.max(0, Grid.getCols() - 1 - currentCol);
                         if (cellsToEdge > 0) {
                             try {
-                                this.translate(dir * Grid.CELL_SIZE * cellsToEdge, 0);
+                                translate(dir * Grid.CELL_SIZE * cellsToEdge, 0);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -70,7 +71,7 @@ public class Spell extends Rectangle {
                         }
 
                         try {
-                            this.delete();
+                            delete();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -83,7 +84,7 @@ public class Spell extends Rectangle {
                         int cellsToEdge = Math.max(0, currentCol);
                         if (cellsToEdge > 0) {
                             try {
-                                this.translate(dir * Grid.CELL_SIZE * cellsToEdge, 0);
+                                translate(dir * Grid.CELL_SIZE * cellsToEdge, 0);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -96,7 +97,7 @@ public class Spell extends Rectangle {
                         }
 
                         try {
-                            this.delete();
+                            delete();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -115,16 +116,16 @@ public class Spell extends Rectangle {
                             int cellsToHit = Math.abs(hitCol - currentCol);
                             if (cellsToHit > 0) {
                                 try {
-                                    this.translate(dir * Grid.CELL_SIZE * cellsToHit, 0);
+                                    translate(dir * Grid.CELL_SIZE * cellsToHit, 0);
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                 }
-                                this.position.setCol(hitCol);
+                                position.setCol(hitCol);
                             }
                             hit.takeDamage(damage);
                             System.out.println("Spell hit character: " + hit.getClass().getSimpleName());
                             try {
-                                this.delete();
+                               delete();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -132,13 +133,13 @@ public class Spell extends Rectangle {
                         }
 
                         // no hit along the path; apply normal movement
-                        this.position.setCol(desiredNext);
-                        this.translate(dir * Grid.CELL_SIZE * this.speed, 0);
+                        position.setCol(desiredNext);
+                        translate(dir * Grid.CELL_SIZE * speed, 0);
                     } catch (Exception e) {
                         // if translate/delete throws, log and try to clean up then stop
                         e.printStackTrace();
                         try {
-                            this.delete();
+                            delete();
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -159,6 +160,11 @@ public class Spell extends Rectangle {
             }
         }).start();
     }
+    
+    public void setColor(Color color) {
+        spell.setColor(color);
+    }
+    
 
     public int getSpeed() {
         return speed;
@@ -180,7 +186,31 @@ public class Spell extends Rectangle {
         return position;
     }
 
-    public game.PlayerEnum getPlayerEnum() {
+    public PlayerEnum getPlayerEnum() {
         return playerEnum;
+    }
+
+    public void delete() {
+        spell.delete();
+    }
+
+    public void fill() {
+        spell.fill();
+    }
+
+    public void translate(int col, int row) {
+        spell.translate(col, row);
+    }
+    
+    public int getWidth() {
+        return spell.getWidth();
+    }
+
+    public int getHeight() {
+        return spell.getHeight();
+    }
+
+    public int getY() {
+        return spell.getY();
     }
 }
