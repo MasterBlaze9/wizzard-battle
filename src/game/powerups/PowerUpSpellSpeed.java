@@ -6,7 +6,7 @@ public class PowerUpSpellSpeed extends PowerUp {
 
     public PowerUpSpellSpeed(int col, int row) {
         super(col, row);
-        super.setColor(AppColor.BROWN.toColor());
+        super.setColor(AppColor.BLUE.toColor());
         super.fill();
     }
 }
