@@ -3,6 +3,7 @@ package game.powerUps;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import ui.grid.Grid;
+
 import collisionManager.CollisionManager;
 
 public class PowerUp {
