@@ -7,9 +7,9 @@ import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
 import game.spells.Spell;
 import keyboard.AppKeyboard;
-import ui.HealthBar.HealthBar;
 import ui.character.CharacterUI;
 import ui.grid.Grid;
+import ui.healthBar.HealthBar;
 import ui.position.Position;
 import collisionManager.CollisionManager;
 

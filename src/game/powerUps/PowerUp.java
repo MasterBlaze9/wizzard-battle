@@ -1,7 +1,7 @@
 package game.powerUps;
 
-import org.academiadecodigo.simplegraphics.graphics.Color;
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
+
 import ui.grid.Grid;
 import collisionManager.CollisionManager;
 
@@ -9,17 +9,17 @@ public class PowerUp {
 
     private final int col;
     private final int row;
-    private Rectangle powerUpSquare;
+    private Picture powerUpSquare;
 
-    public PowerUp(int col, int row) {
+    public PowerUp(int col, int row,String imagePath) {
 
         this.row = row;
         this.col = col;
 
-        powerUpSquare = new Rectangle(Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,
-                Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2, getDefaultSize(),
-                getDefaultSize());
+        powerUpSquare = new Picture(Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,
+                Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,imagePath);
         CollisionManager.registerPowerUp(this);
+        powerUpSquare.draw();
     }
 
     private static int getDefaultSize() {
@@ -52,12 +52,5 @@ public class PowerUp {
         powerUpSquare.delete();
     }
 
-    public void setColor(Color color) {
-        powerUpSquare.setColor(color);
-    }
-
-    public void fill() {
-        powerUpSquare.fill();
-    }
 
 }

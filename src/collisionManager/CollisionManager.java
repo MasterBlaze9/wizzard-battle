@@ -29,36 +29,41 @@ public class CollisionManager {
 		this.grid = grid;
 	}
 
-	public static void registerCharacter(Character c) {
-		if (c == null)
+	public static void registerCharacter(Character character) {
+		if (character == null)
 			return;
-		if (!registeredCharacters.contains(c)) {
-			registeredCharacters.add(c);
+		if (!registeredCharacters.contains(character)) {
+			registeredCharacters.add(character);
 		}
 	}
 
-	public static void registerPowerUp(PowerUp p) {
-		if (p == null) {
+	public static void registerPowerUp(PowerUp powerUp) {
+		if (powerUp == null) {
 			return;
 		}
-		if (!registeredPowerUps.contains(p)) {
-			registeredPowerUps.add(p);
+		if (!registeredPowerUps.contains(powerUp)) {
+			registeredPowerUps.add(powerUp);
 		}
 	}
 
-	public static void unregisterPowerUp(game.powerUps.PowerUp p) {
-		if (p == null) {
+	public static void unregisterPowerUp(PowerUp powerUp) {
+		if (powerUp == null) {
 			return;
 		}
-		registeredPowerUps.remove(p);
+		registeredPowerUps.remove(powerUp);
 	}
 
 	public static PowerUp getPowerUpAt(int col, int row) {
+		int radius = ui.grid.Grid.POWERUP_PICKUP_RADIUS_CELLS;
 		for (PowerUp p : registeredPowerUps) {
 			if (p == null) {
 				continue;
 			}
-			if (p.getCol() == col && p.getRow() == row) {
+
+			int pCol = p.getCol();
+			int pRow = p.getRow();
+
+			if (Math.abs(pCol - col) <= radius && Math.abs(pRow - row) <= radius) {
 				return p;
 			}
 		}
@@ -73,61 +78,13 @@ public class CollisionManager {
 		int sCol = spell.getPosition().getCol();
 		int sRow = spell.getPosition().getRow();
 
-		for (Character c : registeredCharacters) {
-			if (c == null)
-				continue;
-
-			int cCol = c.getPosition().getCol();
-			int cRow = c.getPosition().getRow();
-
-		
-			PlayerEnum charPlayer = null;
-			if (c instanceof PlayerOneCharacter) {
-				charPlayer = PlayerEnum.Player_1;
-			} else if (c instanceof PlayerTwoCharacter) {
-				charPlayer = PlayerEnum.Player_2;
-			}
-
-			if (charPlayer != null && charPlayer == spell.getPlayerEnum()) {
-				continue;
-			}
-
-		
-			if (sCol == cCol && sRow == cRow) {
-				return c;
-			}
-		}
-
-		return null;
-	}
-
-
-	public static Character getCollidingCharacterAlongPath(Spell spell, int fromCol, int toCol) {
-		if (spell == null) {
-			return null;
-		}
-
-
-		int cell = Grid.CELL_SIZE;
-		int spellPixelY = spell.getY();
-		int spellLogicalRow = spell.getPosition().getRow();
-		int spellRowBasePixel = Grid.PADDING + spellLogicalRow * cell;
-
-		int verticalOffsetPixels = spellPixelY - spellRowBasePixel;
-
-		int verticalOffsetCells = Math.round((float) verticalOffsetPixels / (float) cell);
-		int effectiveSpellRow = spellLogicalRow + verticalOffsetCells;
-
-	
-		int minCol = Math.min(fromCol, toCol);
-		int maxCol = Math.max(fromCol, toCol);
-
 		for (Character character : registeredCharacters) {
-			if (character == null) {
+			if (character == null)
 				continue;
-			}
 
-		
+			int characterCol = character.getPosition().getCol();
+			int characterRow = character.getPosition().getRow();
+
 			PlayerEnum charPlayer = null;
 			if (character instanceof PlayerOneCharacter) {
 				charPlayer = PlayerEnum.Player_1;
@@ -139,17 +96,57 @@ public class CollisionManager {
 				continue;
 			}
 
-			int cCol = character.getPosition().getCol();
-			int cRow = character.getPosition().getRow();
+			if (sCol == characterCol && sRow == characterRow) {
+				return character;
+			}
+		}
 
-		
-			if (cRow == effectiveSpellRow && cCol >= minCol && cCol <= maxCol) {
+		return null;
+	}
+
+	public static Character getCollidingCharacterAlongPath(Spell spell, int fromCol, int toCol) {
+		if (spell == null) {
+			return null;
+		}
+
+		int cell = Grid.CELL_SIZE;
+		int spellPixelY = spell.getY();
+		int spellLogicalRow = spell.getPosition().getRow();
+		int spellRowBasePixel = Grid.PADDING + spellLogicalRow * cell;
+
+		int verticalOffsetPixels = spellPixelY - spellRowBasePixel;
+
+		int verticalOffsetCells = Math.round((float) verticalOffsetPixels / (float) cell);
+		int effectiveSpellRow = spellLogicalRow + verticalOffsetCells;
+
+		int minCol = Math.min(fromCol, toCol);
+		int maxCol = Math.max(fromCol, toCol);
+
+		for (Character character : registeredCharacters) {
+			if (character == null) {
+				continue;
+			}
+
+			PlayerEnum charPlayer = null;
+			if (character instanceof PlayerOneCharacter) {
+				charPlayer = PlayerEnum.Player_1;
+			} else if (character instanceof PlayerTwoCharacter) {
+				charPlayer = PlayerEnum.Player_2;
+			}
+
+			if (charPlayer != null && charPlayer == spell.getPlayerEnum()) {
+				continue;
+			}
+
+			int characterCol = character.getPosition().getCol();
+			int characterRow = character.getPosition().getRow();
+
+			if (characterRow == effectiveSpellRow && characterCol >= minCol && characterCol <= maxCol) {
 				return character;
 			}
 
-			
 			int spellW = spell.getWidth();
-			int startX = Grid.PADDING + fromCol * cell + (cell - spellW) / 2 ;
+			int startX = Grid.PADDING + fromCol * cell + (cell - spellW) / 2;
 			int endX = Grid.PADDING + toCol * cell + (cell - spellW) / 2;
 			int sweptX = Math.min(startX, endX);
 			int sweptW = Math.abs(endX - startX) + spellW;
@@ -158,8 +155,8 @@ public class CollisionManager {
 
 			int growPadding = Math.max(2, cell / 4);
 			int charSize = cell + 2 * growPadding;
-			int charX = Grid.PADDING + cCol * cell + (cell - charSize) / 2;
-			int charY = Grid.PADDING + cRow * cell + (cell - charSize) / 2 + Grid.CELL_SIZE + 5;
+			int charX = Grid.PADDING + characterCol * cell + (cell - charSize) / 2;
+			int charY = Grid.PADDING + characterRow * cell + (cell - charSize) / 2 + Grid.CELL_SIZE + 5;
 
 			if (sweptX < charX + charSize && sweptX + sweptW > charX && sweptY < charY + charSize
 					&& sweptY + sweptH > charY) {

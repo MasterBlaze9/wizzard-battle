@@ -5,7 +5,7 @@ import game.powerUps.PowerUp;
 import game.powerUps.PowerUpDamage;
 import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
-import ui.FaceCard.PlayerFaceCard;
+import ui.faceCard.PlayerFaceCard;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
@@ -17,10 +17,12 @@ public class Grid {
 
     public static final int PADDING = 10;
     public static final int DEFAULT_CELL_SIZE = 5;
-    public static int CELL_SIZE = DEFAULT_CELL_SIZE;
+    public static int CELL_SIZE;
 
     public static final int POWERUP_SPAWN_DELAY_SECONDS = 8;
     public static final int POWERUP_BUFF_DURATION_SECONDS = 10;
+
+    public static final int POWERUP_PICKUP_RADIUS_CELLS = 1;
 
     private static int cols;
     private static int rows;
@@ -71,7 +73,9 @@ public class Grid {
     public void init() {
         int usedCellSize = cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
 
+        // keep the static CELL_SIZE in sync with the grid's computed cell size
         CELL_SIZE = usedCellSize;
+
         canvas = new Rectangle(PADDING, PADDING, cols * usedCellSize, rows * usedCellSize);
         canvas.setColor(AppColor.BROWN.toColor());
         canvas.fill();
@@ -89,11 +93,11 @@ public class Grid {
         gameArea.translate(0, 0);
         line.translate(0, 0);
 
-        card1 = new PlayerFaceCard(PlayerEnum.Player_1, 85 , 70,
+        card1 = new PlayerFaceCard(PlayerEnum.Player_1, 85, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         card2 = new PlayerFaceCard(PlayerEnum.Player_2,
-                canvas.getWidth()-135, 70,
+                canvas.getWidth() - 135, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         activeGrid = this;
@@ -116,14 +120,12 @@ public class Grid {
         int topRow = getGameAreaTopRow();
         int rowsPerPlayer = getMaxRowsPerPlayer();
 
-        // left side columns
         int leftCols = getMaxColsPerPlayer();
         int leftCol = 0;
         if (leftCols > 0) {
             leftCol = random.nextInt(leftCols);
         }
 
-        // right side columns
         int rightCols = getMaxColsPerPlayer();
         int rightStart = Math.max(0, getCols() - rightCols);
         int rightCol = rightStart;
@@ -174,22 +176,21 @@ public class Grid {
      * Called by a powerup when it is collected/removed so Grid can forget
      * references.
      */
-    public static void onPowerUpCollected(PowerUp p) {
-        if (p == null) {
+    public static void onPowerUpCollected(PowerUp powerUp) {
+        if (powerUp == null) {
             return;
         }
         boolean wasLeft = false;
         boolean wasRight = false;
-        if (p == leftPowerUp) {
+        if (powerUp == leftPowerUp) {
             leftPowerUp = null;
             wasLeft = true;
         }
-        if (p == rightPowerUp) {
+        if (powerUp == rightPowerUp) {
             rightPowerUp = null;
             wasRight = true;
         }
 
-        // schedule respawn for the side(s) that lost their power-up
         final boolean respawnLeft = wasLeft;
         final boolean respawnRight = wasRight;
 
@@ -210,15 +211,9 @@ public class Grid {
         }).start();
     }
 
-    /**
-     * Spawn a single power-up for one side (left=true for player 1, false for
-     * player 2).
-     * This chooses a random column within that side and a random row inside the
-     * game area.
-     */
     private static void spawnPowerUpForSide(boolean left) {
         try {
-            // if grid isn't initialized yet, bail
+
             if (activeGrid == null) {
                 return;
             }

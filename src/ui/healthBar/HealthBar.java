@@ -1,4 +1,4 @@
-package ui.HealthBar;
+package ui.healthBar;
 
 import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;

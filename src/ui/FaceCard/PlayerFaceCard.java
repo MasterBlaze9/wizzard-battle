@@ -1,5 +1,5 @@
 // src/ui/character/FaceCard/playerOneFaceImagePathCard.java
-package ui.FaceCard;
+package ui.faceCard;
 
 import game.PlayerEnum;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
