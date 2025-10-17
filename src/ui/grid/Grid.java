@@ -5,8 +5,10 @@ import game.powerUps.PowerUp;
 import game.powerUps.PowerUpDamage;
 import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
+import ui.FaceCard.PlayerFaceCard;
+
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-import ui.character.FaceCard.PlayerFaceCard;
+
 import utils.AppColor;
 
 import java.util.Random;

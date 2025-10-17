@@ -7,9 +7,8 @@ import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
 import game.spells.Spell;
 import keyboard.AppKeyboard;
-
+import ui.HealthBar.HealthBar;
 import ui.character.CharacterUI;
-import ui.character.HealthBar.HealthBar;
 import ui.grid.Grid;
 import ui.position.Position;
 import collisionManager.CollisionManager;
@@ -26,7 +25,7 @@ public class PlayerTwoCharacter extends Character {
 	public PlayerTwoCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_2;
 		position = new Position(column, row);
-		characterHead = new CharacterUI(column, row);
+		characterHead = new CharacterUI(column, row,"resources/Characters/character2.png");
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_2, this);
 		collisionManager = new CollisionManager(this, grid);
 		healthBar = new HealthBar(PlayerEnum.Player_2);

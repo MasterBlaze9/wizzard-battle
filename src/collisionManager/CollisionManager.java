@@ -11,40 +11,24 @@ import game.PlayerEnum;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Manages collision checks between spells, characters and registered powerups.
- */
 public class CollisionManager {
 
 	private Character character;
 	private Grid grid;
 
-	// registry of characters in the game for spell collision checks
 	private static final List<Character> registeredCharacters = new ArrayList<>();
-
-	// registry of active powerups (use fully-qualified name since implementations
-	// may extend graphic primitives from other packages)
 	private static final List<PowerUp> registeredPowerUps = new ArrayList<>();
 
 	public CollisionManager(Character character) {
 		this.character = character;
-		// register character for global collision checks
 		registerCharacter(character);
 	}
 
-	/**
-	 * Create a CollisionManager that can validate moves against the provided
-	 * grid/game area.
-	 */
 	public CollisionManager(Character character, Grid grid) {
 		this(character);
 		this.grid = grid;
 	}
 
-	/**
-	 * Register a character for global collision checks. Safe to call multiple
-	 * times.
-	 */
 	public static void registerCharacter(Character c) {
 		if (c == null)
 			return;
@@ -53,9 +37,6 @@ public class CollisionManager {
 		}
 	}
 
-	/**
-	 * Register a powerup for global lookup.
-	 */
 	public static void registerPowerUp(PowerUp p) {
 		if (p == null) {
 			return;
@@ -65,9 +46,6 @@ public class CollisionManager {
 		}
 	}
 
-	/**
-	 * Unregister a powerup.
-	 */
 	public static void unregisterPowerUp(game.powerUps.PowerUp p) {
 		if (p == null) {
 			return;
@@ -75,11 +53,8 @@ public class CollisionManager {
 		registeredPowerUps.remove(p);
 	}
 
-	/**
-	 * Return a powerup occupying the given cell, or null if none.
-	 */
-	public static game.powerUps.PowerUp getPowerUpAt(int col, int row) {
-		for (game.powerUps.PowerUp p : registeredPowerUps) {
+	public static PowerUp getPowerUpAt(int col, int row) {
+		for (PowerUp p : registeredPowerUps) {
 			if (p == null) {
 				continue;
 			}
@@ -90,10 +65,6 @@ public class CollisionManager {
 		return null;
 	}
 
-	/**
-	 * Checks whether the given spell collides with any registered character.
-	 * Returns the character hit, or null if none.
-	 */
 	public static Character getCollidingCharacter(Spell spell) {
 		if (spell == null) {
 			return null;
@@ -109,7 +80,7 @@ public class CollisionManager {
 			int cCol = c.getPosition().getCol();
 			int cRow = c.getPosition().getRow();
 
-			// ignore same-player hits
+		
 			PlayerEnum charPlayer = null;
 			if (c instanceof PlayerOneCharacter) {
 				charPlayer = PlayerEnum.Player_1;
@@ -121,7 +92,7 @@ public class CollisionManager {
 				continue;
 			}
 
-			// simple cell-equality collision
+		
 			if (sCol == cCol && sRow == cRow) {
 				return c;
 			}
@@ -130,34 +101,33 @@ public class CollisionManager {
 		return null;
 	}
 
-	/**
-	 * Checks whether the given spell would collide with any registered character
-	 * when moving from fromCol to toCol (inclusive). This handles fast spells
-	 * that move more than one cell per tick (prevents tunneling).
-	 */
+
 	public static Character getCollidingCharacterAlongPath(Spell spell, int fromCol, int toCol) {
 		if (spell == null) {
 			return null;
 		}
 
-		// convert spell path (fromCol..toCol) into a swept pixel rectangle
+
 		int cell = Grid.CELL_SIZE;
-		int spellW = spell.getWidth();
+		int spellPixelY = spell.getY();
+		int spellLogicalRow = spell.getPosition().getRow();
+		int spellRowBasePixel = Grid.PADDING + spellLogicalRow * cell;
 
-		int startX = Grid.PADDING + fromCol * cell + (cell - spellW) / 2;
-		int endX = Grid.PADDING + toCol * cell + (cell - spellW) / 2;
+		int verticalOffsetPixels = spellPixelY - spellRowBasePixel;
 
-		int sweptX = Math.min(startX, endX);
-		int sweptW = Math.abs(endX - startX) + spellW;
-		int sweptY = spell.getY();
-		int sweptH = spell.getHeight();
+		int verticalOffsetCells = Math.round((float) verticalOffsetPixels / (float) cell);
+		int effectiveSpellRow = spellLogicalRow + verticalOffsetCells;
+
+	
+		int minCol = Math.min(fromCol, toCol);
+		int maxCol = Math.max(fromCol, toCol);
 
 		for (Character character : registeredCharacters) {
 			if (character == null) {
 				continue;
 			}
 
-			// ignore same-player hits
+		
 			PlayerEnum charPlayer = null;
 			if (character instanceof PlayerOneCharacter) {
 				charPlayer = PlayerEnum.Player_1;
@@ -169,15 +139,28 @@ public class CollisionManager {
 				continue;
 			}
 
-			// compute character UI bounding box using CharacterUI centering logic
 			int cCol = character.getPosition().getCol();
 			int cRow = character.getPosition().getRow();
+
+		
+			if (cRow == effectiveSpellRow && cCol >= minCol && cCol <= maxCol) {
+				return character;
+			}
+
+			
+			int spellW = spell.getWidth();
+			int startX = Grid.PADDING + fromCol * cell + (cell - spellW) / 2 ;
+			int endX = Grid.PADDING + toCol * cell + (cell - spellW) / 2;
+			int sweptX = Math.min(startX, endX);
+			int sweptW = Math.abs(endX - startX) + spellW;
+			int sweptY = spellPixelY;
+			int sweptH = spell.getHeight();
+
 			int growPadding = Math.max(2, cell / 4);
 			int charSize = cell + 2 * growPadding;
 			int charX = Grid.PADDING + cCol * cell + (cell - charSize) / 2;
-			int charY = Grid.PADDING + cRow * cell + (cell - charSize) / 2;
+			int charY = Grid.PADDING + cRow * cell + (cell - charSize) / 2 + Grid.CELL_SIZE + 5;
 
-			// rectangle intersection test between swept rect and character bounding box
 			if (sweptX < charX + charSize && sweptX + sweptW > charX && sweptY < charY + charSize
 					&& sweptY + sweptH > charY) {
 				return character;

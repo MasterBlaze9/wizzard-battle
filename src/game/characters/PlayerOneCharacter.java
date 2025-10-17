@@ -7,8 +7,8 @@ import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
 import game.spells.Spell;
 import keyboard.AppKeyboard;
+import ui.HealthBar.HealthBar;
 import ui.character.CharacterUI;
-import ui.character.HealthBar.HealthBar;
 import ui.grid.Grid;
 import ui.position.Position;
 import collisionManager.CollisionManager;
@@ -25,7 +25,7 @@ public class PlayerOneCharacter extends Character {
 	public PlayerOneCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
 		position = new Position(column, row);
-		characterHead = new CharacterUI(column, row);
+		characterHead = new CharacterUI(column, row,"resources/Characters/character.png" );
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_1, this);
 		collisionManager = new CollisionManager(this, grid);
 
@@ -58,7 +58,7 @@ public class PlayerOneCharacter extends Character {
 					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					// spell speed affects both spell travel speed and character movement speed
+					
 					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
 					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
