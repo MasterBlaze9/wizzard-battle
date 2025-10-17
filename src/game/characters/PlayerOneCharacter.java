@@ -13,7 +13,6 @@ import ui.healthBar.HealthBar;
 import ui.position.Position;
 import collisionManager.CollisionManager;
 
-
 public class PlayerOneCharacter extends Character {
 
 	private CharacterUI characterHead;
@@ -22,11 +21,12 @@ public class PlayerOneCharacter extends Character {
 	private AppKeyboard appKeyboard;
 	private CollisionManager collisionManager;
 	private HealthBar healthBar;
-	//HomeScreen homeScreen = new HomeScreen();
+
+	// HomeScreen homeScreen = new HomeScreen();
 	public PlayerOneCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
 		position = new Position(column, row);
-		characterHead = new CharacterUI(column, row,"resources/Characters/character.png" );
+		characterHead = new CharacterUI(column, row, "resources/Characters/character.png");
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_1, this);
 		collisionManager = new CollisionManager(this, grid);
 
@@ -56,12 +56,12 @@ public class PlayerOneCharacter extends Character {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}
@@ -83,11 +83,11 @@ public class PlayerOneCharacter extends Character {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}
@@ -109,11 +109,11 @@ public class PlayerOneCharacter extends Character {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}
@@ -135,11 +135,11 @@ public class PlayerOneCharacter extends Character {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}

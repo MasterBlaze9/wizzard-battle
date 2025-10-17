@@ -54,7 +54,7 @@ public class CollisionManager {
 	}
 
 	public static PowerUp getPowerUpAt(int col, int row) {
-		int radius = ui.grid.Grid.POWERUP_PICKUP_RADIUS_CELLS;
+		int radius = Grid.POWER_UP_PICKUP_RADIUS_CELLS;
 		for (PowerUp p : registeredPowerUps) {
 			if (p == null) {
 				continue;

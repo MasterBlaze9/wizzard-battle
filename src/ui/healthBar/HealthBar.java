@@ -1,13 +1,11 @@
 package ui.healthBar;
 
-import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 import game.PlayerEnum;
 
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 import ui.grid.Grid;
-import utils.AppColor;
 
 public class HealthBar {
 
@@ -16,13 +14,13 @@ public class HealthBar {
     private Life[] lifeCounter;
     private PlayerEnum playerNumber;
 
-    private int numberOfLifes;
-    private static final int DEFAULT_LIFES = 3;
+    private int numberOfLives;
+    private static final int DEFAULT_LIVES = 3;
 
     public HealthBar(PlayerEnum playerNumber) {
         this.playerNumber = playerNumber;
-        if (numberOfLifes <= 0) {
-            numberOfLifes = DEFAULT_LIFES;
+        if (numberOfLives <= 0) {
+            numberOfLives = DEFAULT_LIVES;
         }
 
         if (playerNumber.equals(PlayerEnum.Player_1)) {
@@ -31,17 +29,18 @@ public class HealthBar {
                     Grid.PADDING * 5);
             playerOneHealthBar.draw();
 
-            lifeCounter = new Life[numberOfLifes];
-            for (int i = 0; i < numberOfLifes; i++) {
+            lifeCounter = new Life[numberOfLives];
+            for (int i = 0; i < numberOfLives; i++) {
                 lifeCounter[i] = new Life(i, true);
             }
 
         } else {
-            playerTwoHealthBar = new Rectangle(Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING), Grid.PADDING, Grid.getWidth() / 4, Grid.PADDING * 5);
+            playerTwoHealthBar = new Rectangle(Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING), Grid.PADDING,
+                    Grid.getWidth() / 4, Grid.PADDING * 5);
             playerTwoHealthBar.draw();
 
-            lifeCounter = new Life[numberOfLifes];
-            for (int i = 0; i < numberOfLifes; i++) {
+            lifeCounter = new Life[numberOfLives];
+            for (int i = 0; i < numberOfLives; i++) {
                 lifeCounter[i] = new Life(i, false);
             }
 
@@ -121,10 +120,10 @@ public class HealthBar {
 
             // center vertically inside the health bar
             int ellipseY = barY + (barHeight - diameter) / 2;
-            ellipseY +=15;
+            ellipseY += 15;
 
             // compute total width of all life ellipses and spacing
-            int totalWidth = numberOfLifes * diameter + Math.max(0, numberOfLifes - 1) * spacing;
+            int totalWidth = numberOfLives * diameter + Math.max(0, numberOfLives - 1) * spacing;
 
             // startX: player one should start at the leftmost inset; player two centered
             int startX;
@@ -137,10 +136,9 @@ public class HealthBar {
 
             int ellipseX = startX + index * (diameter + spacing);
 
-            life = new Picture(ellipseX, ellipseY,"resources/PowerUps/health.png");
-            life.grow(10,10);
+            life = new Picture(ellipseX, ellipseY, "resources/PowerUps/health.png");
+            life.grow(10, 10);
             life.draw();
-
 
         }
 

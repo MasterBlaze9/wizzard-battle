@@ -8,9 +8,6 @@ import game.powerUps.PowerUpSpellSpeed;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 import ui.faceCard.PlayerFaceCard;
 
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-
-import utils.AppColor;
 
 import java.util.Random;
 
@@ -20,10 +17,10 @@ public class Grid {
     public static final int DEFAULT_CELL_SIZE = 5;
     public static int CELL_SIZE;
 
-    public static final int POWERUP_SPAWN_DELAY_SECONDS = 8;
-    public static final int POWERUP_BUFF_DURATION_SECONDS = 10;
+    public static final int POWER_UP_SPAWN_DELAY_SECONDS = 8;
+    public static final int POWER_UP_BUFF_DURATION_SECONDS = 10;
 
-    public static final int POWERUP_PICKUP_RADIUS_CELLS = 1;
+    public static final int POWER_UP_PICKUP_RADIUS_CELLS = 1;
 
     private static int cols;
     private static int rows;
@@ -104,7 +101,7 @@ public class Grid {
 
         new Thread(() -> {
             try {
-                Thread.sleep(POWERUP_SPAWN_DELAY_SECONDS * 1000L);
+                Thread.sleep(POWER_UP_SPAWN_DELAY_SECONDS * 1000L);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
@@ -143,7 +140,7 @@ public class Grid {
             rightRow = topRow + random.nextInt(rowsPerPlayer);
         }
 
-        // spawn left random powerup
+     
         int leftType = random.nextInt(3);
         switch (leftType) {
             case 0:
@@ -157,7 +154,7 @@ public class Grid {
                 break;
         }
 
-        // spawn right random powerup
+
         int rightType = random.nextInt(3);
         switch (rightType) {
             case 0:
@@ -172,10 +169,6 @@ public class Grid {
         }
     }
 
-    /**
-     * Called by a powerup when it is collected/removed so Grid can forget
-     * references.
-     */
     public static void onPowerUpCollected(PowerUp powerUp) {
         if (powerUp == null) {
             return;
@@ -196,7 +189,7 @@ public class Grid {
 
         new Thread(() -> {
             try {
-                Thread.sleep(POWERUP_SPAWN_DELAY_SECONDS * 1000L);
+                Thread.sleep(POWER_UP_SPAWN_DELAY_SECONDS * 1000L);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
