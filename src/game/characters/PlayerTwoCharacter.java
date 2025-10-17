@@ -22,7 +22,6 @@ public class PlayerTwoCharacter extends Character {
 	private CollisionManager collisionManager;
 	private HealthBar healthBar;
 
-	
 	public PlayerTwoCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_2;
 		position = new Position(column, row);

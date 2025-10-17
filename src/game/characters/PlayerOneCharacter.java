@@ -44,7 +44,7 @@ public class PlayerOneCharacter extends Character {
 		int newCol = position.getCol();
 
 		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
-			
+
 			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
 			position.setRow(newRow);
 

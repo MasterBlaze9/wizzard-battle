@@ -126,8 +126,10 @@ public class CollisionManager {
 		int maxCol = Math.max(fromCol, toCol);
 
 		if (DEBUG_COLLISIONS) {
-			System.out.println(String.format("[COLLIDE DEBUG] spell logicalCol=%d logicalRow=%d effectiveRow=%d pathFrom=%d pathTo=%d minCol=%d maxCol=%d",
-					spell.getPosition().getCol(), spell.getPosition().getRow(), effectiveSpellRow, fromCol, toCol, minCol, maxCol));
+			System.out.println(String.format(
+					"[COLLIDE DEBUG] spell logicalCol=%d logicalRow=%d effectiveRow=%d pathFrom=%d pathTo=%d minCol=%d maxCol=%d",
+					spell.getPosition().getCol(), spell.getPosition().getRow(), effectiveSpellRow, fromCol, toCol,
+					minCol, maxCol));
 		}
 
 		for (Character character : registeredCharacters) {
@@ -137,7 +139,7 @@ public class CollisionManager {
 
 			if (DEBUG_COLLISIONS) {
 				System.out.println(String.format("[COLLIDE DEBUG] checking character logicalCol=%d logicalRow=%d",
-					character.getPosition().getCol(), character.getPosition().getRow()));
+						character.getPosition().getCol(), character.getPosition().getRow()));
 			}
 
 			PlayerEnum charPlayer = null;
@@ -168,8 +170,9 @@ public class CollisionManager {
 			int sweptH = spell.getHeight();
 
 			if (DEBUG_COLLISIONS) {
-				System.out.println(String.format("[COLLIDE DEBUG] spell prevX=%d currX=%d sweptX=%d sweptW=%d sweptY=%d sweptH=%d",
-						prevX, currX, sweptX, sweptW, sweptY, sweptH));
+				System.out.println(
+						String.format("[COLLIDE DEBUG] spell prevX=%d currX=%d sweptX=%d sweptW=%d sweptY=%d sweptH=%d",
+								prevX, currX, sweptX, sweptW, sweptY, sweptH));
 			}
 
 			// Use the character's actual image bounds for collision.
@@ -189,13 +192,15 @@ public class CollisionManager {
 
 			if (sX < charX + charSizeW && sX + sW > charX && sY < charY + charSizeH && sY + sH > charY) {
 				if (DEBUG_COLLISIONS) {
-					System.out.println(String.format("[COLLIDE DEBUG] HIT char col=%d row=%d charX=%d charY=%d charW=%d charH=%d",
-							characterCol, characterRow, charX, charY, charSizeW, charSizeH));
+					System.out.println(
+							String.format("[COLLIDE DEBUG] HIT char col=%d row=%d charX=%d charY=%d charW=%d charH=%d",
+									characterCol, characterRow, charX, charY, charSizeW, charSizeH));
 				}
 				return character;
 			} else if (DEBUG_COLLISIONS) {
-				System.out.println(String.format("[COLLIDE DEBUG] MISS char col=%d row=%d charX=%d charY=%d charW=%d charH=%d",
-						characterCol, characterRow, charX, charY, charSizeW, charSizeH));
+				System.out.println(
+						String.format("[COLLIDE DEBUG] MISS char col=%d row=%d charX=%d charY=%d charW=%d charH=%d",
+								characterCol, characterRow, charX, charY, charSizeW, charSizeH));
 			}
 		}
 
