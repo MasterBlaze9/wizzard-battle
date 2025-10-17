@@ -22,7 +22,6 @@ public class PlayerOneCharacter extends Character {
 	private CollisionManager collisionManager;
 	private HealthBar healthBar;
 
-	// HomeScreen homeScreen = new HomeScreen();
 	public PlayerOneCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
 		position = new Position(column, row);
@@ -44,8 +43,8 @@ public class PlayerOneCharacter extends Character {
 		int newRow = position.getRow() - moveCells;
 		int newCol = position.getCol();
 
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
-			// apply visual move and update logical position
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
+			
 			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
 			position.setRow(newRow);
 
@@ -73,7 +72,7 @@ public class PlayerOneCharacter extends Character {
 		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
 		int newRow = position.getRow() + moveCells;
 		int newCol = position.getCol();
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(0, Grid.CELL_SIZE * moveCells);
 			position.setRow(newRow);
 
@@ -99,7 +98,7 @@ public class PlayerOneCharacter extends Character {
 		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
 		int newCol = position.getCol() - moveCells;
 		int newRow = position.getRow();
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(-Grid.CELL_SIZE * moveCells, 0);
 			position.setCol(newCol);
 
@@ -125,7 +124,7 @@ public class PlayerOneCharacter extends Character {
 		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
 		int newCol = position.getCol() + moveCells;
 		int newRow = position.getRow();
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(Grid.CELL_SIZE * moveCells, 0);
 			position.setCol(newCol);
 
@@ -155,6 +154,26 @@ public class PlayerOneCharacter extends Character {
 
 	public Position getPosition() {
 		return position;
+	}
+
+	@Override
+	public int getPixelX() {
+		return characterHead.getPixelX();
+	}
+
+	@Override
+	public int getPixelY() {
+		return characterHead.getPixelY();
+	}
+
+	@Override
+	public int getPixelWidth() {
+		return characterHead.getPixelWidth();
+	}
+
+	@Override
+	public int getPixelHeight() {
+		return characterHead.getPixelHeight();
 	}
 
 	public PlayerEnum getPlayerNumber() {

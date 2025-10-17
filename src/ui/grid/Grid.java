@@ -8,7 +8,6 @@ import game.powerUps.PowerUpSpellSpeed;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 import ui.faceCard.PlayerFaceCard;
 
-
 import java.util.Random;
 
 public class Grid {
@@ -22,6 +21,18 @@ public class Grid {
 
     public static final int POWER_UP_PICKUP_RADIUS_CELLS = 1;
 
+    /**
+     * Extra pixels added to character hitbox/grown size to make characters easier
+     * to hit.
+     * This is added on top of the existing growPadding calculation.
+     */
+    public static final int EXTRA_HITBOX_PADDING_CHAR_PIXELS = 12;
+
+    /**
+     * Extra pixels to expand the spell swept collision rectangle in all directions.
+     */
+    public static final int EXTRA_HITBOX_PADDING_SPELL_PIXELS = 8;
+
     private static int cols;
     private static int rows;
     private int targetWidth = 0;
@@ -31,7 +42,6 @@ public class Grid {
 
     private static Picture canvas;
     private GameArea gameArea;
-    private Line line;
 
     private static PowerUp leftPowerUp;
     private static PowerUp rightPowerUp;
@@ -77,18 +87,10 @@ public class Grid {
         canvas = new Picture(PADDING, PADDING, "resources/backgroun2.png");
         canvas.draw();
 
-        gameArea = new GameArea("resources/gameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),canvas.getHeight());
-
-
-        int areaW = gameArea.getAreaWidth();
-        int areaH = gameArea.getAreaHeight();
-
-        int lineX = (areaW - dividerWidth) / 2;
-        int lineY = gameArea.getAreaY();
-        line = new Line(lineX, lineY, dividerWidth, areaH);
+        gameArea = new GameArea("resources/gameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),
+                canvas.getHeight());
 
         gameArea.translate(0, 0);
-        line.translate(0, 0);
 
         card1 = new PlayerFaceCard(PlayerEnum.Player_1, 85, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
@@ -140,7 +142,6 @@ public class Grid {
             rightRow = topRow + random.nextInt(rowsPerPlayer);
         }
 
-     
         int leftType = random.nextInt(3);
         switch (leftType) {
             case 0:
@@ -153,7 +154,6 @@ public class Grid {
                 leftPowerUp = new PowerUpSpellSpeed(leftCol, leftRow);
                 break;
         }
-
 
         int rightType = random.nextInt(3);
         switch (rightType) {

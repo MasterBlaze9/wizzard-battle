@@ -19,6 +19,9 @@ public class CollisionManager {
 	private static final List<Character> registeredCharacters = new ArrayList<>();
 	private static final List<PowerUp> registeredPowerUps = new ArrayList<>();
 
+	// Enable to print collision debug info
+	private static final boolean DEBUG_COLLISIONS = true;
+
 	public CollisionManager(Character character) {
 		this.character = character;
 		registerCharacter(character);
@@ -55,16 +58,16 @@ public class CollisionManager {
 
 	public static PowerUp getPowerUpAt(int col, int row) {
 		int radius = Grid.POWER_UP_PICKUP_RADIUS_CELLS;
-		for (PowerUp p : registeredPowerUps) {
-			if (p == null) {
+		for (PowerUp powerUp : registeredPowerUps) {
+			if (powerUp == null) {
 				continue;
 			}
 
-			int pCol = p.getCol();
-			int pRow = p.getRow();
+			int pCol = powerUp.getCol();
+			int pRow = powerUp.getRow();
 
 			if (Math.abs(pCol - col) <= radius && Math.abs(pRow - row) <= radius) {
-				return p;
+				return powerUp;
 			}
 		}
 		return null;
@@ -122,9 +125,19 @@ public class CollisionManager {
 		int minCol = Math.min(fromCol, toCol);
 		int maxCol = Math.max(fromCol, toCol);
 
+		if (DEBUG_COLLISIONS) {
+			System.out.println(String.format("[COLLIDE DEBUG] spell logicalCol=%d logicalRow=%d effectiveRow=%d pathFrom=%d pathTo=%d minCol=%d maxCol=%d",
+					spell.getPosition().getCol(), spell.getPosition().getRow(), effectiveSpellRow, fromCol, toCol, minCol, maxCol));
+		}
+
 		for (Character character : registeredCharacters) {
 			if (character == null) {
 				continue;
+			}
+
+			if (DEBUG_COLLISIONS) {
+				System.out.println(String.format("[COLLIDE DEBUG] checking character logicalCol=%d logicalRow=%d",
+					character.getPosition().getCol(), character.getPosition().getRow()));
 			}
 
 			PlayerEnum charPlayer = null;
@@ -146,28 +159,50 @@ public class CollisionManager {
 			}
 
 			int spellW = spell.getWidth();
-			int startX = Grid.PADDING + fromCol * cell + (cell - spellW) / 2;
-			int endX = Grid.PADDING + toCol * cell + (cell - spellW) / 2;
-			int sweptX = Math.min(startX, endX);
-			int sweptW = Math.abs(endX - startX) + spellW;
-			int sweptY = spellPixelY;
+			// Use exact previous and current picture X positions to compute the swept area.
+			int prevX = spell.getPrevX();
+			int currX = spell.getX();
+			int sweptX = Math.min(prevX, currX);
+			int sweptW = Math.abs(currX - prevX) + spellW;
+			int sweptY = spell.getY();
 			int sweptH = spell.getHeight();
 
-			int growPadding = Math.max(2, cell / 4);
-			int charSize = cell + 2 * growPadding;
-			int charX = Grid.PADDING + characterCol * cell + (cell - charSize) / 2;
-			int charY = Grid.PADDING + characterRow * cell + (cell - charSize) / 2 + Grid.CELL_SIZE + 5;
+			if (DEBUG_COLLISIONS) {
+				System.out.println(String.format("[COLLIDE DEBUG] spell prevX=%d currX=%d sweptX=%d sweptW=%d sweptY=%d sweptH=%d",
+						prevX, currX, sweptX, sweptW, sweptY, sweptH));
+			}
 
-			if (sweptX < charX + charSize && sweptX + sweptW > charX && sweptY < charY + charSize
-					&& sweptY + sweptH > charY) {
+			// Use the character's actual image bounds for collision.
+			int charX = character.getPixelX();
+			int charY = character.getPixelY();
+			int charSizeW = character.getPixelWidth();
+			int charSizeH = character.getPixelHeight();
+
+			// expand swept rectangle a bit so small spells reliably hit
+			int spellExtra = Grid.EXTRA_HITBOX_PADDING_SPELL_PIXELS;
+			// also add a vertical cell padding so spells that are 1 row off still hit
+			int verticalCellPad = Math.max(1, cell / 2);
+			int sX = sweptX - spellExtra;
+			int sY = sweptY - spellExtra - verticalCellPad;
+			int sW = sweptW + 2 * spellExtra;
+			int sH = sweptH + 2 * spellExtra + verticalCellPad * 2;
+
+			if (sX < charX + charSizeW && sX + sW > charX && sY < charY + charSizeH && sY + sH > charY) {
+				if (DEBUG_COLLISIONS) {
+					System.out.println(String.format("[COLLIDE DEBUG] HIT char col=%d row=%d charX=%d charY=%d charW=%d charH=%d",
+							characterCol, characterRow, charX, charY, charSizeW, charSizeH));
+				}
 				return character;
+			} else if (DEBUG_COLLISIONS) {
+				System.out.println(String.format("[COLLIDE DEBUG] MISS char col=%d row=%d charX=%d charY=%d charW=%d charH=%d",
+						characterCol, characterRow, charX, charY, charSizeW, charSizeH));
 			}
 		}
 
 		return null;
 	}
 
-	public boolean checkGameAreaColision(int newCol, int newRow) {
+	public boolean checkGameAreaCollision(int newCol, int newRow) {
 
 		int totalCols = Grid.getCols();
 		int totalRows = Grid.getRows();
@@ -203,6 +238,7 @@ public class CollisionManager {
 		boolean withinRows = newRow >= topRow && newRow <= bottomRow;
 
 		return withinCols && withinRows;
+
 	}
 
 }

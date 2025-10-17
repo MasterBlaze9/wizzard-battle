@@ -15,6 +15,8 @@ public class Spell {
 
     private Picture spell;
     private Position position;
+    // track previous picture X to compute exact swept rectangle during movement
+    private int prevX;
     private int speed;
     private int damage;
     private PlayerEnum playerEnum;
@@ -23,17 +25,17 @@ public class Spell {
         if (playerEnum.equals(PlayerEnum.Player_1)) {
             spell = new Picture(
                     Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2,
-                    Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
-                            + Grid.CELL_SIZE * 2,
+                    Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2,
                     "resources/Spells/spell.png");
             spell.draw();
+            prevX = spell.getX();
         } else {
             spell = new Picture(
                     Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2,
-                    Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
-                            + Grid.CELL_SIZE * 2,
+                    Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2,
                     "resources/Spells/spell2.png");
             spell.draw();
+            prevX = spell.getX();
         }
 
         speed = 2;
@@ -182,6 +184,9 @@ public class Spell {
     }
 
     public void translate(int col, int row) {
+        // record previous X before moving so collision manager can compute the swept
+        // area exactly
+        prevX = spell.getX();
         spell.translate(col, row);
     }
 
@@ -195,5 +200,13 @@ public class Spell {
 
     public int getY() {
         return spell.getY();
+    }
+
+    public int getX() {
+        return spell.getX();
+    }
+
+    public int getPrevX() {
+        return prevX;
     }
 }

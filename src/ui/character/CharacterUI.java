@@ -3,7 +3,7 @@ package ui.character;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 
 import ui.position.Position;
-import Grid;
+import ui.grid.Grid;
 
 public class CharacterUI {
 
@@ -15,7 +15,10 @@ public class CharacterUI {
 		int cellSize = Grid.CELL_SIZE;
 
 		int growPadding = Math.max(2, cellSize / 4);
-		int finalSize = cellSize + 2 * growPadding;
+		// add extra padding so character sprites occupy a larger visual area (and match
+		// hitbox)
+		int extra = Grid.EXTRA_HITBOX_PADDING_CHAR_PIXELS;
+		int finalSize = cellSize + 2 * growPadding + extra;
 
 		int pixelX = Grid.PADDING + column * cellSize + (cellSize - finalSize) / 2;
 		int pixelY = Grid.PADDING + row * cellSize + (cellSize - finalSize) / 2;
@@ -28,6 +31,22 @@ public class CharacterUI {
 
 	public void move(int cols, int rows) {
 		characterHead.translate(cols, rows);
+	}
+
+	public int getPixelX() {
+		return characterHead.getX();
+	}
+
+	public int getPixelY() {
+		return characterHead.getY();
+	}
+
+	public int getPixelWidth() {
+		return characterHead.getWidth();
+	}
+
+	public int getPixelHeight() {
+		return characterHead.getHeight();
 	}
 
 }
