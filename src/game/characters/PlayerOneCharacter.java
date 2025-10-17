@@ -12,10 +12,6 @@ import ui.character.HealthBar.HealthBar;
 import ui.grid.Grid;
 import ui.position.Position;
 import collisionManager.CollisionManager;
-import game.powerUps.PowerUp;
-import game.powerUps.PowerUpDamage;
-import game.powerUps.PowerUpHealth;
-import game.powerUps.PowerUpSpellSpeed;
 
 public class PlayerOneCharacter extends Character {
 
