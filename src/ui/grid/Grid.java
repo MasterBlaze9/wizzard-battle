@@ -1,6 +1,7 @@
 package ui.grid;
 
 import game.PlayerEnum;
+import game.powerUps.PowerUp;
 import game.powerUps.PowerUpDamage;
 import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
@@ -17,12 +18,9 @@ public class Grid {
     public static final int DEFAULT_CELL_SIZE = 5;
     public static int CELL_SIZE = DEFAULT_CELL_SIZE;
 
-    // powerup timing config: tweak these variables
     public static final int POWERUP_SPAWN_DELAY_SECONDS = 8;
     public static final int POWERUP_BUFF_DURATION_SECONDS = 10;
-    // powerup timing config: tweak these variables
-    public static final int POWERUP_SPAWN_DELAY_SECONDS = 8;
-    public static final int POWERUP_BUFF_DURATION_SECONDS = 10;
+ 
     private static int cols;
     private static int rows;
     private int targetWidth = 0;
@@ -38,8 +36,9 @@ public class Grid {
     private static PowerUp leftPowerUp;
     private static PowerUp rightPowerUp;
 
-    private Player1FaceCard card1;
-    private Player2FaceCard card2;
+    private PlayerFaceCard card1;
+    private PlayerFaceCard card2;
+   
     private static Grid activeGrid;
 
     private int dividerWidth = 10;
@@ -86,8 +85,7 @@ public class Grid {
                 , PADDING * 2 + PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         card2 = new PlayerFaceCard(PlayerEnum.Player_2, canvas.getWidth() - (canvas.getWidth() / 8 - PADDING) + PADDING * 2, PADDING + PADDING * 2, canvas.getWidth() / 8, canvas.getHeight() / 4);
-        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING,
-                canvas.getWidth() / 8, canvas.getHeight() / 4);
+        
 
         activeGrid = this;
 
