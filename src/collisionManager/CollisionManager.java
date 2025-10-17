@@ -5,6 +5,7 @@ import game.characters.Character;
 import game.spells.Spell;
 import game.characters.PlayerOneCharacter;
 import game.characters.PlayerTwoCharacter;
+import game.powerUps.PowerUp;
 import game.PlayerEnum;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class CollisionManager {
 
 	// registry of active powerups (use fully-qualified name since implementations
 	// may extend graphic primitives from other packages)
-	private static final List<game.powerUps.PowerUp> registeredPowerUps = new ArrayList<>();
+	private static final List<PowerUp> registeredPowerUps = new ArrayList<>();
 
 	public CollisionManager(Character character) {
 		this.character = character;
@@ -55,7 +56,7 @@ public class CollisionManager {
 	/**
 	 * Register a powerup for global lookup.
 	 */
-	public static void registerPowerUp(game.powerUps.PowerUp p) {
+	public static void registerPowerUp(PowerUp p) {
 		if (p == null) {
 			return;
 		}
