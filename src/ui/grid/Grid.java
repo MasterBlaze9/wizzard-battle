@@ -87,11 +87,11 @@ public class Grid {
         gameArea.translate(0, 0);
         line.translate(0, 0);
 
-        card1 = new PlayerFaceCard(PlayerEnum.Player_1, PADDING * 2 + PADDING / 2, PADDING * 2 + PADDING,
+        card1 = new PlayerFaceCard(PlayerEnum.Player_1, 85 , 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         card2 = new PlayerFaceCard(PlayerEnum.Player_2,
-                canvas.getWidth() - (canvas.getWidth() / 8 - PADDING) + PADDING * 2, PADDING + PADDING * 2,
+                canvas.getWidth()-135, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         activeGrid = this;

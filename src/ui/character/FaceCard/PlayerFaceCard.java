@@ -32,7 +32,7 @@ public class PlayerFaceCard {
         }
 
         card1 = new Picture(x, y, facePath);
-        card1.grow(width / 8.0, height / 8.0);
+        card1.grow(width/4 , height/4); //TODO Check this 
         card1.draw();
 
     }
