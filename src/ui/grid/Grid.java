@@ -80,8 +80,8 @@ public class Grid {
         canvas.setColor(AppColor.BROWN.toColor());
         canvas.fill();
 
-        gameArea = new GameArea("resources/gameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),
-                canvas.getHeight());
+        gameArea = new GameArea("resources/gameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),canvas.getHeight());
+
 
         int areaW = gameArea.getAreaWidth();
         int areaH = gameArea.getAreaHeight();

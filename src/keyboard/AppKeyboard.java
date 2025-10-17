@@ -2,6 +2,7 @@ package keyboard;
 
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
+import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
 
@@ -16,6 +17,8 @@ public class AppKeyboard implements KeyboardHandler {
 
 	private Character controlledCharacter;
 
+	KeyboardEvent startGame = new KeyboardEvent();
+
 	public AppKeyboard(PlayerEnum playerNumber, Character controlledCharacter) {
 		keyboard = new Keyboard(this);
 		playerControls = new Controls(playerNumber);
@@ -26,6 +29,13 @@ public class AppKeyboard implements KeyboardHandler {
 		keyboard.addEventListener(playerControls.getMoveLeftEvent());
 		keyboard.addEventListener(playerControls.getMoveRightEvent());
 		keyboard.addEventListener(playerControls.getAttackEvent());
+		keyboard.addEventListener(startGame);
+
+		startGame.setKey(KeyboardEvent.KEY_SPACE);
+		startGame.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+
+
+
 	}
 
 
@@ -43,6 +53,8 @@ public class AppKeyboard implements KeyboardHandler {
 			controlledCharacter.moveDown();
 		} else if (key==playerControls.getAttackEvent().getKey()) {
 			controlledCharacter.castSpell();
+		}else if(key == startGame.getKey()){
+			//TODO Create homescreen handle
 		}
 
 	}

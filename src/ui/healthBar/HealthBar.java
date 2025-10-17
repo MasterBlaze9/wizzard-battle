@@ -5,6 +5,7 @@ import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 import game.PlayerEnum;
 
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 import ui.grid.Grid;
 import utils.AppColor;
 
@@ -99,7 +100,7 @@ public class HealthBar {
 
     class Life {
 
-        private Ellipse life;
+        private Picture life;
 
         public Life(int index, boolean playerOne) {
 
@@ -115,11 +116,12 @@ public class HealthBar {
                 // match the x used when creating playerOneHealthBar
                 barX = Grid.PADDING + Grid.getWidth() / 8;
             } else {
-                barX = Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING);
+                barX = Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING + 15);
             }
 
             // center vertically inside the health bar
             int ellipseY = barY + (barHeight - diameter) / 2;
+            ellipseY +=15;
 
             // compute total width of all life ellipses and spacing
             int totalWidth = numberOfLifes * diameter + Math.max(0, numberOfLifes - 1) * spacing;
@@ -130,17 +132,15 @@ public class HealthBar {
                 startX = barX + Grid.PADDING;
             } else {
                 startX = barX + (barWidth - totalWidth) - Grid.PADDING;
-                if (startX < barX + 4) {
 
-                    startX = barX + 4;
-                }
             }
 
             int ellipseX = startX + index * (diameter + spacing);
 
-            life = new Ellipse(ellipseX, ellipseY, diameter, diameter);
-            life.setColor(AppColor.RED.toColor());
-            life.fill();
+            life = new Picture(ellipseX, ellipseY,"resources/PowerUps/health.png");
+            life.grow(10,10);
+            life.draw();
+
 
         }
 
