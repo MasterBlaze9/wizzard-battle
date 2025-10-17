@@ -5,6 +5,7 @@ import game.characters.Character;
 import game.spells.Spell;
 import game.characters.PlayerOneCharacter;
 import game.characters.PlayerTwoCharacter;
+import game.powerUps.PowerUp;
 import game.PlayerEnum;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class CollisionManager {
 	private static final List<Character> registeredCharacters = new ArrayList<>();
 
 	// registry of active powerups
-	private static final List<game.powerUps.PowerUp> registeredPowerUps = new ArrayList<>();
+	private static final List<PowerUp> registeredPowerUps = new ArrayList<>();
 
 	public CollisionManager(Character character) {
 		this.character = character;
@@ -51,7 +52,7 @@ public class CollisionManager {
 	/**
 	 * Register a powerup for global lookup.
 	 */
-	public static void registerPowerUp(game.powerUps.PowerUp p) {
+	public static void registerPowerUp(PowerUp p) {
 		if (p == null) {
 			return;
 		}
@@ -63,7 +64,7 @@ public class CollisionManager {
 	/**
 	 * Unregister a powerup.
 	 */
-	public static void unregisterPowerUp(game.powerUps.PowerUp p) {
+	public static void unregisterPowerUp(PowerUp p) {
 		if (p == null) {
 			return;
 		}
@@ -73,8 +74,8 @@ public class CollisionManager {
 	/**
 	 * Return a powerup occupying the given cell, or null if none.
 	 */
-	public static game.powerUps.PowerUp getPowerUpAt(int col, int row) {
-		for (game.powerUps.PowerUp p : registeredPowerUps) {
+	public static PowerUp getPowerUpAt(int col, int row) {
+		for (PowerUp p : registeredPowerUps) {
 			if (p == null) {
 				continue;
 			}

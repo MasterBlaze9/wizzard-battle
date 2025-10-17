@@ -1,6 +1,10 @@
 package game.characters;
 
 import game.PlayerEnum;
+import game.powerUps.PowerUp;
+import game.powerUps.PowerUpDamage;
+import game.powerUps.PowerUpHealth;
+import game.powerUps.PowerUpSpellSpeed;
 import game.spells.Spell;
 import keyboard.AppKeyboard;
 import ui.character.CharacterUI;

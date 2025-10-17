@@ -20,6 +20,9 @@ public class Grid {
     // powerup timing config: tweak these variables
     public static final int POWERUP_SPAWN_DELAY_SECONDS = 8;
     public static final int POWERUP_BUFF_DURATION_SECONDS = 10;
+    // powerup timing config: tweak these variables
+    public static final int POWERUP_SPAWN_DELAY_SECONDS = 8;
+    public static final int POWERUP_BUFF_DURATION_SECONDS = 10;
     private static int cols;
     private static int rows;
     private int targetWidth = 0;
@@ -32,13 +35,11 @@ public class Grid {
     private GameArea gameArea;
     private Line line;
 
-    private static game.powerUps.PowerUp leftPowerUp;
-    private static game.powerUps.PowerUp rightPowerUp;
+    private static PowerUp leftPowerUp;
+    private static PowerUp rightPowerUp;
 
-
-
-    private PlayerFaceCard card1;
-    private PlayerFaceCard card2;
+    private Player1FaceCard card1;
+    private Player2FaceCard card2;
     private static Grid activeGrid;
 
     private int dividerWidth = 10;
@@ -85,6 +86,8 @@ public class Grid {
                 , PADDING * 2 + PADDING, canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         card2 = new PlayerFaceCard(PlayerEnum.Player_2, canvas.getWidth() - (canvas.getWidth() / 8 - PADDING) + PADDING * 2, PADDING + PADDING * 2, canvas.getWidth() / 8, canvas.getHeight() / 4);
+        card2 = new Player2FaceCard(canvas.getWidth() - (canvas.getWidth() / 8 - PADDING), PADDING,
+                canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         activeGrid = this;
 
@@ -121,22 +124,27 @@ public class Grid {
             rightCol = rightStart + random.nextInt(rightCols);
         }
 
-        int row = topRow;
+        int leftRow = topRow;
         if (rowsPerPlayer > 0) {
-            row = topRow + random.nextInt(rowsPerPlayer);
+            leftRow = topRow + random.nextInt(rowsPerPlayer);
+        }
+
+        int rightRow = topRow;
+        if (rowsPerPlayer > 0) {
+            rightRow = topRow + random.nextInt(rowsPerPlayer);
         }
 
         // spawn left random powerup
         int leftType = random.nextInt(3);
         switch (leftType) {
             case 0:
-                leftPowerUp = new PowerUpDamage(leftCol, row);
+                leftPowerUp = new PowerUpDamage(leftCol, leftRow);
                 break;
             case 1:
-                leftPowerUp = new PowerUpHealth(leftCol, row);
+                leftPowerUp = new PowerUpHealth(leftCol, leftRow);
                 break;
             default:
-                leftPowerUp = new PowerUpSpellSpeed(leftCol, row);
+                leftPowerUp = new PowerUpSpellSpeed(leftCol, leftRow);
                 break;
         }
 
@@ -144,13 +152,13 @@ public class Grid {
         int rightType = random.nextInt(3);
         switch (rightType) {
             case 0:
-                rightPowerUp = new PowerUpDamage(rightCol, row);
+                rightPowerUp = new PowerUpDamage(rightCol, rightRow);
                 break;
             case 1:
-                rightPowerUp = new PowerUpHealth(rightCol, row);
+                rightPowerUp = new PowerUpHealth(rightCol, rightRow);
                 break;
             default:
-                rightPowerUp = new PowerUpSpellSpeed(rightCol, row);
+                rightPowerUp = new PowerUpSpellSpeed(rightCol, rightRow);
                 break;
         }
     }
@@ -159,7 +167,7 @@ public class Grid {
      * Called by a powerup when it is collected/removed so Grid can forget
      * references.
      */
-    public static void onPowerUpCollected(game.powerUps.PowerUp p) {
+    public static void onPowerUpCollected(PowerUp p) {
         if (p == null) {
             return;
         }
