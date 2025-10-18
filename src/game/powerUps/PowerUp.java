@@ -11,15 +11,23 @@ public class PowerUp {
     private final int row;
     private Picture powerUpSquare;
 
-    public PowerUp(int col, int row,String imagePath) {
+    public PowerUp(int col, int row, String imagePath) {
 
         this.row = row;
         this.col = col;
 
         powerUpSquare = new Picture(Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,
-                Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2,imagePath);
-        CollisionManager.registerPowerUp(this);
+                Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - getDefaultSize()) / 2, imagePath);
+        // draw first so we can read pixel bounds
         powerUpSquare.draw();
+        CollisionManager.registerPowerUp(this);
+        try {
+            System.out
+                    .println(String.format("[COLLIDE DEBUG] PowerUp created logical=(%d,%d) pixel=(%d,%d) size=(%d,%d)",
+                            col, row, powerUpSquare.getX(), powerUpSquare.getY(), powerUpSquare.getWidth(),
+                            powerUpSquare.getHeight()));
+        } catch (Exception ignored) {
+        }
     }
 
     private static int getDefaultSize() {
@@ -52,5 +60,36 @@ public class PowerUp {
         powerUpSquare.delete();
     }
 
+    public int getPixelX() {
+        try {
+            return powerUpSquare.getX();
+        } catch (Exception e) {
+            return Grid.PADDING + col * Grid.CELL_SIZE;
+        }
+    }
+
+    public int getPixelY() {
+        try {
+            return powerUpSquare.getY();
+        } catch (Exception e) {
+            return Grid.PADDING + row * Grid.CELL_SIZE;
+        }
+    }
+
+    public int getPixelWidth() {
+        try {
+            return powerUpSquare.getWidth();
+        } catch (Exception e) {
+            return getDefaultSize();
+        }
+    }
+
+    public int getPixelHeight() {
+        try {
+            return powerUpSquare.getHeight();
+        } catch (Exception e) {
+            return getDefaultSize();
+        }
+    }
 
 }

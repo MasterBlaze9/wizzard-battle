@@ -46,10 +46,16 @@ public class PlayerOneCharacter extends Character {
 		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 
 			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
+			// detect powerups along the movement path (handles moveCells > 1)
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
 			position.setRow(newRow);
-
-			// pickup powerup if present
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();
@@ -74,9 +80,16 @@ public class PlayerOneCharacter extends Character {
 		int newCol = position.getCol();
 		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(0, Grid.CELL_SIZE * moveCells);
+			// detect powerups along the movement path (handles moveCells > 1)
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
 			position.setRow(newRow);
-
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();
@@ -100,9 +113,15 @@ public class PlayerOneCharacter extends Character {
 		int newRow = position.getRow();
 		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(-Grid.CELL_SIZE * moveCells, 0);
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
 			position.setCol(newCol);
-
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();
@@ -126,9 +145,15 @@ public class PlayerOneCharacter extends Character {
 		int newRow = position.getRow();
 		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(Grid.CELL_SIZE * moveCells, 0);
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
 			position.setCol(newCol);
-
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();

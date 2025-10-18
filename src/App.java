@@ -26,5 +26,7 @@ public class App {
 
         PlayerOneCharacter playerOneCharacter = new PlayerOneCharacter(canvas, quarterCellCol, startRow);
         PlayerTwoCharacter playerTwoCharacter = new PlayerTwoCharacter(canvas, quarterCellCol * 3, startRow);
+        // dump collision manager state for debugging power-up pickup issues
+        collisionManager.CollisionManager.dumpState();
     }
 }

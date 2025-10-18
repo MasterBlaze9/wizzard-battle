@@ -22,6 +22,10 @@ public class CollisionManager {
 	// Enable to print collision debug info
 	private static final boolean DEBUG_COLLISIONS = true;
 
+	public static boolean isDebugEnabled() {
+		return DEBUG_COLLISIONS;
+	}
+
 	public CollisionManager(Character character) {
 		this.character = character;
 		registerCharacter(character);
@@ -46,6 +50,10 @@ public class CollisionManager {
 		}
 		if (!registeredPowerUps.contains(powerUp)) {
 			registeredPowerUps.add(powerUp);
+			if (DEBUG_COLLISIONS) {
+				System.out.println(String.format("[COLLIDE DEBUG] Registered PowerUp at col=%d row=%d total=%d",
+						powerUp.getCol(), powerUp.getRow(), registeredPowerUps.size()));
+			}
 		}
 	}
 
@@ -58,6 +66,10 @@ public class CollisionManager {
 
 	public static PowerUp getPowerUpAt(int col, int row) {
 		int radius = Grid.POWER_UP_PICKUP_RADIUS_CELLS;
+		if (DEBUG_COLLISIONS) {
+			System.out.println(String.format("[COLLIDE DEBUG] getPowerUpAt query col=%d row=%d radius=%d registered=%d",
+					col, row, radius, registeredPowerUps.size()));
+		}
 		for (PowerUp powerUp : registeredPowerUps) {
 			if (powerUp == null) {
 				continue;
@@ -67,9 +79,101 @@ public class CollisionManager {
 			int pRow = powerUp.getRow();
 
 			if (Math.abs(pCol - col) <= radius && Math.abs(pRow - row) <= radius) {
+				if (DEBUG_COLLISIONS) {
+					System.out.println(String.format("[COLLIDE DEBUG] getPowerUpAt HIT powerUp col=%d row=%d",
+							pCol, pRow));
+				}
 				return powerUp;
 			}
 		}
+		return null;
+	}
+
+	/**
+	 * Find the first power-up encountered along a straight grid path from
+	 * (fromCol,fromRow)
+	 * to (toCol,toRow). This handles multi-cell moves so characters don't pass
+	 * through
+	 * power-ups when their movement speed > 1.
+	 *
+	 * The search checks cells in movement order (from the source towards the
+	 * destination)
+	 * and returns the first matching power-up (respecting pickup radius).
+	 */
+	public static PowerUp getPowerUpAlongPath(int fromCol, int fromRow, int toCol, int toRow) {
+		// simple single-cell case
+		if (fromCol == toCol && fromRow == toRow) {
+			return getPowerUpAt(toCol, toRow);
+		}
+
+		int dCol = toCol - fromCol;
+		int dRow = toRow - fromRow;
+		int steps = Math.max(Math.abs(dCol), Math.abs(dRow));
+		int stepCol = Integer.signum(dCol);
+		int stepRow = Integer.signum(dRow);
+
+		if (DEBUG_COLLISIONS) {
+			System.out.println(String.format("[COLLIDE DEBUG] getPowerUpAlongPath from=(%d,%d) to=(%d,%d) steps=%d",
+					fromCol, fromRow, toCol, toRow, steps));
+		}
+		for (int i = 1; i <= steps; i++) {
+			int c = fromCol + stepCol * i;
+			int r = fromRow + stepRow * i;
+			if (DEBUG_COLLISIONS) {
+				System.out.println(String.format("[COLLIDE DEBUG] checking path cell (%d,%d)", c, r));
+			}
+			PowerUp p = getPowerUpAt(c, r);
+			if (p != null) {
+				if (DEBUG_COLLISIONS) {
+					System.out.println(String.format("[COLLIDE DEBUG] getPowerUpAlongPath HIT at (%d,%d)", c, r));
+				}
+				return p;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Find a power-up whose picture overlaps the character's picture bounds.
+	 * This is a fallback when logical grid coords don't match (e.g., different
+	 * coordinate spaces). Returns the first overlapping power-up or null.
+	 */
+	public static PowerUp getPowerUpOverlappingCharacter(Character character) {
+		if (character == null) {
+			return null;
+		}
+
+		int cX = character.getPixelX();
+		int cY = character.getPixelY();
+		int cW = character.getPixelWidth();
+		int cH = character.getPixelHeight();
+
+		if (DEBUG_COLLISIONS) {
+			System.out.println(String.format(
+					"[COLLIDE DEBUG] checking overlap char pixel=(%d,%d) size=(%d,%d) registeredPowerUps=%d",
+					cX, cY, cW, cH, registeredPowerUps.size()));
+		}
+
+		for (PowerUp p : registeredPowerUps) {
+			if (p == null)
+				continue;
+
+			int pX = p.getPixelX();
+			int pY = p.getPixelY();
+			int pW = p.getPixelWidth();
+			int pH = p.getPixelHeight();
+
+			if (pX < cX + cW && pX + pW > cX && pY < cY + cH && pY + pH > cY) {
+				if (DEBUG_COLLISIONS) {
+					System.out
+							.println(String.format("[COLLIDE DEBUG] overlap HIT powerUp logical=(%d,%d) pixel=(%d,%d)",
+									p.getCol(), p.getRow(), pX, pY));
+				}
+				return p;
+			}
+		}
+
 		return null;
 	}
 
@@ -244,6 +348,40 @@ public class CollisionManager {
 
 		return withinCols && withinRows;
 
+	}
+
+	/**
+	 * Debug helper: prints registered characters and power-ups.
+	 */
+	public static void dumpState() {
+		if (!DEBUG_COLLISIONS) {
+			System.out.println("[COLLIDE DEBUG] dumpState called but DEBUG_COLLISIONS=false");
+			return;
+		}
+
+		System.out.println("[COLLIDE DEBUG] --- CollisionManager STATE DUMP ---");
+		System.out.println(String.format("[COLLIDE DEBUG] Registered characters: %d", registeredCharacters.size()));
+		for (Character c : registeredCharacters) {
+			if (c == null)
+				continue;
+			try {
+				System.out.println(String.format("[COLLIDE DEBUG] Char pos col=%d row=%d pixel=(%d,%d) size=(%d,%d)",
+						c.getPosition().getCol(), c.getPosition().getRow(), c.getPixelX(), c.getPixelY(),
+						c.getPixelWidth(), c.getPixelHeight()));
+			} catch (Exception ignored) {
+			}
+		}
+
+		System.out.println(String.format("[COLLIDE DEBUG] Registered powerUps: %d", registeredPowerUps.size()));
+		for (PowerUp p : registeredPowerUps) {
+			if (p == null)
+				continue;
+			try {
+				System.out.println(String.format("[COLLIDE DEBUG] PowerUp col=%d row=%d", p.getCol(), p.getRow()));
+			} catch (Exception ignored) {
+			}
+		}
+		System.out.println("[COLLIDE DEBUG] --- END STATE DUMP ---");
 	}
 
 }
