@@ -346,6 +346,50 @@ public class CollisionManager {
 		boolean withinCols = newCol >= allowedColMin && newCol <= allowedColMax;
 		boolean withinRows = newRow >= topRow && newRow <= bottomRow;
 
+		// Additional safety: compute the character's future pixel hitbox based on
+		// its current rendered position and the requested row/col delta. This uses
+		// the actual picture bounds (getPixelX/getPixelY/getPixelWidth/getPixelHeight)
+		// rather than recomputing positions from logical rows which better matches
+		// the sprite hitbox and prevents visual overflow on the sides.
+		if (grid != null && character != null) {
+			try {
+				int cell = Grid.CELL_SIZE;
+				int charH = character.getPixelHeight();
+				int charW = character.getPixelWidth();
+
+				int currentRow = character.getPosition().getRow();
+				int deltaRows = newRow - currentRow;
+				int currentPixelY = character.getPixelY();
+				int newPixelY = currentPixelY + deltaRows * cell;
+				int pixelBottom = newPixelY + charH;
+
+				int currentCol = character.getPosition().getCol();
+				int deltaCols = newCol - currentCol;
+				int currentPixelX = character.getPixelX();
+				int newPixelX = currentPixelX + deltaCols * cell;
+				int pixelRight = newPixelX + charW;
+
+				// Compute the game-area pixel bounds using logical rows/cols converted to pixels
+				int logicalTopRow = grid.getGameAreaTopRow();
+				int logicalRows = grid.getMaxRowsPerPlayer();
+				int logicalBottomRow = logicalTopRow + logicalRows - 1;
+				int areaPixelTop = Grid.PADDING + logicalTopRow * cell;
+				int areaPixelBottom = Grid.PADDING + (logicalBottomRow + 1) * cell;
+
+				int allowedColMinPixel = Grid.PADDING + allowedColMin * cell;
+				int allowedColMaxPixel = Grid.PADDING + (allowedColMax + 1) * cell;
+
+				if (newPixelY < areaPixelTop || pixelBottom > areaPixelBottom) {
+					return false;
+				}
+				if (newPixelX < allowedColMinPixel || pixelRight > allowedColMaxPixel) {
+					return false;
+				}
+			} catch (Exception ignored) {
+				// fallback to logical checks only
+			}
+		}
+
 		return withinCols && withinRows;
 
 	}
