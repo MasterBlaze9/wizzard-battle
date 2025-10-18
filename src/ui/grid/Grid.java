@@ -86,19 +86,6 @@ public class Grid {
 
         gameArea.translate(0, 0);
 
-        // Debug: print computed logical/pixel bounds to help verify top/bottom symmetry
-        int usedCellSizeDbg = getCellSize();
-        int areaHdbg = gameArea.getAreaHeight();
-        int rowsInAreadbg = Math.max(0, areaHdbg / usedCellSizeDbg);
-        int topRowDbg = getGameAreaTopRow();
-        int bottomRowDbg = topRowDbg + getMaxRowsPerPlayer() - 1;
-        int areaPixelTopDbg = PADDING + topRowDbg * usedCellSizeDbg;
-        int areaPixelBottomDbg = PADDING + (bottomRowDbg + 1) * usedCellSizeDbg;
-        System.out.println(String.format(
-                "[GRID DEBUG] rows=%d cellSize=%d areaH=%d rowsInArea=%d topRow=%d bottomRow=%d areaPixelTop=%d areaPixelBottom=%d",
-                rows, usedCellSizeDbg, areaHdbg, rowsInAreadbg, topRowDbg, bottomRowDbg, areaPixelTopDbg,
-                areaPixelBottomDbg));
-
         // choose two distinct face images and inject into the face card constructors
         java.util.List<String> facePaths = new java.util.ArrayList<>();
         facePaths.add("resources/Faces/Carolina.png");
@@ -428,17 +415,7 @@ public class Grid {
      * and cell sizing so callers can verify parity and placement.
      */
     public void dumpGameAreaDebug() {
-        int usedCellSize = getCellSize();
-        int areaH = gameArea != null ? gameArea.getAreaHeight() : 0;
-        int areaW = gameArea != null ? gameArea.getAreaWidth() : 0;
-        int rowsInArea = getGameAreaRows();
-        int topRow = getGameAreaTopRow();
-        int bottomRow = getGameAreaBottomRow();
-        int colsPerPlayer = getMaxColsPerPlayer();
-
-        System.out.println(String.format(
-                "[GRID DEBUG VERBOSE] cols=%d rows=%d cell=%d areaW=%d areaH=%d rowsInArea=%d topRow=%d bottomRow=%d colsPerPlayer=%d",
-                cols, rows, usedCellSize, areaW, areaH, rowsInArea, topRow, bottomRow, colsPerPlayer));
+        // Debug method - intentionally empty after log removal
     }
 
     public static int getWidth() {

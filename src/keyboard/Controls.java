@@ -11,35 +11,48 @@ public class Controls {
 	KeyboardEvent moveDown = new KeyboardEvent();
 	KeyboardEvent moveLeft = new KeyboardEvent();
 	KeyboardEvent moveRight = new KeyboardEvent();
-	KeyboardEvent attack = new KeyboardEvent(); // TODO Define the attack key
+	KeyboardEvent attack = new KeyboardEvent();
+
+	// Player control configurations
+	private static class ControlConfig {
+		int up, down, left, right, attack;
+
+		ControlConfig(int up, int down, int left, int right, int attack) {
+			this.up = up;
+			this.down = down;
+			this.left = left;
+			this.right = right;
+			this.attack = attack;
+		}
+	}
+
+	private static final ControlConfig PLAYER1_CONFIG = new ControlConfig(
+			KeyboardEvent.KEY_W,
+			KeyboardEvent.KEY_S,
+			KeyboardEvent.KEY_A,
+			KeyboardEvent.KEY_D,
+			KeyboardEvent.KEY_T);
+
+	private static final ControlConfig PLAYER2_CONFIG = new ControlConfig(
+			KeyboardEvent.KEY_I,
+			KeyboardEvent.KEY_K,
+			KeyboardEvent.KEY_J,
+			KeyboardEvent.KEY_L,
+			KeyboardEvent.KEY_P);
 
 	public Controls(PlayerEnum playerNumber) {
-		if (playerNumber.equals(PlayerEnum.Player_1)) {
-			moveUp.setKey(KeyboardEvent.KEY_W);
-			moveDown.setKey(KeyboardEvent.KEY_S);
-			moveLeft.setKey(KeyboardEvent.KEY_A);
-			moveRight.setKey(KeyboardEvent.KEY_D);
-			attack.setKey(KeyboardEvent.KEY_T);
+		ControlConfig config = playerNumber.equals(PlayerEnum.Player_1) ? PLAYER1_CONFIG : PLAYER2_CONFIG;
 
-			moveUp.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			moveDown.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			moveLeft.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			moveRight.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			attack.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+		setupKeyEvent(moveUp, config.up);
+		setupKeyEvent(moveDown, config.down);
+		setupKeyEvent(moveLeft, config.left);
+		setupKeyEvent(moveRight, config.right);
+		setupKeyEvent(attack, config.attack);
+	}
 
-		} else {
-			moveUp.setKey(KeyboardEvent.KEY_I);
-			moveDown.setKey(KeyboardEvent.KEY_K);
-			moveLeft.setKey(KeyboardEvent.KEY_J);
-			moveRight.setKey(KeyboardEvent.KEY_L);
-			attack.setKey(KeyboardEvent.KEY_P);
-
-			moveUp.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			moveDown.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			moveLeft.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			moveRight.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-			attack.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-		}
+	private void setupKeyEvent(KeyboardEvent event, int key) {
+		event.setKey(key);
+		event.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 	}
 
 	public KeyboardEvent getMoveUpEvent() {
@@ -61,7 +74,5 @@ public class Controls {
 	public KeyboardEvent getAttackEvent() {
 		return attack;
 	}
-
-
 
 }

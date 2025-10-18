@@ -77,7 +77,7 @@ public class Spell {
                             try {
                                 translate(dir * Grid.CELL_SIZE * cellsToEdge, 0);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                // Ignore translation errors
                             }
                         }
 
@@ -98,7 +98,7 @@ public class Spell {
                             try {
                                 translate(dir * Grid.CELL_SIZE * cellsToEdge, 0);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                // Ignore translation errors
                             }
                         }
 
@@ -125,20 +125,17 @@ public class Spell {
                                 try {
                                     translate(dir * Grid.CELL_SIZE * cellsToHit, 0);
                                 } catch (Exception ex) {
-                                    ex.printStackTrace();
+                                    // Ignore translation errors
                                 }
                                 position.setCol(hitCol);
                             }
                             hit.takeDamage(damage);
-                            System.out.println("Spell hit character: " + hit.getClass().getSimpleName());
                             safeDelete();
                             break;
                         }
                         position.setCol(desiredNext);
                         translate(dir * Grid.CELL_SIZE * speed, 0);
                     } catch (Exception e) {
-
-                        e.printStackTrace();
                         safeDelete();
                         break;
                     }
@@ -151,8 +148,7 @@ public class Spell {
                     }
                 }
             } catch (Exception e) {
-                // Log unexpected exceptions so we can see why a spell stopped
-                e.printStackTrace();
+                // Silently handle unexpected exceptions
             } finally {
                 synchronized (ACTIVE) {
                     ACTIVE.remove(this);

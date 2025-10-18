@@ -239,7 +239,7 @@ public class HealthBar {
                 try {
                     life.delete();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    // Ignore delete errors
                 }
                 life = null;
             }

@@ -1,8 +1,23 @@
 package game.characters;
 
+import collisionManager.CollisionManager;
+import game.PlayerEnum;
+import game.powerUps.PowerUpHandler;
+import game.spells.Spell;
+import ui.character.CharacterUI;
+import ui.grid.Grid;
+import ui.healthBar.HealthBar;
 import ui.position.Position;
+import keyboard.AppKeyboard;
 
 public abstract class Character {
+
+	protected CharacterUI characterHead;
+	protected Position position;
+	protected PlayerEnum playerNumber;
+	protected AppKeyboard appKeyboard;
+	protected CollisionManager collisionManager;
+	protected HealthBar healthBar;
 
 	public abstract Position getPosition();
 
@@ -15,19 +30,79 @@ public abstract class Character {
 
 	public abstract int getPixelHeight();
 
-	public abstract void moveUp();
-
-	public abstract void moveDown();
-
-	public abstract void moveLeft();
-
-	public abstract void moveRight();
-
-	public abstract void castSpell();
+	
+	protected abstract PlayerEnum getOpponentPlayer();
 
 	public abstract void takeDamage(int damage);
 
 	public abstract void addLifePoints();
+
+	
+
+	public void moveUp() {
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newRow = position.getRow() - moveCells;
+		int newCol = position.getCol();
+
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
+			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
+			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
+			position.setRow(newRow);
+			
+		}
+	}
+
+	public void moveDown() {
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newRow = position.getRow() + moveCells;
+		int newCol = position.getCol();
+
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
+			characterHead.move(0, Grid.CELL_SIZE * moveCells);
+			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
+			position.setRow(newRow);
+			
+		}
+	}
+
+	public void moveLeft() {
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newCol = position.getCol() - moveCells;
+		int newRow = position.getRow();
+
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
+			characterHead.move(-Grid.CELL_SIZE * moveCells, 0);
+			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
+			position.setCol(newCol);
+			
+		}
+	}
+
+	public void moveRight() {
+		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
+		int newCol = position.getCol() + moveCells;
+		int newRow = position.getRow();
+
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
+			characterHead.move(Grid.CELL_SIZE * moveCells, 0);
+			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
+			position.setCol(newCol);
+			
+		}
+	}
+
+	public void castSpell() {
+		Spell s = new Spell(position.getRow(), position.getCol(), playerNumber);
+		s.setDamage(s.getDamage() + getSpellDamageModifier());
+		s.setSpeed(s.getSpeed() + getSpellSpeedModifier());
+	}
+
+
+	protected void hideCharacter() {
+		if (characterHead != null) {
+			characterHead.hide();
+		}
+	}
 
 	/**
 	 * Called on game-over so implementations can delete any on-screen
@@ -56,60 +131,27 @@ public abstract class Character {
 	}
 
 	public void applyDamageBuff(int extraDamage, int durationSeconds) {
-		if (extraDamage <= 0 || durationSeconds <= 0) {
-			return;
-		}
-		synchronized (this) {
-			spellDamageModifier += extraDamage;
-		}
-		new Thread(() -> {
-			try {
-				Thread.sleep(durationSeconds * 1000L);
-			} catch (InterruptedException ignored) {
-				Thread.currentThread().interrupt();
-			}
+		BuffManager.applyTemporaryBuff(delta -> {
 			synchronized (this) {
-				spellDamageModifier = Math.max(0, spellDamageModifier - extraDamage);
+				spellDamageModifier = Math.max(0, spellDamageModifier + delta);
 			}
-		}).start();
+		}, extraDamage, durationSeconds);
 	}
 
 	public void applySpeedBuff(int extraSpeed, int durationSeconds) {
-		if (extraSpeed <= 0 || durationSeconds <= 0) {
-			return;
-		}
-		synchronized (this) {
-			spellSpeedModifier += extraSpeed;
-		}
-		new Thread(() -> {
-			try {
-				Thread.sleep(durationSeconds * 1000L);
-			} catch (InterruptedException ignored) {
-				Thread.currentThread().interrupt();
-			}
+		BuffManager.applyTemporaryBuff(delta -> {
 			synchronized (this) {
-				spellSpeedModifier = Math.max(0, spellSpeedModifier - extraSpeed);
+				spellSpeedModifier = Math.max(0, spellSpeedModifier + delta);
 			}
-		}).start();
+		}, extraSpeed, durationSeconds);
 	}
 
 	public void applyMovementBuff(int extraMovement, int durationSeconds) {
-		if (extraMovement <= 0 || durationSeconds <= 0) {
-			return;
-		}
-		synchronized (this) {
-			movementSpeedModifier += extraMovement;
-		}
-		new Thread(() -> {
-			try {
-				Thread.sleep(durationSeconds * 1000L);
-			} catch (InterruptedException ignored) {
-				Thread.currentThread().interrupt();
-			}
+		BuffManager.applyTemporaryBuff(delta -> {
 			synchronized (this) {
-				movementSpeedModifier = Math.max(0, movementSpeedModifier - extraMovement);
+				movementSpeedModifier = Math.max(0, movementSpeedModifier + delta);
 			}
-		}).start();
+		}, extraMovement, durationSeconds);
 	}
 
 }

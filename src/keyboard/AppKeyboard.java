@@ -16,8 +16,7 @@ public class AppKeyboard implements KeyboardHandler {
 	private Character controlledCharacter;
 
 	private static KeyboardEvent startGame = new KeyboardEvent();
-	// Global, reusable SPACE listener. We can "arm" it whenever we want
-	// to allow starting/restarting the game.
+	
 	private static Keyboard globalKeyboard;
 	private static boolean listenerInitialized = false;
 	private static volatile boolean armedForStart = false;
@@ -81,14 +80,12 @@ public class AppKeyboard implements KeyboardHandler {
 			listenerInitialized = true;
 		}
 
-		// Arm for a single start/restart
-		armedHomeScreen = homeScreen; // may be null (game over)
-		armedAction = startAction; // may be null -> fallback to GameController
+	
+		armedHomeScreen = homeScreen;
+		armedAction = startAction; 
 		armedForStart = true;
 	}
 
-	// Convenience: arm without passing a Runnable (will call
-	// GameController.startGame())
 	public static void armStartOnce(HomeScreen homeScreen) {
 		addStartListener(homeScreen, null);
 	}

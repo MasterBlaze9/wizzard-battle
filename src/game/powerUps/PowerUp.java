@@ -26,13 +26,6 @@ public class PowerUp {
         synchronized (ACTIVE) {
             ACTIVE.add(this);
         }
-        try {
-            System.out
-                    .println(String.format("[COLLIDE DEBUG] PowerUp created logical=(%d,%d) pixel=(%d,%d) size=(%d,%d)",
-                            col, row, powerUpSquare.getX(), powerUpSquare.getY(), powerUpSquare.getWidth(),
-                            powerUpSquare.getHeight()));
-        } catch (Exception ignored) {
-        }
     }
 
     private static int getDefaultSize() {
