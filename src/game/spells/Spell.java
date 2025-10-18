@@ -15,26 +15,39 @@ public class Spell {
 
     private Picture spell;
     private Position position;
+    // track previous picture X to compute exact swept rectangle during movement
+    private int prevX;
     private int speed;
     private int damage;
     private PlayerEnum playerEnum;
 
     public Spell(int row, int col, PlayerEnum playerEnum) {
-        if (playerEnum.equals(PlayerEnum.Player_1)) {
-            spell = new Picture(
-                    Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2,
-                    Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
-                            + Grid.CELL_SIZE * 2,
-                    "resources/Spells/fire.png");
-            spell.draw();
-        } else {
-            spell = new Picture(
-                    Grid.PADDING + col * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2,
-                    Grid.PADDING + row * Grid.CELL_SIZE + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
-                            + Grid.CELL_SIZE * 2,
-                    "resources/Spells/fire1.png");
-            spell.draw();
+        int baseX = Grid.PADDING + col * Grid.CELL_SIZE
+                + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2;
+
+        int baseY = Grid.PADDING + row * Grid.CELL_SIZE
+                + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
+                - Grid.EXTRA_HIT_BOX_PADDING_CHAR_PIXELS - Grid.SPELL_VERTICAL_OFFSET_BASE;
+
+        // Per-player vertical tuning: allow a different offset for Player 2
+        if (playerEnum.equals(PlayerEnum.Player_2)) {
+            baseY = Grid.PADDING + row * Grid.CELL_SIZE
+                    + (Grid.CELL_SIZE - Math.max(3, Grid.CELL_SIZE / 2)) / 2
+                    - Grid.EXTRA_HIT_BOX_PADDING_CHAR_PIXELS + Grid.SPELL_VERTICAL_OFFSET_P2;
         }
+
+        // adjust horizontal spawn so each player fires from their (opposite) hand
+        int handOffset = Grid.CELL_SIZE / 2 + Grid.SPELL_HAND_TUNING; // tuning offset: half a cell plus a few pixels
+        // Player 1 fires from the right-hand side, Player 2 from the left-hand side
+        int spawnX = baseX + (playerEnum.equals(PlayerEnum.Player_1) ? handOffset : -handOffset);
+
+        if (playerEnum.equals(PlayerEnum.Player_1)) {
+            spell = new Picture(spawnX, baseY, "resources/Spells/spell.png");
+        } else {
+            spell = new Picture(spawnX, baseY, "resources/Spells/spell2.png");
+        }
+        spell.draw();
+        prevX = spell.getX();
 
         speed = 2;
         damage = 1;
@@ -182,6 +195,9 @@ public class Spell {
     }
 
     public void translate(int col, int row) {
+        // record previous X before moving so collision manager can compute the swept
+        // area exactly
+        prevX = spell.getX();
         spell.translate(col, row);
     }
 
@@ -195,5 +211,13 @@ public class Spell {
 
     public int getY() {
         return spell.getY();
+    }
+
+    public int getX() {
+        return spell.getX();
+    }
+
+    public int getPrevX() {
+        return prevX;
     }
 }

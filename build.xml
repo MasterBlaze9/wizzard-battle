@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 
-<project name="Wizzard Battle" default="jarfile">
+<project name="Wizard Battle" default="jarfile">
 
     <!-- Initialize build properties  -->
     <target name="init" description="Initializes properties">
-        <property name="project.name" value="Wizzard Battle"/>
+        <property name="project.name" value="Wizard Battle"/>
         <property name="src.dir" value="src"/>
     <property name="main.class" value="App"/>
         <property name="build.dir" value="build"/>

@@ -4,28 +4,16 @@ package ui.faceCard;
 import game.PlayerEnum;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+// no collection utilities required in this class after refactor
 
 public class PlayerFaceCard {
 
-    //TODO Remove the possibility to have the same pic
-  
-    private Map<PlayerEnum, String> faceAssignments;
     private Picture playerFace;
 
-    public PlayerFaceCard(PlayerEnum player, int x, int y, int width, int height) {
-        
-        faceAssignments = new HashMap<>();
-        faceCardAssigner();
+    public PlayerFaceCard(PlayerEnum player, String facePath, int x, int y, int width, int height) {
 
-        String facePath = getFace(player);
         if (facePath == null) {
-            throw new IllegalStateException("no face assigned for player: " + player);
+            throw new IllegalArgumentException("facePath cannot be null for player: " + player);
         }
 
         playerFace = new Picture(x, y, facePath);
@@ -33,23 +21,9 @@ public class PlayerFaceCard {
         playerFace.draw();
     }
 
-    private void faceCardAssigner() {
-        List<String> paths = new ArrayList<>(Arrays.asList(
-                "resources/Faces/Carolina.png",
-                "resources/Faces/Pascoa.png",
-                "resources/Faces/Rolo.png"));
+    // face assignment is performed by the caller and injected into the constructor
 
-        Collections.shuffle(paths);
-
-        String p1 = paths.size() > 0 ? paths.get(0) : null;
-        String p2 = paths.size() > 1 ? paths.get(1) : null;
-
-        faceAssignments.put(PlayerEnum.Player_1, p1);
-        faceAssignments.put(PlayerEnum.Player_2, p2);
-    }
-
-    public String getFace(PlayerEnum player) {
-        return faceAssignments.get(player);
-    }
+    // face retrieval is now the caller's responsibility; this class only displays
+    // the provided face
 
 }

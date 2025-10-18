@@ -6,6 +6,15 @@ public abstract class Character {
 
 	public abstract Position getPosition();
 
+	// Pixel bounds of the character's rendered picture
+	public abstract int getPixelX();
+
+	public abstract int getPixelY();
+
+	public abstract int getPixelWidth();
+
+	public abstract int getPixelHeight();
+
 	public abstract void moveUp();
 
 	public abstract void moveDown();

@@ -18,7 +18,6 @@ public class Position {
 		return row;
 	}
 
-
 	public void setCol(int col) {
 		this.col = col;
 	}

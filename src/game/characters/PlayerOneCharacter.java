@@ -25,7 +25,7 @@ public class PlayerOneCharacter extends Character {
 	public PlayerOneCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
 		position = new Position(column, row);
-		characterHead = new CharacterUI(column, row,"resources/Characters/character.png" );
+		characterHead = new CharacterUI(column, row, "resources/Characters/character.png");
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_1, this);
 		collisionManager = new CollisionManager(this, grid);
 
@@ -43,24 +43,30 @@ public class PlayerOneCharacter extends Character {
 		int newRow = position.getRow() - moveCells;
 		int newCol = position.getCol();
 
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
-			// apply visual move and update logical position
-			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
-			position.setRow(newRow);
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 
-			// pickup powerup if present
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
+			// detect powerups along the movement path (handles moveCells > 1)
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
+			position.setRow(newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}
@@ -72,21 +78,28 @@ public class PlayerOneCharacter extends Character {
 		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
 		int newRow = position.getRow() + moveCells;
 		int newCol = position.getCol();
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(0, Grid.CELL_SIZE * moveCells);
+			// detect powerups along the movement path (handles moveCells > 1)
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
 			position.setRow(newRow);
-
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}
@@ -98,21 +111,27 @@ public class PlayerOneCharacter extends Character {
 		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
 		int newCol = position.getCol() - moveCells;
 		int newRow = position.getRow();
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(-Grid.CELL_SIZE * moveCells, 0);
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
 			position.setCol(newCol);
-
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}
@@ -124,21 +143,27 @@ public class PlayerOneCharacter extends Character {
 		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
 		int newCol = position.getCol() + moveCells;
 		int newRow = position.getRow();
-		if (collisionManager.checkGameAreaColision(newCol, newRow)) {
+		if (collisionManager.checkGameAreaCollision(newCol, newRow)) {
 			characterHead.move(Grid.CELL_SIZE * moveCells, 0);
+			PowerUp p = CollisionManager.getPowerUpAlongPath(position.getCol(), position.getRow(), newCol, newRow);
+			if (p == null) {
+				p = CollisionManager.getPowerUpOverlappingCharacter(this);
+			}
 			position.setCol(newCol);
-
-			PowerUp p = CollisionManager.getPowerUpAt(newCol, newRow);
+			if (CollisionManager.isDebugEnabled()) {
+				System.out.println(String.format("[COLLIDE DEBUG] Player1 moved to logical=(%d,%d) pixel=(%d,%d)",
+						position.getCol(), position.getRow(), getPixelX(), getPixelY()));
+			}
 			if (p != null) {
 				if (p instanceof PowerUpHealth) {
 					addLifePoints();
 					p.removeFromGame();
 				} else if (p instanceof PowerUpDamage) {
-					applyDamageBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applyDamageBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				} else if (p instanceof PowerUpSpellSpeed) {
-					applySpeedBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
-					applyMovementBuff(1, ui.grid.Grid.POWERUP_BUFF_DURATION_SECONDS);
+					applySpeedBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
+					applyMovementBuff(1, Grid.POWER_UP_BUFF_DURATION_SECONDS);
 					p.removeFromGame();
 				}
 			}
@@ -154,6 +179,26 @@ public class PlayerOneCharacter extends Character {
 
 	public Position getPosition() {
 		return position;
+	}
+
+	@Override
+	public int getPixelX() {
+		return characterHead.getPixelX();
+	}
+
+	@Override
+	public int getPixelY() {
+		return characterHead.getPixelY();
+	}
+
+	@Override
+	public int getPixelWidth() {
+		return characterHead.getPixelWidth();
+	}
+
+	@Override
+	public int getPixelHeight() {
+		return characterHead.getPixelHeight();
 	}
 
 	public PlayerEnum getPlayerNumber() {

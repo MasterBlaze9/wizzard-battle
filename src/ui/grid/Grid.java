@@ -5,11 +5,8 @@ import game.powerUps.PowerUp;
 import game.powerUps.PowerUpDamage;
 import game.powerUps.PowerUpHealth;
 import game.powerUps.PowerUpSpellSpeed;
+import org.academiadecodigo.simplegraphics.pictures.Picture;
 import ui.faceCard.PlayerFaceCard;
-
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-
-import utils.AppColor;
 
 import java.util.Random;
 
@@ -18,12 +15,14 @@ public class Grid {
     public static final int PADDING = 10;
     public static final int DEFAULT_CELL_SIZE = 5;
     public static int CELL_SIZE;
-
-    public static final int POWERUP_SPAWN_DELAY_SECONDS = 8;
-    public static final int POWERUP_BUFF_DURATION_SECONDS = 10;
-
-    public static final int POWERUP_PICKUP_RADIUS_CELLS = 1;
-
+    public static final int POWER_UP_SPAWN_DELAY_SECONDS = 8;
+    public static final int POWER_UP_BUFF_DURATION_SECONDS = 10;
+    public static final int POWER_UP_PICKUP_RADIUS_CELLS = 1;
+    public static final int EXTRA_HIT_BOX_PADDING_CHAR_PIXELS = 12;
+    public static final int EXTRA_HIT_BOX_PADDING_SPELL_PIXELS = 8;
+    public static final int SPELL_VERTICAL_OFFSET_BASE = 35;
+    public static final int SPELL_VERTICAL_OFFSET_P2 = 40;
+    public static final int SPELL_HAND_TUNING = 6;
     private static int cols;
     private static int rows;
     private int targetWidth = 0;
@@ -31,9 +30,8 @@ public class Grid {
 
     private int cellSize = 0;
 
-    private static Rectangle canvas;
+    private static Picture canvas;
     private GameArea gameArea;
-    private Line line;
 
     private static PowerUp leftPowerUp;
     private static PowerUp rightPowerUp;
@@ -73,30 +71,48 @@ public class Grid {
     public void init() {
         int usedCellSize = cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
 
-        // keep the static CELL_SIZE in sync with the grid's computed cell size
         CELL_SIZE = usedCellSize;
 
-        canvas = new Rectangle(PADDING, PADDING, cols * usedCellSize, rows * usedCellSize);
-        canvas.setColor(AppColor.BROWN.toColor());
-        canvas.fill();
+        canvas = new Picture(PADDING, PADDING, "resources/backgroun2.png");
+        canvas.draw();
 
         gameArea = new GameArea("resources/gameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),
                 canvas.getHeight());
 
-        int areaW = gameArea.getAreaWidth();
-        int areaH = gameArea.getAreaHeight();
-
-        int lineX = (areaW - dividerWidth) / 2;
-        int lineY = gameArea.getAreaY();
-        line = new Line(lineX, lineY, dividerWidth, areaH);
-
         gameArea.translate(0, 0);
-        line.translate(0, 0);
 
-        card1 = new PlayerFaceCard(PlayerEnum.Player_1, 85, 70,
+        // Debug: print computed logical/pixel bounds to help verify top/bottom symmetry
+        int usedCellSizeDbg = getCellSize();
+        int areaHdbg = gameArea.getAreaHeight();
+        int rowsInAreadbg = Math.max(0, areaHdbg / usedCellSizeDbg);
+        int topRowDbg = getGameAreaTopRow();
+        int bottomRowDbg = topRowDbg + getMaxRowsPerPlayer() - 1;
+        int areaPixelTopDbg = PADDING + topRowDbg * usedCellSizeDbg;
+        int areaPixelBottomDbg = PADDING + (bottomRowDbg + 1) * usedCellSizeDbg;
+        System.out.println(String.format(
+                "[GRID DEBUG] rows=%d cellSize=%d areaH=%d rowsInArea=%d topRow=%d bottomRow=%d areaPixelTop=%d areaPixelBottom=%d",
+                rows, usedCellSizeDbg, areaHdbg, rowsInAreadbg, topRowDbg, bottomRowDbg, areaPixelTopDbg,
+                areaPixelBottomDbg));
+
+        // choose two distinct face images and inject into the face card constructors
+        java.util.List<String> facePaths = new java.util.ArrayList<>();
+        facePaths.add("resources/Faces/Carolina.png");
+        facePaths.add("resources/Faces/Pascoa.png");
+        facePaths.add("resources/Faces/Rolo.png");
+        // remove duplicates and shuffle
+        facePaths = new java.util.ArrayList<>(new java.util.LinkedHashSet<>(facePaths));
+        if (facePaths.size() < 2) {
+            throw new IllegalStateException("Not enough distinct face images; need at least 2 distinct faces");
+        }
+        java.util.Collections.shuffle(facePaths);
+
+        String face1 = facePaths.get(0);
+        String face2 = facePaths.get(1);
+
+        card1 = new PlayerFaceCard(PlayerEnum.Player_1, face1, 85, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
-        card2 = new PlayerFaceCard(PlayerEnum.Player_2,
+        card2 = new PlayerFaceCard(PlayerEnum.Player_2, face2,
                 canvas.getWidth() - 135, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
@@ -104,7 +120,7 @@ public class Grid {
 
         new Thread(() -> {
             try {
-                Thread.sleep(POWERUP_SPAWN_DELAY_SECONDS * 1000L);
+                Thread.sleep(POWER_UP_SPAWN_DELAY_SECONDS * 1000L);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
@@ -112,6 +128,14 @@ public class Grid {
             spawnPowerUpsOnce();
         }).start();
 
+    }
+
+    /**
+     * Returns the current active Grid instance (set during init) or null if
+     * no grid has been initialized yet.
+     */
+    public static Grid getActiveGrid() {
+        return activeGrid;
     }
 
     private void spawnPowerUpsOnce() {
@@ -143,7 +167,6 @@ public class Grid {
             rightRow = topRow + random.nextInt(rowsPerPlayer);
         }
 
-        // spawn left random powerup
         int leftType = random.nextInt(3);
         switch (leftType) {
             case 0:
@@ -157,7 +180,6 @@ public class Grid {
                 break;
         }
 
-        // spawn right random powerup
         int rightType = random.nextInt(3);
         switch (rightType) {
             case 0:
@@ -172,10 +194,6 @@ public class Grid {
         }
     }
 
-    /**
-     * Called by a powerup when it is collected/removed so Grid can forget
-     * references.
-     */
     public static void onPowerUpCollected(PowerUp powerUp) {
         if (powerUp == null) {
             return;
@@ -196,7 +214,7 @@ public class Grid {
 
         new Thread(() -> {
             try {
-                Thread.sleep(POWERUP_SPAWN_DELAY_SECONDS * 1000L);
+                Thread.sleep(POWER_UP_SPAWN_DELAY_SECONDS * 1000L);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
@@ -273,10 +291,27 @@ public class Grid {
         int usedCellSize = getCellSize();
         if (gameArea != null) {
 
-            return Math.max(0, gameArea.getAreaHeight() / usedCellSize);
+            int areaH = gameArea.getAreaHeight();
+            int rowsInArea = Math.max(0, areaH / usedCellSize);
+
+            // rowsInArea should not exceed the total logical rows available
+            rowsInArea = Math.min(rowsInArea, rows);
+
+            // Ensure the remaining rows (outside the game area) split evenly
+            // so the top limit equals the bottom limit. If the difference is
+            // odd, reduce rowsInArea by one (if possible) to make it even.
+            if ((rows - rowsInArea) % 2 != 0 && rowsInArea > 0) {
+                rowsInArea--;
+            }
+
+            return Math.max(0, rowsInArea);
         }
 
-        return Math.max(0, rows / 2);
+        int rowsInArea = Math.max(0, rows / 2);
+        if ((rows - rowsInArea) % 2 != 0 && rowsInArea > 0) {
+            rowsInArea--;
+        }
+        return Math.max(0, rowsInArea);
     }
 
     public int getMaxColsPerPlayer() {
@@ -309,11 +344,77 @@ public class Grid {
         if (gameArea != null) {
             int areaH = gameArea.getAreaHeight();
             int rowsInArea = Math.max(0, areaH / usedCellSize);
+
+            // rowsInArea should not exceed the total logical rows available
+            rowsInArea = Math.min(rowsInArea, rows);
+
+            // Match the parity logic used in getMaxRowsPerPlayer so the top
+            // and bottom margins are equal.
+            if ((rows - rowsInArea) % 2 != 0 && rowsInArea > 0) {
+                rowsInArea--;
+            }
+
             return Math.max(0, (rows - rowsInArea) / 2);
         }
 
         int rowsInArea = Math.max(0, rows / 2);
         return Math.max(0, (rows - rowsInArea) / 2);
+    }
+
+    /**
+     * Returns the number of logical rows that the game area occupies.
+     * This centralizes the parity/rounding logic so callers get a consistent
+     * value for both top and bottom calculations.
+     */
+    public int getGameAreaRows() {
+        int usedCellSize = getCellSize();
+        if (gameArea != null) {
+            int areaH = gameArea.getAreaHeight();
+            int rowsInArea = Math.max(0, areaH / usedCellSize);
+
+            // rowsInArea should not exceed the total logical rows available
+            rowsInArea = Math.min(rowsInArea, rows);
+
+            // Ensure symmetric margins by adjusting parity if necessary
+            if ((rows - rowsInArea) % 2 != 0 && rowsInArea > 0) {
+                rowsInArea--;
+            }
+
+            return Math.max(0, rowsInArea);
+        }
+
+        int rowsInArea = Math.max(0, rows / 2);
+        if ((rows - rowsInArea) % 2 != 0 && rowsInArea > 0) {
+            rowsInArea--;
+        }
+        return Math.max(0, rowsInArea);
+    }
+
+    /**
+     * Returns the bottom logical row index (inclusive) of the game area.
+     */
+    public int getGameAreaBottomRow() {
+        int top = getGameAreaTopRow();
+        int rowsInArea = getGameAreaRows();
+        return Math.max(0, top + rowsInArea - 1);
+    }
+
+    /**
+     * Prints verbose debug information about the computed game-area bounds
+     * and cell sizing so callers can verify parity and placement.
+     */
+    public void dumpGameAreaDebug() {
+        int usedCellSize = getCellSize();
+        int areaH = gameArea != null ? gameArea.getAreaHeight() : 0;
+        int areaW = gameArea != null ? gameArea.getAreaWidth() : 0;
+        int rowsInArea = getGameAreaRows();
+        int topRow = getGameAreaTopRow();
+        int bottomRow = getGameAreaBottomRow();
+        int colsPerPlayer = getMaxColsPerPlayer();
+
+        System.out.println(String.format(
+                "[GRID DEBUG VERBOSE] cols=%d rows=%d cell=%d areaW=%d areaH=%d rowsInArea=%d topRow=%d bottomRow=%d colsPerPlayer=%d",
+                cols, rows, usedCellSize, areaW, areaH, rowsInArea, topRow, bottomRow, colsPerPlayer));
     }
 
     public static int getWidth() {
