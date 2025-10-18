@@ -62,4 +62,13 @@ public class CharacterUI {
 		return characterHead.getHeight();
 	}
 
+	public void hide() {
+		if (characterHead != null) {
+			try {
+				characterHead.delete();
+			} catch (Exception ignored) {
+			}
+		}
+	}
+
 }

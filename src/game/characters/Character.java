@@ -29,6 +29,15 @@ public abstract class Character {
 
 	public abstract void addLifePoints();
 
+	/**
+	 * Called on game-over so implementations can delete any on-screen
+	 * pictures (sprites) they own. This helps ensure no character image
+	 * lingers after the grid/background is cleared.
+	 */
+	public void cleanupOnGameOver() {
+		// default no-op; concrete players can override
+	}
+
 	// --- Buff state & helpers ---
 	private int spellDamageModifier = 0;
 	private int spellSpeedModifier = 0;

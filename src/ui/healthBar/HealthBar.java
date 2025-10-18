@@ -17,6 +17,9 @@ public class HealthBar {
     private int numberOfLives;
     private static final int DEFAULT_LIVES = 3;
 
+    // Track all created health bars so we can clear them at game-over
+    private static java.util.List<HealthBar> INSTANCES = new java.util.ArrayList<>();
+
     public HealthBar(PlayerEnum playerNumber) {
         this.playerNumber = playerNumber;
         if (numberOfLives <= 0) {
@@ -46,6 +49,9 @@ public class HealthBar {
 
         }
 
+        // Register this instance for global cleanup
+        INSTANCES.add(this);
+
     }
 
     public void removeLifePoints(int pointsToRemove) {
@@ -74,6 +80,15 @@ public class HealthBar {
                 }
             }
         }
+    }
+
+    public boolean isAlive() {
+        for (int i = 0; i < lifeCounter.length; i++) {
+            if (lifeCounter[i] != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addLifePoints() {
@@ -156,6 +171,44 @@ public class HealthBar {
         }
     }
 
+    public void cleanup() {
+        // Remove all life counters
+        if (lifeCounter != null) {
+            for (int i = 0; i < lifeCounter.length; i++) {
+                if (lifeCounter[i] != null) {
+                    lifeCounter[i].remove();
+                    lifeCounter[i] = null;
+                }
+            }
+        }
+
+        // Remove health bar rectangles
+        try {
+            if (playerOneHealthBar != null) {
+                playerOneHealthBar.delete();
+                playerOneHealthBar = null;
+            }
+            if (playerTwoHealthBar != null) {
+                playerTwoHealthBar.delete();
+                playerTwoHealthBar = null;
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    // Static helper to cleanup all health bars
+    public static void cleanupAll() {
+        try {
+            for (HealthBar hb : new java.util.ArrayList<>(INSTANCES)) {
+                if (hb != null) {
+                    hb.cleanup();
+                }
+            }
+        } finally {
+            INSTANCES.clear();
+        }
+    }
+
     class Life {
 
         private Picture life;
@@ -198,7 +251,6 @@ public class HealthBar {
 
         }
 
-    
         public void remove() {
             if (life != null) {
                 try {

@@ -10,6 +10,8 @@ public class PowerUp {
     private final int col;
     private final int row;
     private Picture powerUpSquare;
+    // Track instances so we can cleanup any leftover images on game-over
+    private static final java.util.List<PowerUp> ACTIVE = new java.util.ArrayList<>();
 
     public PowerUp(int col, int row, String imagePath) {
 
@@ -21,6 +23,9 @@ public class PowerUp {
         // draw first so we can read pixel bounds
         powerUpSquare.draw();
         CollisionManager.registerPowerUp(this);
+        synchronized (ACTIVE) {
+            ACTIVE.add(this);
+        }
         try {
             System.out
                     .println(String.format("[COLLIDE DEBUG] PowerUp created logical=(%d,%d) pixel=(%d,%d) size=(%d,%d)",
@@ -92,4 +97,21 @@ public class PowerUp {
         }
     }
 
+    public static void cleanupAll() {
+        java.util.List<PowerUp> snapshot;
+        synchronized (ACTIVE) {
+            snapshot = new java.util.ArrayList<>(ACTIVE);
+        }
+        for (PowerUp p : snapshot) {
+            if (p != null) {
+                try {
+                    p.delete();
+                } catch (Exception ignored) {
+                }
+            }
+        }
+        synchronized (ACTIVE) {
+            ACTIVE.clear();
+        }
+    }
 }

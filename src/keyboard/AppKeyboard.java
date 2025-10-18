@@ -16,7 +16,13 @@ public class AppKeyboard implements KeyboardHandler {
 	private Character controlledCharacter;
 
 	private static KeyboardEvent startGame = new KeyboardEvent();
-	private static boolean startRegistered = false;
+	// Global, reusable SPACE listener. We can "arm" it whenever we want
+	// to allow starting/restarting the game.
+	private static Keyboard globalKeyboard;
+	private static boolean listenerInitialized = false;
+	private static volatile boolean armedForStart = false;
+	private static HomeScreen armedHomeScreen = null;
+	private static Runnable armedAction = null;
 
 	public AppKeyboard(PlayerEnum playerNumber, Character controlledCharacter) {
 		keyboard = new Keyboard(this);
@@ -30,44 +36,61 @@ public class AppKeyboard implements KeyboardHandler {
 		keyboard.addEventListener(playerControls.getAttackEvent());
 	}
 
-	
 	public static void addStartListener(HomeScreen homeScreen, Runnable startAction) {
-		if (homeScreen == null || startAction == null) {
-			return;
-		}
+		// Initialize global listener once
+		if (!listenerInitialized) {
+			globalKeyboard = new Keyboard(new KeyboardHandler() {
+				@Override
+				public void keyPressed(KeyboardEvent keyboardEvent) {
+					if (!armedForStart) {
+						return;
+					}
+					if (keyboardEvent.getKey() == startGame.getKey()) {
+						// Disarm immediately to avoid retriggering
+						armedForStart = false;
+						try {
+							if (armedHomeScreen != null) {
+								armedHomeScreen.hide();
+							}
+						} catch (Exception ignored) {
+						}
 
-		
-		if (startRegistered) {
-			return;
-		}
-		startRegistered = true;
-
-		Keyboard kb = new Keyboard(new KeyboardHandler() {
-
-			private boolean started = false;
-
-			@Override
-			public void keyPressed(KeyboardEvent keyboardEvent) {
-				if (started) {
-					return;
+						// Prefer armedAction when provided; otherwise fall back to GameController
+						try {
+							if (armedAction != null) {
+								armedAction.run();
+							} else {
+								game.GameController.startGame();
+							}
+						} finally {
+							// Clear one-shot references
+							armedHomeScreen = null;
+							armedAction = null;
+						}
+					}
 				}
 
-				if (keyboardEvent.getKey() == startGame.getKey()) {
-					started = true;
-					homeScreen.hide();
-					startAction.run();
+				@Override
+				public void keyReleased(KeyboardEvent keyboardEvent) {
 				}
-			}
+			});
 
-			@Override
-			public void keyReleased(KeyboardEvent keyboardEvent) {
-				
-			}
-		});
+			startGame.setKey(KeyboardEvent.KEY_SPACE);
+			startGame.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
+			globalKeyboard.addEventListener(startGame);
+			listenerInitialized = true;
+		}
 
-		startGame.setKey(KeyboardEvent.KEY_SPACE);
-		startGame.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-		kb.addEventListener(startGame);
+		// Arm for a single start/restart
+		armedHomeScreen = homeScreen; // may be null (game over)
+		armedAction = startAction; // may be null -> fallback to GameController
+		armedForStart = true;
+	}
+
+	// Convenience: arm without passing a Runnable (will call
+	// GameController.startGame())
+	public static void armStartOnce(HomeScreen homeScreen) {
+		addStartListener(homeScreen, null);
 	}
 
 	@Override
@@ -89,6 +112,6 @@ public class AppKeyboard implements KeyboardHandler {
 
 	@Override
 	public void keyReleased(KeyboardEvent keyboardEvent) {
-		
+
 	}
 }

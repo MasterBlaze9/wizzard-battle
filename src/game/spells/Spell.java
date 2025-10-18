@@ -21,6 +21,9 @@ public class Spell {
     private int damage;
     private PlayerEnum playerEnum;
 
+    // Track all created spells so we can cleanup on game-over
+    private static final java.util.List<Spell> ACTIVE = new java.util.ArrayList<>();
+
     public Spell(int row, int col, PlayerEnum playerEnum) {
         int baseX = Grid.PADDING + col * Grid.CELL_SIZE
                 + (Grid.CELL_SIZE - Math.max(6, Grid.CELL_SIZE * 2)) / 2;
@@ -57,6 +60,10 @@ public class Spell {
 
         final int dir = playerEnum.equals(PlayerEnum.Player_1) ? 1 : -1;
 
+        synchronized (ACTIVE) {
+            ACTIVE.add(this);
+        }
+
         new Thread(() -> {
             try {
                 while (true) {
@@ -80,11 +87,7 @@ public class Spell {
                             Thread.currentThread().interrupt();
                         }
 
-                        try {
-                            delete();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        safeDelete();
 
                         break;
                     }
@@ -105,11 +108,7 @@ public class Spell {
                             Thread.currentThread().interrupt();
                         }
 
-                        try {
-                            delete();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        safeDelete();
 
                         break;
                     }
@@ -132,11 +131,7 @@ public class Spell {
                             }
                             hit.takeDamage(damage);
                             System.out.println("Spell hit character: " + hit.getClass().getSimpleName());
-                            try {
-                                delete();
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
+                            safeDelete();
                             break;
                         }
                         position.setCol(desiredNext);
@@ -144,11 +139,7 @@ public class Spell {
                     } catch (Exception e) {
 
                         e.printStackTrace();
-                        try {
-                            delete();
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
+                        safeDelete();
                         break;
                     }
 
@@ -162,6 +153,10 @@ public class Spell {
             } catch (Exception e) {
                 // Log unexpected exceptions so we can see why a spell stopped
                 e.printStackTrace();
+            } finally {
+                synchronized (ACTIVE) {
+                    ACTIVE.remove(this);
+                }
             }
         }).start();
     }
@@ -194,6 +189,13 @@ public class Spell {
         spell.delete();
     }
 
+    private void safeDelete() {
+        try {
+            delete();
+        } catch (Exception ignore) {
+        }
+    }
+
     public void translate(int col, int row) {
         // record previous X before moving so collision manager can compute the swept
         // area exactly
@@ -219,5 +221,21 @@ public class Spell {
 
     public int getPrevX() {
         return prevX;
+    }
+
+    // Remove all active spells' pictures
+    public static void cleanupAll() {
+        java.util.List<Spell> snapshot;
+        synchronized (ACTIVE) {
+            snapshot = new java.util.ArrayList<>(ACTIVE);
+        }
+        for (Spell s : snapshot) {
+            if (s != null) {
+                s.safeDelete();
+            }
+        }
+        synchronized (ACTIVE) {
+            ACTIVE.clear();
+        }
     }
 }

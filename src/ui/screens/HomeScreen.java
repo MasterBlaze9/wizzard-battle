@@ -38,7 +38,6 @@ public class HomeScreen {
         }
         homeScreenBackground = new Picture(0, 0, "resources/backgroundStart.png");
         homeScreenBackground.draw();
-        homeScreenBackground.grow(homeScreenBackground.getWidth(), homeScreenBackground.getHeight());
         visible = true;
     }
 
