@@ -21,17 +21,16 @@ public class Grid {
 
     public static final int POWER_UP_PICKUP_RADIUS_CELLS = 1;
 
-    /**
-     * Extra pixels added to character hitbox/grown size to make characters easier
-     * to hit.
-     * This is added on top of the existing growPadding calculation.
-     */
+
     public static final int EXTRA_HIT_BOX_PADDING_CHAR_PIXELS = 12;
 
-    /**
-     * Extra pixels to expand the spell swept collision rectangle in all directions.
-     */
+
     public static final int EXTRA_HIT_BOX_PADDING_SPELL_PIXELS = 8;
+
+ 
+    public static final int SPELL_VERTICAL_OFFSET_BASE = 35;
+    public static final int SPELL_VERTICAL_OFFSET_P2 = 40;
+    public static final int SPELL_HAND_TUNING = 6;
 
     private static int cols;
     private static int rows;
@@ -81,7 +80,7 @@ public class Grid {
     public void init() {
         int usedCellSize = cellSize > 0 ? cellSize : DEFAULT_CELL_SIZE;
 
-        // keep the static CELL_SIZE in sync with the grid's computed cell size
+      
         CELL_SIZE = usedCellSize;
 
         canvas = new Picture(PADDING, PADDING, "resources/backgroun2.png");
