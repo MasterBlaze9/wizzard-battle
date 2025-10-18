@@ -9,8 +9,6 @@ import ui.grid.Grid;
 
 public class HealthBar {
 
-    private Rectangle playerOneHealthBar;
-    private Rectangle playerTwoHealthBar;
     private Life[] lifeCounter;
     private PlayerEnum playerNumber;
 
@@ -25,9 +23,7 @@ public class HealthBar {
 
         if (playerNumber.equals(PlayerEnum.Player_1)) {
 
-            playerOneHealthBar = new Rectangle(Grid.PADDING + Grid.getWidth() / 8, Grid.PADDING, Grid.getWidth() / 4,
-                    Grid.PADDING * 5);
-            playerOneHealthBar.draw();
+
 
             lifeCounter = new Life[numberOfLives];
             for (int i = 0; i < numberOfLives; i++) {
@@ -35,9 +31,7 @@ public class HealthBar {
             }
 
         } else {
-            playerTwoHealthBar = new Rectangle(Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING), Grid.PADDING,
-                    Grid.getWidth() / 4, Grid.PADDING * 5);
-            playerTwoHealthBar.draw();
+
 
             lifeCounter = new Life[numberOfLives];
             for (int i = 0; i < numberOfLives; i++) {
@@ -192,7 +186,7 @@ public class HealthBar {
 
             int ellipseX = startX + index * (diameter + spacing);
 
-            life = new Picture(ellipseX, ellipseY, "resources/PowerUps/health.png");
+            life = new Picture(ellipseX, ellipseY * 2, "resources/PowerUps/health.png");
             life.grow(10, 10);
             life.draw();
 
