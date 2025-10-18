@@ -14,18 +14,31 @@ public class CharacterUI {
 
 		int cellSize = Grid.CELL_SIZE;
 
-		int growPadding = Math.max(2, cellSize / 4);
-		// add extra padding so character sprites occupy a larger visual area (and match
-		// hitbox)
-		int extra = Grid.EXTRA_HITBOX_PADDING_CHAR_PIXELS;
-		int finalSize = cellSize + 2 * growPadding + extra;
-
-		int pixelX = Grid.PADDING + column * cellSize + (cellSize - finalSize) / 2;
-		int pixelY = Grid.PADDING + row * cellSize + (cellSize - finalSize) / 2;
-
-		characterHead = new Picture(pixelX, pixelY, facePath);
-		position = new Position(column, row);
+		// create picture first and draw so width/height are available
+		characterHead = new Picture(0, 0, facePath);
 		characterHead.draw();
+
+		// compute target center of the logical cell in pixels
+		int cellOriginX = Grid.PADDING + column * cellSize;
+		int cellOriginY = Grid.PADDING + row * cellSize;
+
+		int targetCenterX = cellOriginX + cellSize / 2;
+		int targetCenterY = cellOriginY + cellSize / 2;
+
+		// actual picture size (available after draw)
+		int picW = characterHead.getWidth();
+		int picH = characterHead.getHeight();
+
+		int pixelX = targetCenterX - picW / 2;
+		int pixelY = targetCenterY - picH / 2;
+
+		// small upward nudge so characters appear a bit higher on screen
+		int verticalNudge = 6; // pixels upward
+		pixelY -= verticalNudge;
+
+		// translate from initial (0,0) to desired position
+		characterHead.translate(pixelX, pixelY);
+		position = new Position(column, row);
 
 	}
 

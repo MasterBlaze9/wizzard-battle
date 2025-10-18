@@ -26,12 +26,12 @@ public class Grid {
      * to hit.
      * This is added on top of the existing growPadding calculation.
      */
-    public static final int EXTRA_HITBOX_PADDING_CHAR_PIXELS = 12;
+    public static final int EXTRA_HIT_BOX_PADDING_CHAR_PIXELS = 12;
 
     /**
      * Extra pixels to expand the spell swept collision rectangle in all directions.
      */
-    public static final int EXTRA_HITBOX_PADDING_SPELL_PIXELS = 8;
+    public static final int EXTRA_HIT_BOX_PADDING_SPELL_PIXELS = 8;
 
     private static int cols;
     private static int rows;

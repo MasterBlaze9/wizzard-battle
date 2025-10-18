@@ -286,7 +286,7 @@ public class CollisionManager {
 			int charSizeH = character.getPixelHeight();
 
 			// expand swept rectangle a bit so small spells reliably hit
-			int spellExtra = Grid.EXTRA_HITBOX_PADDING_SPELL_PIXELS;
+			int spellExtra = Grid.EXTRA_HIT_BOX_PADDING_SPELL_PIXELS;
 			// also add a vertical cell padding so spells that are 1 row off still hit
 			int verticalCellPad = Math.max(1, cell / 2);
 			int sX = sweptX - spellExtra;
@@ -369,20 +369,34 @@ public class CollisionManager {
 				int newPixelX = currentPixelX + deltaCols * cell;
 				int pixelRight = newPixelX + charW;
 
-				// Compute the game-area pixel bounds using logical rows/cols converted to pixels
+				// Compute the game-area pixel bounds using logical rows/cols converted to
+				// pixels
 				int logicalTopRow = grid.getGameAreaTopRow();
 				int logicalRows = grid.getMaxRowsPerPlayer();
 				int logicalBottomRow = logicalTopRow + logicalRows - 1;
 				int areaPixelTop = Grid.PADDING + logicalTopRow * cell;
 				int areaPixelBottom = Grid.PADDING + (logicalBottomRow + 1) * cell;
 
+				// include character extra hitbox padding so characters are allowed
+				// to be placed a bit higher (their sprite may extend above the logical
+				// cell). This mirrors the padding used when creating CharacterUI.
+				int charExtra = Grid.EXTRA_HIT_BOX_PADDING_CHAR_PIXELS;
+
 				int allowedColMinPixel = Grid.PADDING + allowedColMin * cell;
 				int allowedColMaxPixel = Grid.PADDING + (allowedColMax + 1) * cell;
 
-				if (newPixelY < areaPixelTop || pixelBottom > areaPixelBottom) {
+				// expand/shrink area bounds by hitbox extra so sprite tops aren't clipped
+				int adjustedAreaTop = areaPixelTop - Math.max(0, charExtra / 2);
+				int adjustedAreaBottom = areaPixelBottom + Math.max(0, charExtra / 2);
+
+				if (newPixelY < adjustedAreaTop || pixelBottom > adjustedAreaBottom) {
 					return false;
 				}
-				if (newPixelX < allowedColMinPixel || pixelRight > allowedColMaxPixel) {
+				// expand horizontal allowed area slightly to account for hitbox growth
+				int adjustedAllowedColMinPixel = allowedColMinPixel - Math.max(0, charExtra / 2);
+				int adjustedAllowedColMaxPixel = allowedColMaxPixel + Math.max(0, charExtra / 2);
+
+				if (newPixelX < adjustedAllowedColMinPixel || pixelRight > adjustedAllowedColMaxPixel) {
 					return false;
 				}
 			} catch (Exception ignored) {
