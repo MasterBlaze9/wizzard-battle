@@ -10,7 +10,7 @@ public class GameArea {
     private int areaY;
     private int areaWidth;
     private int areaHeight;
-    private Picture GameArea;
+    public Picture GameArea;
 
     public GameArea(String imagePath, int canvasX, int canvasY, int canvasWidth, int canvasHeight) {
 

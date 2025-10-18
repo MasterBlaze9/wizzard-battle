@@ -40,8 +40,13 @@ public class Grid {
     private PlayerFaceCard card2;
 
     private static Grid activeGrid;
+    // Controls whether power-ups are allowed to spawn. True while a game is active.
+    private static volatile boolean powerUpSpawningEnabled = false;
 
     private int dividerWidth = 10;
+
+    private static String player1FacePath;
+    private static String player2FacePath;
 
     public Grid(int cols, int rows) {
         Grid.cols = cols;
@@ -109,6 +114,9 @@ public class Grid {
         String face1 = facePaths.get(0);
         String face2 = facePaths.get(1);
 
+        player1FacePath = face1;
+        player2FacePath = face2;
+
         card1 = new PlayerFaceCard(PlayerEnum.Player_1, face1, 85, 70,
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
@@ -117,6 +125,7 @@ public class Grid {
                 canvas.getWidth() / 8, canvas.getHeight() / 4);
 
         activeGrid = this;
+        powerUpSpawningEnabled = true;
 
         new Thread(() -> {
             try {
@@ -125,7 +134,9 @@ public class Grid {
                 Thread.currentThread().interrupt();
                 return;
             }
-            spawnPowerUpsOnce();
+            if (powerUpSpawningEnabled) {
+                spawnPowerUpsOnce();
+            }
         }).start();
 
     }
@@ -139,6 +150,9 @@ public class Grid {
     }
 
     private void spawnPowerUpsOnce() {
+        if (!powerUpSpawningEnabled) {
+            return;
+        }
         Random random = new Random();
 
         int topRow = getGameAreaTopRow();
@@ -198,6 +212,9 @@ public class Grid {
         if (powerUp == null) {
             return;
         }
+        if (!powerUpSpawningEnabled) {
+            return;
+        }
         boolean wasLeft = false;
         boolean wasRight = false;
         if (powerUp == leftPowerUp) {
@@ -220,6 +237,10 @@ public class Grid {
                 return;
             }
 
+            if (!powerUpSpawningEnabled) {
+                return;
+            }
+
             if (respawnLeft) {
                 spawnPowerUpForSide(true);
             }
@@ -233,6 +254,9 @@ public class Grid {
         try {
 
             if (activeGrid == null) {
+                return;
+            }
+            if (!powerUpSpawningEnabled) {
                 return;
             }
 
@@ -431,6 +455,50 @@ public class Grid {
 
     public int getY() {
         return canvas.getY();
+    }
+
+    public static String getPlayerFacePath(PlayerEnum player) {
+        if (player == PlayerEnum.Player_1) {
+            return player1FacePath;
+        } else {
+            return player2FacePath;
+        }
+    }
+
+    public static void clearAll() {
+        if (activeGrid != null) {
+            try {
+                powerUpSpawningEnabled = false;
+                if (canvas != null) {
+                    canvas.delete();
+                    canvas = null;
+                }
+                if (activeGrid.gameArea != null) {
+                    if (activeGrid.gameArea.GameArea != null) {
+                        activeGrid.gameArea.GameArea.delete();
+                    }
+                    activeGrid.gameArea = null;
+                }
+                if (activeGrid.card1 != null) {
+                    activeGrid.card1.hide();
+                    activeGrid.card1 = null;
+                }
+                if (activeGrid.card2 != null) {
+                    activeGrid.card2.hide();
+                    activeGrid.card2 = null;
+                }
+                if (leftPowerUp != null) {
+                    leftPowerUp.removeFromGame();
+                    leftPowerUp = null;
+                }
+                if (rightPowerUp != null) {
+                    rightPowerUp.removeFromGame();
+                    rightPowerUp = null;
+                }
+                activeGrid = null;
+            } catch (Exception ignored) {
+            }
+        }
     }
 
 }

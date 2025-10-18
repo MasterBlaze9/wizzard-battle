@@ -450,4 +450,31 @@ public class CollisionManager {
 		System.out.println("[COLLIDE DEBUG] --- END STATE DUMP ---");
 	}
 
+	public static void clearAll() {
+		try {
+			// Hide character sprites
+			for (Character c : new java.util.ArrayList<>(registeredCharacters)) {
+				if (c != null) {
+					try {
+						c.cleanupOnGameOver();
+					} catch (Exception ignored) {
+					}
+				}
+			}
+			// Remove any on-screen spell pictures
+			try {
+				game.spells.Spell.cleanupAll();
+			} catch (Exception ignored) {
+			}
+			// Remove any on-screen power-up pictures
+			try {
+				game.powerUps.PowerUp.cleanupAll();
+			} catch (Exception ignored) {
+			}
+		} finally {
+			registeredCharacters.clear();
+			registeredPowerUps.clear();
+		}
+	}
+
 }

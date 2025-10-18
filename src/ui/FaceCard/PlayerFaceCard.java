@@ -21,6 +21,15 @@ public class PlayerFaceCard {
         playerFace.draw();
     }
 
+    public void hide() {
+        if (playerFace != null) {
+            try {
+                playerFace.delete();
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
     // face assignment is performed by the caller and injected into the constructor
 
     // face retrieval is now the caller's responsibility; this class only displays

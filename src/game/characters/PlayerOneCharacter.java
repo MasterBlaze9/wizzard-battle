@@ -211,6 +211,38 @@ public class PlayerOneCharacter extends Character {
 
 	public void takeDamage(int damage) {
 		healthBar.removeLifePoints(damage);
+		if (!healthBar.isAlive()) {
+			triggerGameOver(PlayerEnum.Player_2);
+		}
+	}
+
+	private void triggerGameOver(PlayerEnum winner) {
+		hideCharacter();
+		// Clear all health bars from both players
+		ui.healthBar.HealthBar.cleanupAll();
+		CollisionManager.clearAll();
+		ui.grid.Grid.clearAll();
+
+		// Small delay to allow any running spell threads to complete cleanup
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		// Show the Game Over screen (background + winner face) and listen for SPACE
+		new ui.screens.GameOverScreen(winner);
+	}
+
+	private void hideCharacter() {
+		if (characterHead != null) {
+			characterHead.hide();
+		}
+	}
+
+	@Override
+	public void cleanupOnGameOver() {
+		hideCharacter();
 	}
 
 	@Override
