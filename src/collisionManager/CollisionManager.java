@@ -26,6 +26,15 @@ public class CollisionManager {
 		return DEBUG_COLLISIONS;
 	}
 
+	public static void registerCharacter(Character character) {
+		if (character == null) {
+			return;
+		}
+		if (!registeredCharacters.contains(character)) {
+			registeredCharacters.add(character);
+		}
+	}
+
 	public CollisionManager(Character character) {
 		this.character = character;
 		registerCharacter(character);
@@ -36,24 +45,12 @@ public class CollisionManager {
 		this.grid = grid;
 	}
 
-	public static void registerCharacter(Character character) {
-		if (character == null)
-			return;
-		if (!registeredCharacters.contains(character)) {
-			registeredCharacters.add(character);
-		}
-	}
-
 	public static void registerPowerUp(PowerUp powerUp) {
 		if (powerUp == null) {
 			return;
 		}
 		if (!registeredPowerUps.contains(powerUp)) {
 			registeredPowerUps.add(powerUp);
-			if (DEBUG_COLLISIONS) {
-				System.out.println(String.format("[COLLIDE DEBUG] Registered PowerUp at col=%d row=%d total=%d",
-						powerUp.getCol(), powerUp.getRow(), registeredPowerUps.size()));
-			}
 		}
 	}
 
@@ -319,8 +316,10 @@ public class CollisionManager {
 		int colsPerPlayer = grid.getMaxColsPerPlayer();
 		int rowsPerPlayer = grid.getMaxRowsPerPlayer();
 
-		int topRow = (totalRows - rowsPerPlayer) / 2;
-		int bottomRow = topRow + rowsPerPlayer - 1;
+		// Compute logical bounds using Grid so parity/rounding stays consistent.
+		// Use Grid's own helpers to ensure top/bottom and row counts match.
+		int topRow = grid != null ? grid.getGameAreaTopRow() : (totalRows - rowsPerPlayer) / 2;
+		int bottomRow = grid != null ? grid.getGameAreaBottomRow() : topRow + rowsPerPlayer - 1;
 
 		int allowedColMin = 0;
 		int allowedColMax = totalCols - 1;
@@ -347,10 +346,8 @@ public class CollisionManager {
 		boolean withinRows = newRow >= topRow && newRow <= bottomRow;
 
 		// Additional safety: compute the character's future pixel hitbox based on
-		// its current rendered position and the requested row/col delta. This uses
-		// the actual picture bounds (getPixelX/getPixelY/getPixelWidth/getPixelHeight)
-		// rather than recomputing positions from logical rows which better matches
-		// the sprite hitbox and prevents visual overflow on the sides.
+		// the same grid/game-area calculations used by `Grid` so logical and pixel
+		// checks remain consistent.
 		if (grid != null && character != null) {
 			try {
 				int cell = Grid.CELL_SIZE;
@@ -369,30 +366,30 @@ public class CollisionManager {
 				int newPixelX = currentPixelX + deltaCols * cell;
 				int pixelRight = newPixelX + charW;
 
-				// Compute the game-area pixel bounds using logical rows/cols converted to
-				// pixels
-				int logicalTopRow = grid.getGameAreaTopRow();
-				int logicalRows = grid.getMaxRowsPerPlayer();
-				int logicalBottomRow = logicalTopRow + logicalRows - 1;
-				int areaPixelTop = Grid.PADDING + logicalTopRow * cell;
-				int areaPixelBottom = Grid.PADDING + (logicalBottomRow + 1) * cell;
+				int areaPixelTop = Grid.PADDING + topRow * cell;
+				int areaPixelBottom = Grid.PADDING + (bottomRow + 1) * cell;
 
-				// include character extra hitbox padding so characters are allowed
-				// to be placed a bit higher (their sprite may extend above the logical
-				// cell). This mirrors the padding used when creating CharacterUI.
 				int charExtra = Grid.EXTRA_HIT_BOX_PADDING_CHAR_PIXELS;
 
 				int allowedColMinPixel = Grid.PADDING + allowedColMin * cell;
 				int allowedColMaxPixel = Grid.PADDING + (allowedColMax + 1) * cell;
 
-				// expand/shrink area bounds by hitbox extra so sprite tops aren't clipped
+				// Debug: log what the boundaries are
+				if (DEBUG_COLLISIONS && (newRow == topRow || newRow == bottomRow)) {
+					System.out.println(String.format(
+							"[COLLIDE DEBUG] Boundary check: newRow=%d topRow=%d bottomRow=%d newPixelY=%d pixelBottom=%d areaPixelTop=%d areaPixelBottom=%d charH=%d charExtra=%d",
+							newRow, topRow, bottomRow, newPixelY, pixelBottom, areaPixelTop, areaPixelBottom, charH,
+							charExtra));
+				}
+
 				int adjustedAreaTop = areaPixelTop - Math.max(0, charExtra / 2);
 				int adjustedAreaBottom = areaPixelBottom + Math.max(0, charExtra / 2);
 
+				// Top edge must be >= adjusted top, Bottom edge must be <= adjusted bottom
 				if (newPixelY < adjustedAreaTop || pixelBottom > adjustedAreaBottom) {
 					return false;
 				}
-				// expand horizontal allowed area slightly to account for hitbox growth
+
 				int adjustedAllowedColMinPixel = allowedColMinPixel - Math.max(0, charExtra / 2);
 				int adjustedAllowedColMaxPixel = allowedColMaxPixel + Math.max(0, charExtra / 2);
 
@@ -439,6 +436,17 @@ public class CollisionManager {
 			} catch (Exception ignored) {
 			}
 		}
+
+		// If the Grid was initialized, print its verbose debug info so we see the
+		// exact cell/area/top/bottom computations in the same dump output.
+		try {
+			Grid g = Grid.getActiveGrid();
+			if (g != null) {
+				g.dumpGameAreaDebug();
+			}
+		} catch (Exception ignored) {
+		}
+
 		System.out.println("[COLLIDE DEBUG] --- END STATE DUMP ---");
 	}
 

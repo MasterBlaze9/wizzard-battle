@@ -18,7 +18,9 @@ public class GameArea {
         int areaHeight = canvasHeight / 2;
 
         int areaX = canvasX;
-        int areaY = canvasY + (canvasHeight - areaHeight) / 2;
+        // Calculate area Y position to ensure equal top and bottom margins
+        int topMargin = (canvasHeight - areaHeight) / 2;
+        int areaY = canvasY + topMargin;
 
         gameArea = new Rectangle(areaX, areaY, areaWidth, areaHeight);
 
