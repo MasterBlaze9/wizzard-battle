@@ -81,7 +81,7 @@ public class Grid {
         canvas = new Picture(PADDING, PADDING, "resources/backgroun2.png");
         canvas.draw();
 
-        gameArea = new GameArea("resources/gameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),
+        gameArea = new GameArea("resources/GameArea.png", canvas.getX(), canvas.getY(), canvas.getWidth(),
                 canvas.getHeight());
 
         gameArea.translate(0, 0);
