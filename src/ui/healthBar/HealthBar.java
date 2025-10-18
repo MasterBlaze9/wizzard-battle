@@ -49,26 +49,26 @@ public class HealthBar {
     }
 
     public void removeLifePoints(int pointsToRemove) {
-        // defensive: nothing to do for non-positive removal
+
         if (pointsToRemove <= 0) {
             return;
         }
         int removed = 0;
 
         if (playerNumber.equals(PlayerEnum.Player_1)) {
-            // Player 1: remove from rightmost to leftmost
+
             for (int i = lifeCounter.length - 1; i >= 0 && removed < pointsToRemove; i--) {
                 if (lifeCounter[i] != null) {
-                    lifeCounter[i].remove(); // deletes the ellipse from the screen
+                    lifeCounter[i].remove();
                     lifeCounter[i] = null;
                     removed++;
                 }
             }
         } else {
-            // Player 2: remove from leftmost to rightmost
+
             for (int i = 0; i < lifeCounter.length && removed < pointsToRemove; i++) {
                 if (lifeCounter[i] != null) {
-                    lifeCounter[i].remove(); // deletes the ellipse from the screen
+                    lifeCounter[i].remove();
                     lifeCounter[i] = null;
                     removed++;
                 }
@@ -77,22 +77,81 @@ public class HealthBar {
     }
 
     public void addLifePoints() {
-        // Restore a single life according to the player's direction
+
+        int len = lifeCounter.length;
+
+        int minFilled = Integer.MAX_VALUE;
+        int maxFilled = Integer.MIN_VALUE;
+        int filledCount = 0;
+
+        for (int i = 0; i < len; i++) {
+            if (lifeCounter[i] != null) {
+                filledCount++;
+                if (i < minFilled) {
+                    minFilled = i;
+                }
+                if (i > maxFilled) {
+                    maxFilled = i;
+                }
+            }
+        }
+
+        java.util.function.IntConsumer placeAt = (int idx) -> {
+            if (idx >= 0 && idx < len && lifeCounter[idx] == null) {
+                if (playerNumber.equals(PlayerEnum.Player_1)) {
+                    lifeCounter[idx] = new Life(idx, true);
+                } else {
+                    lifeCounter[idx] = new Life(idx, false);
+                }
+            }
+        };
+
+        if (filledCount == 0) {
+
+            if (playerNumber.equals(PlayerEnum.Player_1)) {
+                placeAt.accept(0);
+            } else {
+                placeAt.accept(len - 1);
+            }
+            return;
+        }
+
         if (playerNumber.equals(PlayerEnum.Player_1)) {
-            // Player 1: restore rightmost empty slot first
-            for (int i = lifeCounter.length - 1; i >= 0; i--) {
+
+            for (int i = maxFilled + 1; i < len; i++) {
                 if (lifeCounter[i] == null) {
-                    lifeCounter[i] = new Life(i, true);
-                    break;
+                    placeAt.accept(i);
+                    return;
+                }
+            }
+
+            for (int i = maxFilled - 1; i >= 0; i--) {
+                if (lifeCounter[i] == null) {
+                    placeAt.accept(i);
+                    return;
                 }
             }
         } else {
-            // Player 2: restore leftmost empty slot first
-            for (int i = 0; i < lifeCounter.length; i++) {
+
+            for (int i = minFilled - 1; i >= 0; i--) {
                 if (lifeCounter[i] == null) {
-                    lifeCounter[i] = new Life(i, false);
-                    break;
+                    placeAt.accept(i);
+                    return;
                 }
+            }
+
+            for (int i = minFilled + 1; i < len; i++) {
+                if (lifeCounter[i] == null) {
+                    placeAt.accept(i);
+                    return;
+                }
+            }
+        }
+
+        for (int i = 0; i < len; i++) {
+            if (lifeCounter[i] == null) {
+                placeAt.accept(i);
+                return;
             }
         }
     }
@@ -112,20 +171,17 @@ public class HealthBar {
             int barWidth = Grid.getWidth() / 4;
 
             if (playerOne) {
-                // match the x used when creating playerOneHealthBar
+
                 barX = Grid.PADDING + Grid.getWidth() / 8;
             } else {
                 barX = Grid.getWidth() / 2 + (Grid.getWidth() / 8 + Grid.PADDING + 15);
             }
 
-            // center vertically inside the health bar
             int ellipseY = barY + (barHeight - diameter) / 2;
             ellipseY += 15;
 
-            // compute total width of all life ellipses and spacing
             int totalWidth = numberOfLives * diameter + Math.max(0, numberOfLives - 1) * spacing;
 
-            // startX: player one should start at the leftmost inset; player two centered
             int startX;
             if (playerOne) {
                 startX = barX + Grid.PADDING;
@@ -142,9 +198,7 @@ public class HealthBar {
 
         }
 
-        /**
-         * Remove the visual ellipse from the screen and mark this Life as removed.
-         */
+    
         public void remove() {
             if (life != null) {
                 try {
