@@ -1,6 +1,6 @@
 package ui.healthBar;
 
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
+
 
 import game.PlayerEnum;
 
@@ -13,9 +13,9 @@ public class HealthBar {
     private PlayerEnum playerNumber;
 
     private int numberOfLives;
-    private static final int DEFAULT_LIVES = 3;
+    private static final int DEFAULT_LIVES = 10;
 
-    // Track all created health bars so we can clear them at game-over
+   
     private static java.util.List<HealthBar> INSTANCES = new java.util.ArrayList<>();
 
     public HealthBar(PlayerEnum playerNumber) {
@@ -176,18 +176,7 @@ public class HealthBar {
             }
         }
 
-        // Remove health bar rectangles
-        try {
-            if (playerOneHealthBar != null) {
-                playerOneHealthBar.delete();
-                playerOneHealthBar = null;
-            }
-            if (playerTwoHealthBar != null) {
-                playerTwoHealthBar.delete();
-                playerTwoHealthBar = null;
-            }
-        } catch (Exception ignored) {
-        }
+     
     }
 
     // Static helper to cleanup all health bars

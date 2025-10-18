@@ -11,7 +11,6 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import org.academiadecodigo.simplegraphics.pictures.Picture;
 
-
 public class GameOverScreen implements KeyboardHandler {
 
     private Picture background;
@@ -21,31 +20,24 @@ public class GameOverScreen implements KeyboardHandler {
     private boolean triggered = false;
 
     public GameOverScreen(PlayerEnum winner) {
-     
+
         background = new Picture(0, 0, "resources/backgroun2.png");
         background.draw();
 
-        
         String facePath = Grid.getPlayerFacePath(winner);
         if (facePath == null || facePath.isEmpty()) {
-           
+
             facePath = winner == PlayerEnum.Player_1 ? "resources/Faces/Carolina.png"
                     : "resources/Faces/Pascoa.png";
         }
 
-      
         int screenW = background.getWidth();
         int screenH = background.getHeight();
 
         winnerFace = new Picture((int) screenW / 2 - 50, (int) screenH / 2.75, facePath);
         winnerFace.draw();
 
-        int growX = screenW / 12;
-        int growY = screenH / 12;
-        try {
-            winnerFace.grow(growX, growY);
-        } catch (Exception ignored) {
-        }
+        winnerFace.grow(120, 120);
 
         String winnerName = (winner == PlayerEnum.Player_1) ? "PLAYER 1" : "PLAYER 2";
 
@@ -54,12 +46,11 @@ public class GameOverScreen implements KeyboardHandler {
         winnerText.grow(140, 48);
         winnerText.draw();
 
-        hintText = new Text((int) screenW / 2 -70, (int) (screenH / 2) + 200, "Press SPACE to restart");
+        hintText = new Text((int) screenW / 2 - 50, (int) (screenH / 2) + 200, "Press SPACE to restart");
         hintText.setColor(Color.WHITE);
         hintText.grow(90, 34);
         hintText.draw();
 
-       
         Keyboard kb = new Keyboard(this);
         KeyboardEvent restart = new KeyboardEvent();
         restart.setKey(KeyboardEvent.KEY_SPACE);
