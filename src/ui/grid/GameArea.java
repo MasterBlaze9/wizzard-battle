@@ -34,7 +34,13 @@ public class GameArea {
     }
 
     public void translate(int col, int row) {
-        gameArea.translate(col, row);
+        try {
+            gameArea.translate(col, row);
+        }
+        catch(Exception e){
+            System.out.println("Error trying to move gameArea UI: " + e.getMessage());
+        }
+
     }
 
     public int getAreaX() {
