@@ -1,3 +1,4 @@
+
 package game.spells;
 
 import game.PlayerEnum;
@@ -23,6 +24,7 @@ public class Spell {
 
     // Track all created spells so we can cleanup on game-over
     private static final java.util.List<Spell> ACTIVE = new java.util.ArrayList<>();
+    private Thread spellThread; // ADD THIS FIELD
 
     public Spell(int row, int col, PlayerEnum playerEnum) {
         int baseX = Grid.PADDING + col * Grid.CELL_SIZE
@@ -64,9 +66,13 @@ public class Spell {
             ACTIVE.add(this);
         }
 
-        new Thread(() -> {
+        spellThread = new Thread(() -> { // STORE THE THREAD REFERENCE
             try {
                 while (true) {
+                    // ADD THIS CHECK FOR INTERRUPTION
+                    if (Thread.currentThread().isInterrupted()) {
+                        break;
+                    }
 
                     int currentCol = position.getCol();
                     int desiredNext = currentCol + dir * speed;
@@ -154,7 +160,8 @@ public class Spell {
                     ACTIVE.remove(this);
                 }
             }
-        }).start();
+        });
+        spellThread.start(); // START THE THREAD
     }
 
     public int getSpeed() {
@@ -219,7 +226,7 @@ public class Spell {
         return prevX;
     }
 
-    // Remove all active spells' pictures
+    // MODIFY THIS METHOD TO INTERRUPT THREADS
     public static void cleanupAll() {
         java.util.List<Spell> snapshot;
         synchronized (ACTIVE) {
@@ -227,6 +234,10 @@ public class Spell {
         }
         for (Spell s : snapshot) {
             if (s != null) {
+                // Interrupt the spell thread
+                if (s.spellThread != null && s.spellThread.isAlive()) {
+                    s.spellThread.interrupt();
+                }
                 s.safeDelete();
             }
         }
