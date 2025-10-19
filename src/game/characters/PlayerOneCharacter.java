@@ -71,10 +71,13 @@ public class PlayerOneCharacter extends Character {
 		}
 	}
 
-	@Override
-	public void cleanupOnGameOver() {
-		hideCharacter();
-	}
+    @Override
+    public void cleanupOnGameOver() {
+        hideCharacter();
+        if (appKeyboard != null) {
+            appKeyboard.cleanup();
+        }
+    }
 
 	@Override
 	public void addLifePoints() {
