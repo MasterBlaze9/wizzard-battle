@@ -36,14 +36,24 @@ public class CharacterUI {
 		int verticalNudge = 6; // pixels upward
 		pixelY -= verticalNudge;
 
-		// translate from initial (0,0) to desired position
-		characterHead.translate(pixelX, pixelY);
-		position = new Position(column, row);
+        try {
+            // translate from initial (0,0) to desired position
+            characterHead.translate(pixelX, pixelY);
+            position = new Position(column, row);
+        }
+        catch(Exception e){
+            System.out.println("Error trying to move characterHead UI: " + e.getMessage());
+        }
 
 	}
 
 	public void move(int cols, int rows) {
-		characterHead.translate(cols, rows);
+        try {
+            characterHead.translate(cols, rows);
+        }
+        catch(Exception e){
+            System.out.println("Error trying to move character UI: " + e.getMessage());
+        }
 	}
 
 	public int getPixelX() {

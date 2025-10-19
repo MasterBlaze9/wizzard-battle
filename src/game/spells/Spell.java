@@ -200,10 +200,15 @@ public class Spell {
     }
 
     public void translate(int col, int row) {
-        // record previous X before moving so collision manager can compute the swept
-        // area exactly
-        prevX = spell.getX();
-        spell.translate(col, row);
+        try {
+            // record previous X before moving so collision manager can compute the swept
+            // area exactly
+            prevX = spell.getX();
+            spell.translate(col, row);
+        }
+        catch(Exception e){
+            System.out.println("Error trying to move spell UI: " + e.getMessage());
+        }
     }
 
     public int getWidth() {
