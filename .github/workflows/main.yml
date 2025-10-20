@@ -1,0 +1,26 @@
+name: Java Build (Ant)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Java
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'   # or 'zulu'/'oracle' if you prefer
+          java-version: '17'        # change to your version
+
+      # Step 3: Run the Ant build
+      - name: Run Ant build
+        run: ant -f build.xml
