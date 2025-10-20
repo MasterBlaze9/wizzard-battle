@@ -13,7 +13,6 @@ public class HomeScreen {
     public HomeScreen() {
         homeScreenBackground = new Picture(0, 0, "resources/backgroundStart.png");
         homeScreenBackground.draw();
-        // constructor draws the background; mark visible so show()/hide() behave correctly
         visible = true;
 
     }

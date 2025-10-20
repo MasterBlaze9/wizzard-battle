@@ -30,14 +30,11 @@ public abstract class Character {
 
 	public abstract int getPixelHeight();
 
-	
 	protected abstract PlayerEnum getOpponentPlayer();
 
 	public abstract void takeDamage(int damage);
 
 	public abstract void addLifePoints();
-
-	
 
 	public void moveUp() {
 		int moveCells = 1 + Math.max(0, getMovementSpeedModifier());
@@ -48,7 +45,7 @@ public abstract class Character {
 			characterHead.move(0, -Grid.CELL_SIZE * moveCells);
 			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
 			position.setRow(newRow);
-			
+
 		}
 	}
 
@@ -61,7 +58,7 @@ public abstract class Character {
 			characterHead.move(0, Grid.CELL_SIZE * moveCells);
 			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
 			position.setRow(newRow);
-			
+
 		}
 	}
 
@@ -74,7 +71,7 @@ public abstract class Character {
 			characterHead.move(-Grid.CELL_SIZE * moveCells, 0);
 			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
 			position.setCol(newCol);
-			
+
 		}
 	}
 
@@ -87,7 +84,7 @@ public abstract class Character {
 			characterHead.move(Grid.CELL_SIZE * moveCells, 0);
 			PowerUpHandler.handlePowerUpCollection(this, position.getCol(), position.getRow(), newCol, newRow);
 			position.setCol(newCol);
-			
+
 		}
 	}
 
@@ -96,7 +93,6 @@ public abstract class Character {
 		s.setDamage(s.getDamage() + getSpellDamageModifier());
 		s.setSpeed(s.getSpeed() + getSpellSpeedModifier());
 	}
-
 
 	protected void hideCharacter() {
 		if (characterHead != null) {

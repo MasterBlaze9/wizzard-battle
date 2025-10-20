@@ -8,7 +8,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
 import game.PlayerEnum;
 import game.characters.Character;
-import ui.screens.HomeScreen;
+import ui.screens.*;
 
 public class AppKeyboard implements KeyboardHandler {
 

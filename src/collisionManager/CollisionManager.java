@@ -63,7 +63,7 @@ public class CollisionManager {
 
 	public static PowerUp getPowerUpAt(int col, int row) {
 		int radius = Grid.POWER_UP_PICKUP_RADIUS_CELLS;
-		
+
 		for (PowerUp powerUp : registeredPowerUps) {
 			if (powerUp == null) {
 				continue;
@@ -73,16 +73,15 @@ public class CollisionManager {
 			int pRow = powerUp.getRow();
 
 			if (Math.abs(pCol - col) <= radius && Math.abs(pRow - row) <= radius) {
-			
+
 				return powerUp;
 			}
 		}
 		return null;
 	}
 
-	
 	public static PowerUp getPowerUpAlongPath(int fromCol, int fromRow, int toCol, int toRow) {
-		
+
 		if (fromCol == toCol && fromRow == toRow) {
 			return getPowerUpAt(toCol, toRow);
 		}
@@ -93,14 +92,13 @@ public class CollisionManager {
 		int stepCol = Integer.signum(dCol);
 		int stepRow = Integer.signum(dRow);
 
-	
 		for (int i = 1; i <= steps; i++) {
 			int c = fromCol + stepCol * i;
 			int r = fromRow + stepRow * i;
-			
+
 			PowerUp p = getPowerUpAt(c, r);
 			if (p != null) {
-			
+
 				return p;
 			}
 		}
@@ -118,8 +116,6 @@ public class CollisionManager {
 		int cW = character.getPixelWidth();
 		int cH = character.getPixelHeight();
 
-		
-
 		for (PowerUp p : registeredPowerUps) {
 			if (p == null)
 				continue;
@@ -130,7 +126,7 @@ public class CollisionManager {
 			int pH = p.getPixelHeight();
 
 			if (pX < cX + cW && pX + pW > cX && pY < cY + cH && pY + pH > cY) {
-			
+
 				return p;
 			}
 		}
@@ -190,7 +186,6 @@ public class CollisionManager {
 		int minCol = Math.min(fromCol, toCol);
 		int maxCol = Math.max(fromCol, toCol);
 
-
 		for (Character character : registeredCharacters) {
 			if (character == null) {
 				continue;
@@ -215,7 +210,7 @@ public class CollisionManager {
 			}
 
 			int spellW = spell.getWidth();
-	
+
 			int prevX = spell.getPrevX();
 			int currX = spell.getX();
 			int sweptX = Math.min(prevX, currX);
@@ -223,17 +218,13 @@ public class CollisionManager {
 			int sweptY = spell.getY();
 			int sweptH = spell.getHeight();
 
-		
-
-			
 			int charX = character.getPixelX();
 			int charY = character.getPixelY();
 			int charSizeW = character.getPixelWidth();
 			int charSizeH = character.getPixelHeight();
 
-			
 			int spellExtra = Grid.EXTRA_HIT_BOX_PADDING_SPELL_PIXELS;
-	
+
 			int verticalCellPad = Math.max(1, cell / 2);
 			int sX = sweptX - spellExtra;
 			int sY = sweptY - spellExtra - verticalCellPad;
@@ -241,9 +232,9 @@ public class CollisionManager {
 			int sH = sweptH + 2 * spellExtra + verticalCellPad * 2;
 
 			if (sX < charX + charSizeW && sX + sW > charX && sY < charY + charSizeH && sY + sH > charY) {
-			
+
 				return character;
-			} 
+			}
 		}
 
 		return null;
@@ -257,7 +248,6 @@ public class CollisionManager {
 		int colsPerPlayer = grid.getMaxColsPerPlayer();
 		int rowsPerPlayer = grid.getMaxRowsPerPlayer();
 
-		
 		int topRow = grid != null ? grid.getGameAreaTopRow() : (totalRows - rowsPerPlayer) / 2;
 		int bottomRow = grid != null ? grid.getGameAreaBottomRow() : topRow + rowsPerPlayer - 1;
 
@@ -285,7 +275,6 @@ public class CollisionManager {
 		boolean withinCols = newCol >= allowedColMin && newCol <= allowedColMax;
 		boolean withinRows = newRow >= topRow && newRow <= bottomRow;
 
-		
 		if (grid != null && character != null) {
 			try {
 				int cell = Grid.CELL_SIZE;
@@ -315,7 +304,6 @@ public class CollisionManager {
 				int adjustedAreaTop = areaPixelTop - Math.max(0, charExtra / 2);
 				int adjustedAreaBottom = areaPixelBottom + Math.max(0, charExtra / 2);
 
-				
 				if (newPixelY < adjustedAreaTop || pixelBottom > adjustedAreaBottom) {
 					return false;
 				}

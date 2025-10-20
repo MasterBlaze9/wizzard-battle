@@ -1,4 +1,4 @@
-package game.powerups;
+package game.powerUps;
 
 public enum PowerupType {
 

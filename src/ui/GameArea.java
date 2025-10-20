@@ -4,10 +4,7 @@ import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 
 import utils.AppColor;
 
-/**
- * Represents the in-game area that sits inside the grid canvas. The GameArea
- * will be centered vertically inside the provided canvas rectangle.
- */
+
 public class GameArea extends Rectangle {
     private Rectangle gameArea;
     private int areaX;
