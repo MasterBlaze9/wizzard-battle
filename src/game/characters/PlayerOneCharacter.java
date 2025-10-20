@@ -1,60 +1,57 @@
 package game.characters;
 
+import game.GameStateManager;
 import game.PlayerEnum;
-import game.spells.Spell;
 import keyboard.AppKeyboard;
 import ui.character.CharacterUI;
 import ui.grid.Grid;
+import ui.healthBar.HealthBar;
 import ui.position.Position;
+import collisionManager.CollisionManager;
 
 public class PlayerOneCharacter extends Character {
 
-	private CharacterUI characterHead;
-	private Position position;
-	private PlayerEnum playerNumber;
-	private AppKeyboard appKeyboard;
-
-	public PlayerOneCharacter(int column, int row) {
+	public PlayerOneCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_1;
 		position = new Position(column, row);
-		characterHead = new CharacterUI(column, row);
+		characterHead = new CharacterUI(column, row, "resources/Characters/character.png");
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_1, this);
+		collisionManager = new CollisionManager(this, grid);
+		healthBar = new HealthBar(PlayerEnum.Player_1);
+	}
+
+	public PlayerEnum getPlayerEnum() {
+		return playerNumber;
 	}
 
 	@Override
-	public void moveUp() {
-		characterHead.move(0, -Grid.CELL_SIZE);
-
-		System.out.println(position.getCol());
-		System.out.println(position.getRow());
+	protected PlayerEnum getOpponentPlayer() {
+		return PlayerEnum.Player_2;
 	}
 
 	@Override
-	public void moveDown() {
-		characterHead.move(0, Grid.CELL_SIZE);
-	}
-
-	@Override
-	public void moveLeft() {
-		characterHead.move(-Grid.CELL_SIZE, 0);
-	}
-
-	@Override
-	public void moveRight() {
-		characterHead.move(Grid.CELL_SIZE, 0);
-	}
-
-	@Override
-	public void castSpell(Spell spellToCast) {
-		int currentRow = position.getRow();
-		int curremtColumn = position.getCol();
-		// include position in the exception message so the local vars are used
-		throw new UnsupportedOperationException(
-				"Unimplemented method 'castSpell' at " + curremtColumn + "," + currentRow);
-	}
-
 	public Position getPosition() {
 		return position;
+	}
+
+	@Override
+	public int getPixelX() {
+		return characterHead.getPixelX();
+	}
+
+	@Override
+	public int getPixelY() {
+		return characterHead.getPixelY();
+	}
+
+	@Override
+	public int getPixelWidth() {
+		return characterHead.getPixelWidth();
+	}
+
+	@Override
+	public int getPixelHeight() {
+		return characterHead.getPixelHeight();
 	}
 
 	public PlayerEnum getPlayerNumber() {
@@ -63,6 +60,28 @@ public class PlayerOneCharacter extends Character {
 
 	public AppKeyboard getAppKeyboard() {
 		return appKeyboard;
+	}
+
+	@Override
+	public void takeDamage(int damage) {
+		healthBar.removeLifePoints(damage);
+		if (!healthBar.isAlive()) {
+			hideCharacter();
+			GameStateManager.triggerGameOver(getOpponentPlayer());
+		}
+	}
+
+    @Override
+    public void cleanupOnGameOver() {
+        hideCharacter();
+        if (appKeyboard != null) {
+            appKeyboard.cleanup();
+        }
+    }
+
+	@Override
+	public void addLifePoints() {
+		healthBar.addLifePoints();
 	}
 
 }

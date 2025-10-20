@@ -1,21 +1,21 @@
 <?xml version="1.0" ?>
 
-<project name="Wizzard Battle" default="jarfile">
+<project name="Wizard Battle" default="jarfile">
 
     <!-- Initialize build properties  -->
     <target name="init" description="Initializes properties">
-        <property name="project.name" value="Wizzard Battle"/>
+        <property name="project.name" value="Wizard Battle"/>
         <property name="src.dir" value="src"/>
     <property name="main.class" value="App"/>
         <property name="build.dir" value="build"/>
         <property name="classes.dir" value="${build.dir}/classes"/>
+     
         <property name="lib.dir" value="lib" />
+        <property name="resources.dir" value="resources"/>
         <path id="classpath">
             <fileset dir="${lib.dir}" includes="**/*.jar" />
         </path>
-        <!-- uncomment for projects with libs and resources
-        <property name="resources.dir" value="resources"/>
-        -->
+       
     </target>
 
     <!-- Creates the build directories to hold JAR and Class files -->
@@ -23,10 +23,19 @@
         <mkdir dir="${classes.dir}"/>
     </target>
 
+    <!-- Copies resource files into the classes directory so they are available on the classpath -->
+    <target name="copy-resources" description="Copy resources into classes dir" depends="prepare">
+        <copy todir="${classes.dir}">
+            <fileset dir="${resources.dir}"/>
+        </copy>
+    </target>
+
     <!-- Compiles the source code -->
-    <target name="compile" description="Compiles the source code" depends="prepare">
+    <target name="compile" description="Compiles the source code" depends="copy-resources">
         <javac srcdir="${src.dir}" destdir="${classes.dir}">
-            <classpath refid="classpath"/>
+           
+                <classpath refid="classpath"/>
+        
         </javac>
     </target>
 
@@ -35,12 +44,13 @@
         <jar destfile="${build.dir}/${project.name}.jar" basedir="${classes.dir}">
             <manifest>
                 <attribute name="Main-Class" value="${main.class}"/>
-                <attribute name="Class-Path" value="${lib.dir}/simplegraphics.jar" />
             </manifest>
+          
             <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
             <fileset dir=".">
                 <include name="**/${resources.dir}/**"/>
             </fileset>
+          
         </jar>
     </target>
 

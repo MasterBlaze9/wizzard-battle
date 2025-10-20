@@ -1,29 +1,53 @@
 package game.characters;
 
+import game.GameStateManager;
 import game.PlayerEnum;
-import game.spells.Spell;
 import keyboard.AppKeyboard;
-// Controls import removed because it's not used here
 import ui.character.CharacterUI;
 import ui.grid.Grid;
+import ui.healthBar.HealthBar;
 import ui.position.Position;
+import collisionManager.CollisionManager;
 
 public class PlayerTwoCharacter extends Character {
 
-	private CharacterUI characterHead;
-	private Position position;
-	private PlayerEnum playerNumber;
-	private AppKeyboard appKeyboard;
-
-	public PlayerTwoCharacter(int column, int row) {
+	public PlayerTwoCharacter(Grid grid, int column, int row) {
 		playerNumber = PlayerEnum.Player_2;
 		position = new Position(column, row);
-		characterHead = new CharacterUI(column, row);
+		characterHead = new CharacterUI(column, row, "resources/Characters/character2.png");
 		appKeyboard = new AppKeyboard(PlayerEnum.Player_2, this);
+		collisionManager = new CollisionManager(this, grid);
+		healthBar = new HealthBar(PlayerEnum.Player_2);
 	}
 
+	@Override
+	protected PlayerEnum getOpponentPlayer() {
+		return PlayerEnum.Player_1;
+	}
+
+	@Override
 	public Position getPosition() {
 		return position;
+	}
+
+	@Override
+	public int getPixelX() {
+		return characterHead.getPixelX();
+	}
+
+	@Override
+	public int getPixelY() {
+		return characterHead.getPixelY();
+	}
+
+	@Override
+	public int getPixelWidth() {
+		return characterHead.getPixelWidth();
+	}
+
+	@Override
+	public int getPixelHeight() {
+		return characterHead.getPixelHeight();
 	}
 
 	public PlayerEnum getPlayerNumber() {
@@ -35,29 +59,25 @@ public class PlayerTwoCharacter extends Character {
 	}
 
 	@Override
-	public void moveUp() {
-		characterHead.move(0, -Grid.CELL_SIZE);
+	public void takeDamage(int damage) {
+		healthBar.removeLifePoints(damage);
+		if (!healthBar.isAlive()) {
+			hideCharacter();
+			GameStateManager.triggerGameOver(getOpponentPlayer());
+		}
 	}
 
-	@Override
-	public void moveDown() {
-		characterHead.move(0, Grid.CELL_SIZE);
-	}
+    @Override
+    public void cleanupOnGameOver() {
+        hideCharacter();
+        if (appKeyboard != null) {
+            appKeyboard.cleanup();
+        }
+    }
 
 	@Override
-	public void moveLeft() {
-		characterHead.move(-Grid.CELL_SIZE, 0);
-	}
-
-	@Override
-	public void moveRight() {
-		characterHead.move(Grid.CELL_SIZE, 0);
-	}
-
-	@Override
-	public void castSpell(Spell spellToCast) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'castSpell'");
+	public void addLifePoints() {
+		healthBar.addLifePoints();
 	}
 
 }
