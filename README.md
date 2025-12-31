@@ -1,33 +1,33 @@
 # 🧙‍♂️ Wizard Battle
 
-Um jogo de batalha entre dois magos desenvolvido em Java, onde os jogadores controlam personagens que lançam feitiços, coletam power-ups e competem para vencer o oponente.
+A battle game between two wizards developed in Java, where players control characters who cast spells, collect power-ups, and compete to defeat their opponent.
 
-## 📋 Índice
+## 📋 Index
 
-- [Visão Geral](#visão-geral)
-- [Diagrama de Classes](#diagrama-de-classes)
-- [Arquitetura do Projeto](#arquitetura-do-projeto)
-- [Documentação das Classes](#documentação-das-classes)
-- [Como Jogar](#como-jogar)
-- [Compilação e Execução](#compilação-e-execução)
-- [Controles](#controles)
-
----
-
-## 🎮 Visão Geral
-
-Wizard Battle é um jogo multiplayer local onde dois jogadores competem em uma arena dividida. Cada jogador controla um personagem mago que pode:
-
-- **Movimentar-se** pela sua metade da arena
-- **Lançar feitiços** contra o oponente
-- **Coletar power-ups** que aparecem aleatoriamente
-- **Aumentar temporariamente** suas habilidades através de buffs
-
-O objetivo é reduzir a vida do oponente a zero antes que ele faça o mesmo com você.
+- [Overview](#overview)
+- [Class Diagram](#class-diagram)
+- [Project Architecture](#project-architecture)
+- [Class Documentation](#class-documentation)
+- [How to Play](#how-to-play)
+- [Build and Run](#build-and-run)
+- [Controls](#controls)
 
 ---
 
-## 📊 Diagrama de Classes
+## 🎮 Overview
+
+Wizard Battle is a local multiplayer game where two players compete in a divided arena. Each player controls a wizard character who can:
+
+- **Move** within their half of the arena
+- **Cast spells** at the opponent
+- **Collect power-ups** that appear randomly
+- **Temporarily boost** their abilities through buffs
+
+The goal is to reduce your opponent's life to zero before they do the same to you.
+
+---
+
+## 📊 Class Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -163,126 +163,126 @@ O objetivo é reduzir a vida do oponente a zero antes que ele faça o mesmo com 
 
 ---
 
-## 🏗️ Arquitetura do Projeto
+## 🏗️ Project Architecture
 
-### Estrutura de Diretórios
+### Directory Structure
 
 ```
 WizzardBattle/
 ├── src/
-│   ├── App.java                          # Ponto de entrada da aplicação
-│   ├── game/                             # Lógica principal do jogo
-│   │   ├── GameController.java           # Controlador central do jogo
-│   │   ├── GameStateManager.java         # Gerenciamento de estados
-│   │   ├── Player.java                   # Classe wrapper de jogador
-│   │   ├── PlayerEnum.java               # Enumeração de jogadores
-│   │   ├── characters/                   # Personagens jogáveis
-│   │   │   ├── Character.java            # Classe abstrata base
-│   │   │   ├── PlayerOneCharacter.java   # Implementação Jogador 1
-│   │   │   ├── PlayerTwoCharacter.java   # Implementação Jogador 2
-│   │   │   └── BuffManager.java          # Gerenciador de buffs temporários
-│   │   ├── spells/                       # Sistema de feitiços
-│   │   │   └── Spell.java                # Projétil de feitiço
-│   │   └── powerUps/                     # Sistema de power-ups
-│   │       ├── PowerUp.java              # Classe base de power-up
-│   │       ├── PowerUpHandler.java       # Gerenciador centralizado
-│   │       ├── PowerUpHealth.java        # Power-up de vida
-│   │       ├── PowerUpDamage.java        # Power-up de dano
-│   │       └── PowerUpSpellSpeed.java    # Power-up de velocidade
-│   ├── collisionManager/                 # Sistema de colisões
-│   │   └── CollisionManager.java         # Detecção de colisões
-│   ├── keyboard/                         # Sistema de entrada
-│   │   ├── AppKeyboard.java              # Gerenciador de teclado
-│   │   └── Controls.java                 # Mapeamento de teclas
-│   ├── ui/                               # Interface do usuário
-│   │   ├── character/                    # Renderização de personagens
-│   │   │   └── CharacterUI.java          # UI do personagem
-│   │   ├── grid/                         # Sistema de grid
-│   │   │   ├── Grid.java                 # Grade principal do jogo
-│   │   │   └── GameArea.java             # Área jogável
-│   │   ├── healthBar/                    # Sistema de vida
-│   │   │   └── HealthBar.java            # Barra de vida
-│   │   ├── faceCard/                     # Avatares dos jogadores
-│   │   │   └── PlayerFaceCard.java       # Card com face do jogador
-│   │   ├── screens/                      # Telas do jogo
-│   │   │   ├── HomeScreen.java           # Tela inicial
-│   │   │   └── GameOverScreen.java       # Tela de fim de jogo
-│   │   └── position/                     # Sistema de posicionamento
-│   │       └── Position.java             # Coordenadas lógicas
-│   └── utils/                            # Utilitários
-│       └── AppColor.java                 # Paleta de cores
-├── resources/                            # Recursos gráficos
-│   ├── Characters/                       # Sprites de personagens
-│   ├── Faces/                           # Avatares dos jogadores
-│   ├── PowerUps/                        # Sprites de power-ups
-│   ├── Spells/                          # Sprites de feitiços
-│   └── *.png                            # Backgrounds e UI
-├── lib/                                 # Bibliotecas externas
-└── build.xml                            # Script de build Ant
+│   ├── App.java                          # Application entry point
+│   ├── game/                             # Main game logic
+│   │   ├── GameController.java           # Central game controller
+│   │   ├── GameStateManager.java         # State management
+│   │   ├── Player.java                   # Player wrapper class
+│   │   ├── PlayerEnum.java               # Player enumeration
+│   │   ├── characters/                   # Playable characters
+│   │   │   ├── Character.java            # Abstract base class
+│   │   │   ├── PlayerOneCharacter.java   # Player 1 implementation
+│   │   │   ├── PlayerTwoCharacter.java   # Player 2 implementation
+│   │   │   └── BuffManager.java          # Temporary buff manager
+│   │   ├── spells/                       # Spell system
+│   │   │   └── Spell.java                # Spell projectile
+│   │   └── powerUps/                     # Power-up system
+│   │       ├── PowerUp.java              # Base power-up class
+│   │       ├── PowerUpHandler.java       # Centralized handler
+│   │       ├── PowerUpHealth.java        # Health power-up
+│   │       ├── PowerUpDamage.java        # Damage power-up
+│   │       └── PowerUpSpellSpeed.java    # Spell speed power-up
+│   ├── collisionManager/                 # Collision system
+│   │   └── CollisionManager.java         # Collision detection
+│   ├── keyboard/                         # Input system
+│   │   ├── AppKeyboard.java              # Keyboard manager
+│   │   └── Controls.java                 # Key mapping
+│   ├── ui/                               # User interface
+│   │   ├── character/                    # Character rendering
+│   │   │   └── CharacterUI.java          # Character UI
+│   │   ├── grid/                         # Grid system
+│   │   │   ├── Grid.java                 # Main game grid
+│   │   │   └── GameArea.java             # Playable area
+│   │   ├── healthBar/                    # Health system
+│   │   │   └── HealthBar.java            # Health bar
+│   │   ├── faceCard/                     # Player avatars
+│   │   │   └── PlayerFaceCard.java       # Player face card
+│   │   ├── screens/                      # Game screens
+│   │   │   ├── HomeScreen.java           # Home screen
+│   │   │   └── GameOverScreen.java       # Game over screen
+│   │   └── position/                     # Positioning system
+│   │       └── Position.java             # Logical coordinates
+│   └── utils/                            # Utilities
+│       └── AppColor.java                 # Color palette
+├── resources/                            # Graphic resources
+│   ├── Characters/                       # Character sprites
+│   ├── Faces/                            # Player avatars
+│   ├── PowerUps/                         # Power-up sprites
+│   ├── Spells/                           # Spell sprites
+│   └── *.png                             # Backgrounds and UI
+├── lib/                                  # External libraries
+└── build.xml                             # Ant build script
 ```
 
 ---
 
-## 📚 Documentação das Classes
+## 📚 Class Documentation
 
-### 🎯 Camada de Aplicação
+### 🎯 Application Layer
 
 #### **App.java**
-**Propósito:** Ponto de entrada principal da aplicação.
+**Purpose:** Main entry point of the application.
 
-**Responsabilidades:**
-- Inicializar a tela inicial (HomeScreen)
-- Configurar o callback de início do jogo
-- Criar a grid e os personagens dos jogadores
-- Inicializar o sistema de colisões
+**Responsibilities:**
+- Initialize the home screen (HomeScreen)
+- Set up the game start callback
+- Create the grid and player characters
+- Initialize the collision system
 
-**Métodos Principais:**
-- `main(String[] args)` - Método de entrada da aplicação
-- `startGame()` - Inicia uma nova partida, criando grid e personagens
+**Main Methods:**
+- `main(String[] args)` - Application entry method
+- `startGame()` - Starts a new match, creating grid and characters
 
-**Fluxo de Execução:**
-1. Cria e exibe HomeScreen
-2. Aguarda tecla SPACE para iniciar
-3. Cria Grid (128x72 células, 1920x1080 pixels)
-4. Posiciona jogadores em suas metades da arena
-5. Instancia PlayerOneCharacter e PlayerTwoCharacter
+**Execution Flow:**
+1. Creates and displays HomeScreen
+2. Waits for SPACE key to start
+3. Creates Grid (128x72 cells, 1920x1080 pixels)
+4. Positions players in their halves of the arena
+5. Instantiates PlayerOneCharacter and PlayerTwoCharacter
 
 ---
 
-### 🎮 Camada de Gerenciamento
+### 🎮 Management Layer
 
 #### **GameController.java**
-**Propósito:** Controlador central que coordena o início do jogo.
+**Purpose:** Central controller that coordinates the start of the game.
 
-**Responsabilidades:**
-- Armazenar a ação de início de jogo
-- Fornecer ponto de entrada para iniciar partidas
+**Responsibilities:**
+- Store the start game action
+- Provide an entry point to start matches
 
-**Métodos:**
-- `setStartAction(Runnable action)` - Define a ação a ser executada ao iniciar
-- `startGame()` - Executa a ação de início registrada
+**Methods:**
+- `setStartAction(Runnable action)` - Sets the action to execute on start
+- `startGame()` - Executes the registered start action
 
-**Uso:** Desacopla as telas (HomeScreen, GameOverScreen) da lógica de inicialização do App.
+**Usage:** Decouples screens (HomeScreen, GameOverScreen) from App initialization logic.
 
 ---
 
 #### **GameStateManager.java**
-**Propósito:** Centraliza transições de estado do jogo (principalmente game-over).
+**Purpose:** Centralizes game state transitions (mainly game-over).
 
-**Responsabilidades:**
-- Gerenciar fim de jogo
-- Limpar todos os elementos visuais e lógicos
-- Exibir tela de vitória
+**Responsibilities:**
+- Manage game over
+- Clear all visual and logical elements
+- Display victory screen
 
-**Métodos:**
-- `triggerGameOver(PlayerEnum winner)` - Aciona sequência de game-over
+**Methods:**
+- `triggerGameOver(PlayerEnum winner)` - Triggers the game-over sequence
 
-**Processo de Game-Over:**
-1. Limpa todas as barras de vida
-2. Limpa CollisionManager (personagens, power-ups)
-3. Limpa Grid e elementos visuais
-4. Aguarda 100ms para threads finalizarem
-5. Exibe GameOverScreen com o vencedor
+**Game-Over Process:**
+1. Clears all health bars
+2. Clears CollisionManager (characters, power-ups)
+3. Clears Grid and visual elements
+4. Waits 100ms for threads to finish
+5. Displays GameOverScreen with the winner
 
 ---
 
@@ -363,7 +363,7 @@ WizzardBattle/
 
 ---
 
-### 👤 Camada de Personagens
+### 👤 Character Layer
 
 #### **Character.java (Classe Abstrata)**
 **Propósito:** Classe base que contém toda a lógica comum aos personagens.
@@ -514,7 +514,7 @@ applyDamageBuff(1, 10) {
 
 ---
 
-### 🔮 Camada de Elementos de Jogo
+### 🔮 Game Elements Layer
 
 #### **Spell.java**
 **Propósito:** Projétil de feitiço que se move horizontalmente e causa dano.
@@ -653,7 +653,7 @@ public PowerUp(int col, int row, String imagePath) {
 
 ---
 
-### 🖼️ Camada de Interface
+### 🖼️ Interface Layer
 
 #### **Grid.java**
 **Propósito:** Sistema central de renderização e coordenação da arena.
@@ -953,7 +953,7 @@ public class GameOverScreen implements KeyboardHandler {
 
 ---
 
-### ⌨️ Camada de Controles
+### ⌨️ Controls Layer
 
 #### **AppKeyboard.java**
 **Propósito:** Gerenciador de entrada de teclado por personagem.
@@ -1088,113 +1088,114 @@ private void setupKeyEvent(KeyboardEvent event, int key) {
 
 ---
 
-## 🎮 Como Jogar
+## 🎮 How to Play
 
-### Objetivo
-Reduza a vida do oponente a zero antes que ele faça o mesmo com você!
+### Objective
+Reduce your opponent's life to zero before they do the same to you!
 
-### Controles
+### Controls
 
-#### Jogador 1 (Esquerda)
-- **W** - Mover para cima
-- **S** - Mover para baixo
-- **A** - Mover para esquerda
-- **D** - Mover para direita
-- **T** - Lançar feitiço
+#### Player 1 (Left)
+- **W** - Move up
+- **S** - Move down
+- **A** - Move left
+- **D** - Move right
+- **T** - Cast spell
 
-#### Jogador 2 (Direita)
-- **I** - Mover para cima
-- **K** - Mover para baixo
-- **J** - Mover para esquerda
-- **L** - Mover para direita
-- **P** - Lançar feitiço
+#### Player 2 (Right)
+- **I** - Move up
+- **K** - Move down
+- **J** - Move left
+- **L** - Move right
+- **P** - Cast spell
 
 #### Global
-- **SPACE** - Iniciar jogo / Reiniciar após game-over
+- **SPACE** - Start game / Restart after game-over
 
 ### Power-Ups
 
-Power-ups aparecem aleatoriamente na arena a cada 8 segundos:
+Power-ups appear randomly in the arena every 8 seconds:
 
-- **❤️ Vida (Verde):** Adiciona +1 ponto de vida
-- **⚔️ Dano (Vermelho):** Aumenta dano dos feitiços por 10 segundos
-- **⚡ Velocidade (Azul):** Aumenta velocidade de movimento e feitiços por 10 segundos
+- **❤️ Health (Green):** Adds +1 life point
+- **⚔️ Damage (Red):** Increases spell damage for 10 seconds
+- **⚡ Speed (Blue):** Increases movement and spell speed for 10 seconds
 
-### Dicas Estratégicas
+### Strategy Tips
 
-1. **Movimento:** Personagens podem se mover apenas em sua metade da arena
-2. **Feitiços:** Viajam em linha reta e causam 1 de dano (2 com buff)
-3. **Power-Ups:** Aparecem dos dois lados - seja rápido para coletar
-4. **Buffs:** Acumulam! Coletar múltiplos aumenta os efeitos
-5. **Posicionamento:** Mantenha distância ao lançar feitiços
+1. **Movement:** Characters can only move within their half of the arena
+2. **Spells:** Travel in a straight line and deal 1 damage (2 with buff)
+3. **Power-Ups:** Appear on both sides - be quick to collect them
+4. **Buffs:** Stack! Collecting multiple increases effects
+5. **Positioning:** Keep your distance when casting spells
 
 ---
 
-## 🛠️ Compilação e Execução
+## 🛠️ Build and Run
 
-### Pré-requisitos
+### Prerequisites
 - **Java JDK 8+**
-- **Apache Ant** (para build)
-- Biblioteca **SimpleGraphics** (incluída em `lib/`)
+- **Apache Ant** (for build)
+- **SimpleGraphics** library (included in `lib/`)
 
-### Compilar o Projeto
+### Compile the Project
 
 ```bash
-# Compilar apenas
+# Compile only
 ant compile
 
-# Compilar e criar JAR
+# Compile and create JAR
 ant jarfile
 
-# Limpar build
+# Clean build
 ant clean
 ```
 
-### Executar
+### Run
 
 ```bash
-# Executar a partir das classes compiladas
+# Run from compiled classes
 java -cp "build/classes;lib/*" App
 
-# Ou executar o JAR (após ant jarfile)
+# Or run the JAR (after ant jarfile)
 java -jar "build/Wizard Battle.jar"
 ```
 
-### Estrutura do Build
+### Build Structure
 
-O arquivo `build.xml` define:
-- **init:** Cria diretórios de build
-- **prepare:** Prepara estrutura
-- **copy-resources:** Copia imagens e recursos para build/classes
-- **compile:** Compila código Java
-- **jarfile:** Cria JAR executável
+The `build.xml` file defines:
+- **init:** Creates build directories
+- **prepare:** Prepares structure
+- **copy-resources:** Copies images and resources to build/classes
+- **compile:** Compiles Java code
+- **jarfile:** Creates executable JAR
 
 ---
 
-## 📝 Histórico de Refatoração
 
-Este projeto passou por uma refatoração significativa para melhorar a qualidade do código:
+## 📝 Refactoring History
 
-### Melhorias Implementadas
+This project has undergone significant refactoring to improve code quality:
 
-1. **Eliminação de Duplicação**
-   - Redução de 350+ linhas de código duplicado
-   - PlayerOneCharacter: 254 → 68 linhas (-73%)
-   - PlayerTwoCharacter: 248 → 65 linhas (-74%)
+### Improvements Implemented
 
-2. **Novas Classes Utilitárias**
-   - `PowerUpHandler` - Centraliza lógica de power-ups
-   - `BuffManager` - Sistema genérico de buffs temporários
-   - `GameStateManager` - Gerenciamento de estados do jogo
+1. **Elimination of Duplication**
+    - Reduced 350+ lines of duplicated code
+    - PlayerOneCharacter: 254 → 68 lines (-73%)
+    - PlayerTwoCharacter: 248 → 65 lines (-74%)
 
-3. **Consolidação de Lógica**
-   - Movimentação comum na classe `Character`
-   - Power-ups processados em um único lugar
-   - Game-over centralizado
+2. **New Utility Classes**
+    - `PowerUpHandler` - Centralizes power-up logic
+    - `BuffManager` - Generic temporary buff system
+    - `GameStateManager` - Game state management
 
-4. **Configuração Data-Driven**
-   - Controles configurados por objetos de dados
-   - Fácil adicionar novos jogadores ou esquemas de controle
+3. **Logic Consolidation**
+    - Common movement in the `Character` class
+    - Power-ups processed in a single place
+    - Centralized game-over logic
+
+4. **Data-Driven Configuration**
+    - Controls configured by data objects
+    - Easy to add new players or control schemes
 
 
 ---
